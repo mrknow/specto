@@ -128,6 +128,7 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
                     return
 
             elif error == False:
+                print ("Response code",response.code, response.msg)
                 return
 
 

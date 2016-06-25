@@ -108,6 +108,8 @@ class tvshows:
 
 
     def get(self, url, idx=True):
+        control.log("><><><><> imdb_link user ******************** %s" % url)
+
         try:
             try: url = getattr(self, url + '_link')
             except: pass
@@ -115,6 +117,7 @@ class tvshows:
             try: u = urlparse.urlparse(url).netloc.lower()
             except: pass
 
+            control.log("><><><><> imdb_link user ******************** %s" % url)
 
             #if u in self.tmdb_link:
             #    self.list = cache.get(self.tmdb_list, 24, url)
@@ -135,7 +138,9 @@ class tvshows:
 
 
             elif u in self.imdb_link and ('/user/' in url or '/list/' in url):
-                self.list = cache.get(self.imdb_list, 0, url, idx)
+                control.log("><><><><> imdb_link user ******************** %s" % url)
+
+                self.list = cache.get(self.imdb_list2, 0, url, idx)
                 self.worker()
 
             elif u in self.imdb_link and '/search/title' in url:
@@ -286,7 +291,7 @@ class tvshows:
 
 
     def imdb_list2(self, url, idx=True):
-        #control.log("><><><><> imdb_list2 ******************** %s" % idx)
+        control.log("><><><><> imdb_list2 ******************** %s" % idx)
         #http://ia.media-imdb.com/images/M/MV5BMTg3OTc0NzkyOV5BMl5BanBnXkFtZTgwMDMwMTM3MjE@._V1_SX640_SY720_.jpg
         try:
             if url == self.imdbwatchlist_link:
@@ -711,6 +716,7 @@ class tvshows:
             except:
                 pass
 
+        self.list = sorted(self.list, key=lambda k: re.sub('(^the |^a )', '', k['name'].lower()))
         return self.list
 
 

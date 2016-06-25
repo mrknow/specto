@@ -3,9 +3,9 @@
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
 		<import addon="script.module.requests" version="1.0.0" />
-		<import addon="script.module.metahandler" />
+		<import addon="script.module.metahandler" version="1.0.0" />
 		<import addon="plugin.video.youtube" optional="true" />
-		<import addon="script.specto.media" optional="true" />
+		<import addon="script.specto.media" />
 
 
 	</requires>

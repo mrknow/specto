@@ -640,10 +640,15 @@ class movies:
 
 
     def imdb_user_list(self, url):
+        print("Items", url)
+
         try:
             result = client.request(url)
             result = result.decode('iso-8859-1').encode('utf-8')
             items = client.parseDOM(result, 'div', attrs = {'class': 'list_name'})
+            #control.log("##################><><><><> trakt_list item  %s" % item)
+            print("Items",items)
+
         except:
             pass
 
@@ -663,6 +668,7 @@ class movies:
             except:
                 pass
 
+        self.list = sorted(self.list, key=lambda k: re.sub('(^the |^a )', '', k['name'].lower()))
         return self.list
 
     def imdb_person_list(self, url):

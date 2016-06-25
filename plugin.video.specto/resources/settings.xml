@@ -38,7 +38,7 @@
 		<setting id="movietubev2" type="bool" label="Movietube" default="true" />
 		<setting id="movienight" type="bool" label="Movienight" default="true" />
 		<setting id="muchmovies" type="bool" label="Muchmovies" default="true" />
-		<setting id="oneclickwatch" type="bool" label="Muchmovies" default="true" />
+		<setting id="oneclickwatch" type="bool" label="Oneclickwatch" default="false" />
 		<setting id="pelispedia" type="bool" label="Pelispedia" default="true" />
 		<setting id="primewire" type="bool" label="Primewire" default="true" />
 		<setting id="pubfilm" type="bool" label="Pubfilm" default="true" />
@@ -65,7 +65,7 @@
 		<setting id="muchmovies_tv" type="bool" label="Muchmovies" default="true" />
 		<setting id="moviefarsiv2_tv" type="bool" label="Moviefarsi" default="false" />
 		<setting id="moviestorm_tv" type="bool" label="Moviestorm" default="false" />
-		<setting id="oneclickwatch_tv" type="bool" label="Moviestorm" default="false" />
+		<setting id="oneclickwatch_tv" type="bool" label="Oneclickwatch" default="false" />
 		<setting id="ororo_tv" type="bool" label="Ororo" default="true" />
 		<setting id="primewire_tv" type="bool" label="Primewire" default="true" />
 		<setting id="pelispedia_tv" type="bool" label="Pelispedia" default="true" />
@@ -133,7 +133,7 @@
 		<setting id="trakt.token" type="text" option="hidden" visible="false" label="" default="" />
 		<setting id="trakt.refresh" type="text" option="hidden" visible="false" label="" default="" />
 		<setting type="lsep" label="IMDb" />
-		<setting id="imdb_user" type="text" label="30911" default="" />
+		<setting id="imdb_user" type="number" label="30911" default="" />
 		<setting type="lsep" label="Alluc (accounts.alluc.com)" />
 		<setting id="alluc_user" type="text" label="30911" default="" />
 		<setting id="alluc_password" type="text" option="hidden" label="30913" default="" />

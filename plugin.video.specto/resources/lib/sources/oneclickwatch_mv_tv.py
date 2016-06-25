@@ -142,7 +142,7 @@ class source:
 
             mylinks = []
             for myurl in mysources:
-                result = client.request(myurl)
+                result = client.request(myurl,mobile=True)
                 mytitle = re.compile('<title>(.*?)</title>', re.DOTALL).findall(result)[0]
                 if any(word in mytitle.lower() for word in ['camrip', 'tsrip', 'hdcam', 'hdts', 'dvdcam', 'dvdts', 'cam', 'ts']):
                     quality = 'CAM'
@@ -155,12 +155,14 @@ class source:
                 links = client.parseDOM(result, 'a', attrs={'rel': 'nofollow'})
                 links = [i for i in links if i.startswith('http')]
                 for a in links:
+                    control.log(">>>>>>>>>>>>>>> ONE CHECK  %s" % (a))
+
                     mylinks.append([a,quality])
 
             threads = []
             for i in mylinks: threads.append(workers.Thread(self.check, i))
             [i.start() for i in threads]
-            for i in range(0, 10 * 2):
+            for i in range(0, 10 * 4):
                 is_alive = [x.is_alive() for x in threads]
                 if all(x == False for x in is_alive): break
                 time.sleep(2)
@@ -171,6 +173,8 @@ class source:
 
     def check(self, i):
         try:
+            control.log(">>>>>>>>>>>>>>> ONE CHECK  %s" % (i[0]))
+
             url = client.replaceHTMLCodes(i[0])
             url = url.encode('utf-8')
 

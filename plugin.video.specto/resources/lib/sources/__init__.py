@@ -561,6 +561,9 @@ class sources:
             dbcur = dbcon.cursor()
             dbcur.execute("DROP TABLE IF EXISTS rel_src")
             dbcur.execute("VACUUM")
+            dbcur.execute("DROP TABLE IF EXISTS rel_url")
+            dbcur.execute("VACUUM")
+
             dbcon.commit()
 
             control.infoDialog(control.lang(30511).encode('utf-8'))

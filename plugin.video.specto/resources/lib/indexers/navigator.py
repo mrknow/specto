@@ -47,9 +47,16 @@ class navigator:
         movie_library = os.path.join(control.transPath(control.setting('movie_library')),'')
         tv_library = os.path.join(control.transPath(control.setting('tv_library')),'')
         tv_downloads = os.path.join(control.transPath(control.setting('tv_downloads')),'')
-        #movie_downloads = os.path.join(control.transPath(control.setting('movie_downloads')),'')
-        if not os.path.exists(movie_library): os.makedirs(movie_library)
-        if not os.path.exists(tv_library): os.makedirs(tv_library)
+        movie_downloads = os.path.join(control.transPath(control.setting('movie_downloads')),'')
+
+        try:
+            if not os.path.exists(movie_library): os.makedirs(movie_library)
+        except:
+            pass
+        try:
+            if not os.path.exists(tv_library): os.makedirs(tv_library)
+        except:
+            pass
         #if not os.path.exists(tv_downloads) and tv_downloads!='' : os.makedirs(tv_downloads)
         #if not os.path.exists(movie_downloads) and movie_downloads != '': os.makedirs(movie_downloads)
 
