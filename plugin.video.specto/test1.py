@@ -14,24 +14,19 @@ from resources.lib.libraries import control
 from resources.lib import resolvers
 
 from resources.lib.resolvers import openload
-from resources.lib.sources.oneclickwatch_mv_tv import source
+from resources.lib.sources.watchfree_mv_tv import source
+#from resources.lib.sources.animeultima_tv import source
 
 from resources.lib.indexers import movies
 
-my = movies.movies()
-print my.imdb_user_list('http://www.imdb.com/user/ur65842011/lists?tab=all&sort=modified:desc&filter=titles')
-
-
-exit()
 #openloadlink = 'https://openload.co/embed/7xKm9d-wcT4'
 my = source()
-a = my.get_movie('tt2379713','Spectre','2015')
-control.log('############ DAYT res-1 %s' % a)
+#a = my.get_movie('tt2379713','Spectre','2015')
+#control.log('############ DAYT res-1 %s' % a)
 
-b = my.get_sources(a,'','','')
-control.log('############ DAYT res-2 %s' % b)
+#b = my.get_sources(a,'','','')
+#control.log('############ DAYT res-2 %s' % b)
 
-exit()
 #{'tmdb': '60948', 'tvdb': '272644', 'tvshowtitle': '12 Monkeys', 'imdb': 'tt3148266', 'year': '2015', 'action': 'seasons', 'tvrage': '36903'}
 #PARAMS: {'tmdb': '1424', 'tvdb': '264586', 'tvshowtitle': 'Orange Is the New Black', 'imdb': 'tt2372162', 'year': '2013', 'action': 'seasons', 'tvrage': '32950'}
 
@@ -50,6 +45,33 @@ d=my.get_episode(c,imdb,tvdb,title,data,'2','6')
 control.log('############ DAYT res-1 %s' % d)
 e=my.get_sources(d,'','','')
 print ("eee",e)
+exit()
+
+#PARAMS: {'tmdb': '62715', 'episode': '7', 'name': 'Dragon Ball Super S04E07', 'title': 'A Message From the Future - Goku Black Invades!',
+# 'tvdb': '295068', 'season': '4', 'tvshowtitle': 'Dragon Ball Super', 'date': '2016-06-26',
+# 'meta': '{"rating": "7.5", "code": "tt4644488", "tmdb": "62715", "imdb": "tt4644488", "year": "2015", "duration": "1500",
+#  "plot": "T  are they? ", "votes": "332", "thumb": "https://walter.trakt.us/images/episodes/002/265/650/screenshots/thumb/4923bc211d.jpg",
+# "title": "A Message From the Future - Goku Black Invades!", "tvdb": "295068", "mpaa": "TV-14",
+#  "season": "4", "status": "Continuing", "poster": "https://walter.trakt.us/images/shows/000/098/580/posters/medium/32569f3caa.jpg",
+# "tvshowtitle": "Dragon Ball Super", "studio": "Fuji TV", "genre": "Animation / Action / Adventure / Mystery",
+# "tvrage": "48862", "banner": "https://walter.trakt.us/images/shows/000/098/580/banners/original/dc596601d3.jpg",
+# "episode": "7", "name": "Dragon Ball Super S04E07", "premiered": "2016-06-26",
+# "fanart": "https://walter.trakt.us/images/shows/000/098/580/fanarts/original/fab7afcb95.jpg",
+# "trailer": "plugin://plugin.video.specto/?action=trailer&name=Dragon+Ball+Super"}', 'imdb': 'tt4644488',
+# 'year': '2015', 'action': 'sources', 'tvrage': '48862', 'alter': '0'}
+
+tvdb='295068'
+title = 'Dragon Ball Super'
+imdb='tt4644488'
+
+c=my.get_show(imdb,tvdb,title,'2015')
+control.log('############ get_show  res-1 %s' % c)
+d=my.get_episode(c,imdb,tvdb,title,data,'4','7')
+control.log('############ get_episode res-1 %s' % d)
+e=my.get_sources(d,'','','')
+print ("get_sources",e)
+exit()
+
 #url = 'http://ok.ru/video/86215559923'
 #print resolvers.request(url)
 

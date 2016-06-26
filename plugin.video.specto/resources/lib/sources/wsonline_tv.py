@@ -114,7 +114,7 @@ class source:
                     url = client.replaceHTMLCodes(url)
                     url = url.encode('utf-8')
 
-                    sources.append({'source': host, 'quality': 'SD', 'provider': 'WSOnline', 'url': url})
+                    sources.append({'source': host, 'quality': 'MQ', 'provider': 'WSOnline', 'url': url})
                 except:
                     pass
 

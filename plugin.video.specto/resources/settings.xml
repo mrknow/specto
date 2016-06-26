@@ -38,12 +38,13 @@
 		<setting id="movietubev2" type="bool" label="Movietube" default="true" />
 		<setting id="movienight" type="bool" label="Movienight" default="true" />
 		<setting id="muchmovies" type="bool" label="Muchmovies" default="true" />
-		<setting id="oneclickwatch" type="bool" label="Oneclickwatch" default="false" />
+		<setting id="oneclickwatch" type="bool" label="Oneclickwatch" default="true" />
 		<setting id="pelispedia" type="bool" label="Pelispedia" default="true" />
 		<setting id="primewire" type="bool" label="Primewire" default="true" />
 		<setting id="pubfilm" type="bool" label="Pubfilm" default="true" />
 		<setting id="putlocker" type="bool" label="Putlocker" default="true" />
 		<setting id="rainierland" type="bool" label="Rainierland" default="true" />
+		<setting id="serieswatch" type="bool" label="Serieswatch" default="true" />
 		<setting id="tunemovie" type="bool" label="Tunemovie" default="true" />
 		<setting id="watchfree" type="bool" label="Watchfree" default="false" />
 		<setting id="wmonline" type="bool" label="WMOnline" default="true" />
@@ -65,20 +66,21 @@
 		<setting id="muchmovies_tv" type="bool" label="Muchmovies" default="true" />
 		<setting id="moviefarsiv2_tv" type="bool" label="Moviefarsi" default="false" />
 		<setting id="moviestorm_tv" type="bool" label="Moviestorm" default="false" />
-		<setting id="oneclickwatch_tv" type="bool" label="Oneclickwatch" default="false" />
+		<setting id="oneclickwatch_tv" type="bool" label="Oneclickwatch" default="true" />
 		<setting id="ororo_tv" type="bool" label="Ororo" default="true" />
+		<setting id="onlinedizi_tv" type="bool" label="Onlinedizi" default="true" />
 		<setting id="primewire_tv" type="bool" label="Primewire" default="true" />
 		<setting id="pelispedia_tv" type="bool" label="Pelispedia" default="true" />
 		<setting id="pubfilm_tv" type="bool" label="Pubfilm" default="true" />
 		<setting id="putlocker_tv" type="bool" label="Putlocker" default="true" />
 		<setting id="sezonlukdizi_tv" type="bool" label="Sezonlukdizi" default="true" />
+		<setting id="serieswatch_tv" type="bool" label="Serieswatch" default="true" />
 		<setting id="tunemovie_tv" type="bool" label="Tunemovie" default="true" />
 		<setting id="tvrelease_tv" type="bool" label="TVrelease" default="true" />
 		<setting id="vidics_tv" type="bool" label="Vidics" default="true" />
 		<setting id="watchfree_tv" type="bool" label="Watchfree" default="true" />
 		<setting id="wsonline_tv" type="bool" label="WSOnline" default="true" />
 		<setting id="watchseries_tv" type="bool" label="Watchseries" default="true" />
-		<setting id="onlinedizi_tv" type="bool" label="Onlinedizi" default="true" />
 		<setting id="xmovies_tv" type="bool" label="Xmovies" default="true" />
 
 
@@ -146,10 +148,6 @@
         <setting id="realdebrid_refresh" visible="false" type="text" default=""/>
         <setting id="realdebrid_client_id" visible="false" type="text" default=""/>
         <setting id="realdebrid_client_secret" visible="false" type="text" default=""/>
-		<!--<setting id="realdebrid_auth" visible="false" type="text" default=""/>-->
-
-
-
 		<setting type="lsep" label="Premiumize" />
 		<setting id="premiumize_user" type="text" label="ID" default="" />
 		<setting id="premiumize_password" type="text" option="hidden" label="PIN" default="" />

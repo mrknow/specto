@@ -42,6 +42,7 @@ ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) A
 
 def request(url, close=True, redirect=True, error=False, proxy=None, post=None, headers=None, mobile=False, limit=None, referer=None, cookie=None, output='', timeout='30'):
     try:
+        #control.log('@@@@@@@@@@@@@@ - URL:%s' % url)
         handlers = []
 
         if not proxy == None:
