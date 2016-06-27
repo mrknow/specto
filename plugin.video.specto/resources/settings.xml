@@ -32,6 +32,8 @@
 		<setting id="dayt" type="bool" label="Dayt" default="true" />
 		<setting id="easynews" type="bool" label="Easynews" default="false" />
 		<setting id="fmovies" type="bool" label="Fmovies" default="true" />
+		<setting id="genvideos" type="bool" label="Genvideos" default="true" />
+
 		<setting id="icefilms" type="bool" label="Icefilms" default="true" />
 		<setting id="iwatchonline" type="bool" label="Iwatchonline" default="false" />
 		<setting id="movie25" type="bool" label="Movie25" default="false" />

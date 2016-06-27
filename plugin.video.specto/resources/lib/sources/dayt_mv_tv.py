@@ -23,8 +23,6 @@ import re,urlparse,datetime,os,base64,urllib
 from resources.lib.libraries import cleantitle
 from resources.lib import resolvers
 from resources.lib.libraries import client
-from resources.lib.libraries import client2
-from resources.lib.libraries import cache
 from resources.lib.libraries import control
 try:
     from sqlite3 import dbapi2 as database
@@ -106,7 +104,7 @@ class source:
                 result = dbcur.fetchone()
                 myurl = urlparse.urljoin(self.base_link, '/movies/' + urllib.quote_plus(result[1]))
                 myhead = {'Referer': 'http://dayt.se/movies/'}
-                result10 = client2.http_get(myurl, headers=myhead)
+                result10 = client.request(myurl, headers=myhead)
                 result10 = client.parseDOM(result10, 'div', attrs={'id': '5throw'})[0]
                 result10 = client.parseDOM(result10, 'a', attrs={'rel': 'nofollow'}, ret='href')
                 mquality = 'HD'
