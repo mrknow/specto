@@ -24,8 +24,6 @@ import re,urllib,urlparse,json, random
 from resources.lib.libraries import control
 from resources.lib.libraries import cleantitle
 from resources.lib.libraries import client
-from resources.lib.libraries import cache
-from resources.lib.libraries import client2
 
 
 

@@ -22,7 +22,6 @@
 import re,urllib,urlparse,base64
 
 from resources.lib.libraries import cleantitle
-from resources.lib.libraries import client2
 from resources.lib.libraries import client
 from resources.lib.libraries import control
 
@@ -36,7 +35,7 @@ class source:
 
     def request(self, url, check):
         try:
-            result = client2.http_get(url)
+            result = client.request(url)
             if check in str(result): return result.decode('iso-8859-1').encode('utf-8')
         except:
             return

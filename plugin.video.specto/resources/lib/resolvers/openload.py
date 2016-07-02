@@ -19,7 +19,7 @@
 '''
 
 
-import re,urllib,json,time
+import re,urllib,json,time,urllib2
 from resources.lib.libraries import client
 from resources.lib.libraries import client2
 from resources.lib.libraries import control
@@ -67,11 +67,16 @@ def check(url):
 def decodeOpenLoad(html):
     # decodeOpenLoad made by mortael, please leave this line for proper credit :)
     aastring = re.compile("<script[^>]+>(ﾟωﾟﾉ[^<]+)<", re.DOTALL | re.IGNORECASE).findall(html)
-    haha = re.compile(r"welikekodi_ya_rly = (\d+) - (\d+)", re.DOTALL | re.IGNORECASE).findall(html)
-    haha = int(haha[0][0]) - int(haha[0][1])
+    hahadec = decodeOpenLoad2(aastring[0])
+    haha = re.compile(r"welikekodi_ya_rly = Math.round([^;]+);", re.DOTALL | re.IGNORECASE).findall(hahadec)[0]
+    haha = eval("int" + haha)
 
-    aastring = aastring[haha]
+    videourl1 = decodeOpenLoad2(aastring[haha])
 
+    return videourl1
+
+
+def decodeOpenLoad2(aastring):
     aastring = aastring.replace("(ﾟДﾟ)[ﾟεﾟ]+(oﾟｰﾟo)+ ((c^_^o)-(c^_^o))+ (-~0)+ (ﾟДﾟ) ['c']+ (-~-~1)+", "")
     aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ) + (ﾟΘﾟ))", "9")
     aastring = aastring.replace("((ﾟｰﾟ) + (ﾟｰﾟ))", "8")
@@ -116,11 +121,18 @@ def decodeOpenLoad(html):
         decodestring = decodestring.replace("+", "")
         decodestring = decodestring.replace("\"", "")
         videourl = re.search(r"(http[^\}]+)", decodestring, re.DOTALL | re.IGNORECASE).group(1)
+        videourl = videourl.replace("https", "http")
     else:
-        videourl = re.search(r"vr\s?=\s?\"|'([^\"']+)", decodestring, re.DOTALL | re.IGNORECASE).group(1)
+        return decodestring
+
+    UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0'
+    headers = {'User-Agent': UA}
+
+    req = urllib2.Request(videourl, None, headers)
+    res = urllib2.urlopen(req)
+    videourl = res.geturl()
 
     return videourl
-
 
 def decode(encoded):
     for octc in (c for c in re.findall(r'\\(\d{2,3})', encoded)):

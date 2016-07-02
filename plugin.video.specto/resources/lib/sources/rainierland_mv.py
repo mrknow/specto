@@ -144,7 +144,7 @@ class source:
                 for i in r4:
                     try:
                         url = resolvers.request(i)
-                        sources.append({'source': 'openload', 'quality': 'HD', 'provider': 'Rainierland', 'url': url})
+                        sources.append({'source': 'openload', 'quality': 'HQ', 'provider': 'Rainierland', 'url': url})
                     except:
                         pass
 

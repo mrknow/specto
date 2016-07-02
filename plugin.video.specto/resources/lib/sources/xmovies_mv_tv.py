@@ -25,7 +25,8 @@ from resources.lib.libraries import cleantitle
 from resources.lib.libraries import client
 from resources.lib.libraries import control
 
-from resources.lib.resolvers import googleplus
+from resources.lib import resolvers
+
 
 
 class source:
@@ -154,10 +155,10 @@ class source:
                                 {'source': 'gvideo', 'url': url, 'quality': client.googletag(url)[0]['quality']}]
 
                         elif 'openload.' in frame[0]:
-                            links += [{'source': 'openload.co', 'url': frame[0], 'quality': 'HD'}]
+                            links += [{'source': 'openload.co', 'url': frame[0], 'quality': 'HQ'}]
 
                         elif 'videomega.' in frame[0]:
-                            links += [{'source': 'videomega.tv', 'url': frame[0], 'quality': 'HD'}]
+                            links += [{'source': 'videomega.tv', 'url': frame[0], 'quality': 'HQ'}]
 
                     elif embed:
                         url = urlparse.parse_qs(embed[0])['fmt_stream_map'][0]
@@ -189,6 +190,7 @@ class source:
     def resolve(self, url):
         try:
             if url.startswith('stack://'): return url
+            if 'openload' in url: return resolvers.request(url)
 
             url = client.request(url, output='geturl')
             if 'requiressl=yes' in url: url = url.replace('http://', 'https://')

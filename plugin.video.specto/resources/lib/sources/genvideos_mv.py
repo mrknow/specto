@@ -23,9 +23,7 @@ import re,urlparse,json,os,base64,urllib
 from resources.lib.libraries import cleantitle
 from resources.lib import resolvers
 from resources.lib.libraries import client
-from resources.lib.libraries import client2
-from resources.lib.libraries import cache
-from resources.lib.libraries import control
+
 try:
     from sqlite3 import dbapi2 as database
 except:

@@ -24,7 +24,6 @@ import cookielib,os
 
 from resources.lib.libraries import cleantitle
 from resources.lib.libraries import client
-from resources.lib.libraries import client2
 
 from resources.lib.libraries import control
 from resources.lib import resolvers

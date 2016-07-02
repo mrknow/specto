@@ -192,7 +192,7 @@ def getHosts():
 def resolve(url, debrid='realdebrid'):
     u = url
     u = u.replace('filefactory.com/stream/', 'filefactory.com/file/')
-    control.log("@@@@  REALDEBRID INIT %s ### %s" % (url,debrid))
+    #control.log("@@@@  REALDEBRID INIT %s ### %s" % (url,debrid))
     try:
         u1 = urlparse.urlparse(url)[1].split('.')
         u1 = u[-2] + '.' + u[-1]
@@ -210,7 +210,7 @@ def resolve(url, debrid='realdebrid'):
         url = 'https://api.real-debrid.com/rest/1.0/unrestrict/link'
 
         result = client.request(url, post=post, headers=headers, error=True)
-        #control.log('@@ DEBRID  RESULTS@@ %s' % result)
+        control.log('@@ DEBRID  RESULTS@@ %s' % result)
 
         result = json.loads(result)
 

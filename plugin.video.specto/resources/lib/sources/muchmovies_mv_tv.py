@@ -39,7 +39,7 @@ class source:
         try:
             query = self.search_link % urllib.quote(title)
             query = urlparse.urljoin(self.base_link, query)
-            result = client2.http_get(query)
+            result = client.request(query)
             title = cleantitle.movie(title)
             years = ['%s' % str(year), '%s' % str(int(year)+1), '%s' % str(int(year)-1)]
             r = client.parseDOM(result, 'div', attrs = {'class': 'ml-item'})
@@ -79,9 +79,7 @@ class source:
             query = self.search_link % urllib.quote(tvshowtitle)
             query = urlparse.urljoin(self.base_link, query)
 
-            #result = client.source(query)
-            result = client2.http_get(query)
-
+            result = client.source(query)
 
             tvshowtitle = cleantitle.tv(tvshowtitle)
             season = '%01d' % int(season)
@@ -124,7 +122,7 @@ class source:
             except: pass
 
             url = urlparse.urljoin(self.base_link, url) + '/watching.html'
-            result = client2.http_get(url)
+            result = client.request(url)
 
             movie = client.parseDOM(result, 'div', ret='movie-id', attrs = {'id': 'media-player'})[0]
             mtoken =  client.parseDOM(result, 'div', ret='player-token', attrs = {'id': 'media-player'})[0]
@@ -136,7 +134,7 @@ class source:
             else: quality = 'SD'
             url = '/ajax/get_episodes/%s/%s' % (movie, mtoken)
             url = urlparse.urljoin(self.base_link, url)
-            result = client2.http_get(url)
+            result = client.request(url)
             result = client.parseDOM(result, 'div', attrs = {'class': 'les-content'})
             result = zip(client.parseDOM(result, 'a', ret='onclick'), client.parseDOM(result, 'a', ret='episode-id'), client.parseDOM(result, 'a'))
             result = [(re.sub('[^0-9]', '', i[0].split(',')[0]), re.sub('[^0-9a-fA-F]', '', i[0].split(',')[-1]), i[1], ''.join(re.findall('(\d+)', i[2])[:1])) for i in result]

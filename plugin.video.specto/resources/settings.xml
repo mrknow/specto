@@ -33,7 +33,6 @@
 		<setting id="easynews" type="bool" label="Easynews" default="false" />
 		<setting id="fmovies" type="bool" label="Fmovies" default="true" />
 		<setting id="genvideos" type="bool" label="Genvideos" default="true" />
-
 		<setting id="icefilms" type="bool" label="Icefilms" default="true" />
 		<setting id="iwatchonline" type="bool" label="Iwatchonline" default="false" />
 		<setting id="movie25" type="bool" label="Movie25" default="false" />
@@ -46,7 +45,7 @@
 		<setting id="pubfilm" type="bool" label="Pubfilm" default="true" />
 		<setting id="putlocker" type="bool" label="Putlocker" default="true" />
 		<setting id="rainierland" type="bool" label="Rainierland" default="true" />
-		<setting id="serieswatch" type="bool" label="Serieswatch" default="true" />
+		<setting id="serieswatch" type="bool" label="Serieswatch" default="false" />
 		<setting id="tunemovie" type="bool" label="Tunemovie" default="true" />
 		<setting id="watchfree" type="bool" label="Watchfree" default="false" />
 		<setting id="wmonline" type="bool" label="WMOnline" default="true" />
@@ -76,7 +75,7 @@
 		<setting id="pubfilm_tv" type="bool" label="Pubfilm" default="true" />
 		<setting id="putlocker_tv" type="bool" label="Putlocker" default="true" />
 		<setting id="sezonlukdizi_tv" type="bool" label="Sezonlukdizi" default="true" />
-		<setting id="serieswatch_tv" type="bool" label="Serieswatch" default="true" />
+		<setting id="serieswatch_tv" type="bool" label="Serieswatch" default="false" />
 		<setting id="tunemovie_tv" type="bool" label="Tunemovie" default="true" />
 		<setting id="tvrelease_tv" type="bool" label="TVrelease" default="true" />
 		<setting id="vidics_tv" type="bool" label="Vidics" default="true" />
