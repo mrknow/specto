@@ -21,7 +21,6 @@
 
 import re,urllib,urlparse,base64
 from resources.lib.libraries import client
-from resources.lib.libraries import client2
 from resources.lib.libraries import control
 
 from resources.lib.libraries import cache
@@ -54,7 +53,7 @@ class source:
 
     def onlinedizi_tvcache(self):
         try:
-            result = client2.http_get(self.base_link)
+            result = client.request(self.base_link)
             result = client.parseDOM(result, 'ul', attrs = {'class': 'all-series-list.+?'})[0]
             result = client.parseDOM(result, 'li')
             result = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'a')) for i in result]
@@ -85,7 +84,7 @@ class source:
             url = urlparse.urljoin(self.base_link, url)
             path = urlparse.urlparse(url).path
 
-            result = client2.http_get(url)
+            result = client.request(url)
             result = re.sub(r'[^\x00-\x7F]+','', result)
             result = client.parseDOM(result, 'li')
             result = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'a')) for i in result]
@@ -93,7 +92,7 @@ class source:
 
             url = urlparse.urljoin(self.base_link, result)
 
-            result = client2.http_get(url)
+            result = client.request(url)
             result = re.sub(r'[^\x00-\x7F]+','', result)
             result = client.parseDOM(result, 'div', attrs = {'class': 'video-player'})[0]
             result = client.parseDOM(result, 'iframe', ret='src')[-1]
@@ -103,14 +102,14 @@ class source:
                 url = base64.b64decode(urlparse.parse_qs(urlparse.urlparse(result).query)['id'][0])
                 if not url.startswith('http'): raise Exception()
             except:
-                url = client2.http_get(result)
+                url = client.request(result)
                 url = urllib.unquote_plus(url.decode('string-escape'))
 
                 frame = client.parseDOM(url, 'iframe', ret='src')
                 control.log('RRRR frame %s' % frame)
 
                 if len(frame) > 0:
-                    url = [client2.http_get(frame[-1], allow_redirect = False)]
+                    url = [client.request(frame[-1], allow_redirect = False)]
                 else: url = re.compile('"(.+?)"').findall(url)
                 url = [i for i in url if 'ok.ru' in i or 'vk.com' in i or 'openload.co' in i][0]
 

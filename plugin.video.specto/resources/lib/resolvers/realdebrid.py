@@ -79,7 +79,7 @@ def rdAuthorize():
         result = json.loads(result)
 
         token, refresh = result['access_token'], result['refresh_token']
-        #control.log("### id:%s, secret:%s, token:%s, refresh:%s " % (id,secret,token,refresh))
+        control.log("### id:%s, secret:%s, token:%s, refresh:%s " % (id,secret,token,refresh))
         control.set_setting('realdebrid_client_id', id)
         control.set_setting('realdebrid_client_secret', secret)
         control.set_setting('realdebrid_token', token)
@@ -192,7 +192,7 @@ def getHosts():
 def resolve(url, debrid='realdebrid'):
     u = url
     u = u.replace('filefactory.com/stream/', 'filefactory.com/file/')
-    #control.log("@@@@  REALDEBRID INIT %s ### %s" % (url,debrid))
+    control.log("@@@@  REALDEBRID INIT %s ### %s" % (url,debrid))
     try:
         u1 = urlparse.urlparse(url)[1].split('.')
         u1 = u[-2] + '.' + u[-1]
@@ -202,6 +202,7 @@ def resolve(url, debrid='realdebrid'):
 
         if '' in credentials()['realdebrid'].values(): raise Exception()
         id, secret, token, refresh = credentials()['realdebrid']['id'], credentials()['realdebrid']['secret'], credentials()['realdebrid']['token'], credentials()['realdebrid']['refresh']
+        control.log('@@ DEBRID  refresh@@ %s' % refresh)
 
         USER_AGENT = 'SPECTO for Kodi/1.0'
 

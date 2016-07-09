@@ -19,6 +19,7 @@
 '''
 
 import re,urlparse,datetime,os,base64,urllib
+import zipfile, StringIO
 
 from resources.lib.libraries import cleantitle
 from resources.lib import resolvers
@@ -36,7 +37,7 @@ class source:
         self.search_link = '/forum/search.php?do=process'
         self.forum_link = '/forum/forum.php'
         self.forum_prefix = '/forum'
-        self.data_link = 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL21ya25vdy9kYXRhYmFzZS9tYXN0ZXIvZGF5dHNlMS5kYg=='
+        self.data_link = 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL21ya25vdy9kYXRhYmFzZS9tYXN0ZXIvZGF5dHNlMS56aXA='
         self.headers = {}
 
     def get_movie(self,imdb, title, year):
@@ -94,15 +95,24 @@ class source:
                 except:pass
                 if download == True:
                     control.log('#Dayt DDDOOOWNLOAD ')
+                    #result = client.request(base64.b64decode(self.data_link))
+                    #with open(data, "wb") as code:
+                    #    code.write(result)
                     result = client.request(base64.b64decode(self.data_link))
-                    with open(data, "wb") as code:
-                        code.write(result)
+                    print(len(result))
+                    control.log(">>>>>>>>>>>>>>> ONEC Downloading")
+                    zip = zipfile.ZipFile(StringIO.StringIO(result))
+                    zip.extractall(control.dataPath)
+                    zip.close()
 
                 dbcon = database.connect(data)
                 dbcur = dbcon.cursor()
-                dbcur.execute("SELECT * FROM movies WHERE title like '%"+title.lower()+"%'")
+                control.log("#Dayt DDDOOOWNLOAD SELECT * FROM movies WHERE title like '%"+cleantitle.movie(title)+"%'")
+                dbcur.execute("SELECT * FROM movies WHERE title like '%"+cleantitle.movie(title)+"%'")
                 result = dbcur.fetchone()
-                myurl = urlparse.urljoin(self.base_link, '/movies/' + urllib.quote_plus(result[1]))
+                #myurl = urlparse.urljoin(self.base_link, '/movies/' + urllib.quote_plus(result[1]))
+                myurl = urlparse.urljoin(self.base_link, '/movies/' + result[1])
+
                 myhead = {'Referer': 'http://dayt.se/movies/'}
                 result10 = client.request(myurl, headers=myhead)
                 result10 = client.parseDOM(result10, 'div', attrs={'id': '5throw'})[0]

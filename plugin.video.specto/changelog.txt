@@ -1,4 +1,10 @@
-Genvideo
+2016.07.09.2
+Add - Genvideo
+Add - separate addon called script.mrknow.urlresolver (from tknorris repo)
+Fix - WSOnline - thx @bjgood
+Fix - Muchmovies
+
+
 
 Specto v2016.06.26.2
 ------------------------

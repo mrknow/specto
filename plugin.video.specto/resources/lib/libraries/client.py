@@ -129,7 +129,7 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
                     return
 
             elif error == False:
-                print ("Response code",response.code, response.msg)
+                print ("Response code",response.code, response.msg,url)
                 return
 
 
@@ -182,7 +182,7 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
 
         return result
     except Exception as e:
-        control.log('Client ERR %s' % e)
+        control.log('Client ERR %s, url:' % (e,url))
         return
 
 def source(url, close=True, error=False, proxy=None, post=None, headers=None, mobile=False, safe=False, referer=None, cookie=None, output='', timeout='30'):

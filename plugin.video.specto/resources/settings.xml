@@ -149,6 +149,7 @@
         <setting id="realdebrid_refresh" visible="false" type="text" default=""/>
         <setting id="realdebrid_client_id" visible="false" type="text" default=""/>
         <setting id="realdebrid_client_secret" visible="false" type="text" default=""/>
+		<setting id="realdebrid_tokenExpireIn" type="text" visible="false" default="" />
 		<setting type="lsep" label="Premiumize" />
 		<setting id="premiumize_user" type="text" label="ID" default="" />
 		<setting id="premiumize_password" type="text" option="hidden" label="PIN" default="" />

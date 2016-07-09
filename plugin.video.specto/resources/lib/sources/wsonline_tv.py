@@ -23,6 +23,7 @@ import re,urllib,urlparse
 
 from resources.lib.libraries import cleantitle
 from resources.lib.libraries import client
+from resources.lib.libraries import control
 from resources.lib import resolvers
 
 
@@ -114,7 +115,7 @@ class source:
                     url = client.replaceHTMLCodes(url)
                     url = url.encode('utf-8')
 
-                    sources.append({'source': host, 'quality': 'MQ', 'provider': 'WSOnline', 'url': url})
+                    sources.append({'source': host, 'quality': 'SD', 'provider': 'wsonline', 'url': url})
                 except:
                     pass
 
@@ -124,12 +125,13 @@ class source:
 
 
     def resolve(self, url):
+        control.log("@@@ WSONLINE url: %s" % url)
         try:
-            result = client.request(url)
-
-            try: url = client.parseDOM(result, 'a', ret='href', attrs = {'class': 'wsoButton'})[0]
-            except: pass
-
+            #try:
+                #result = client.request(url)
+                #url = client.parseDOM(result, 'a', ret='href', attrs = {'class': 'wsoButton'})[0]
+            #except: pass
+            #url = client.request(url, output='geturl')
             url = resolvers.request(url)
             return url
         except:

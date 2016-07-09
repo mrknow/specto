@@ -3,6 +3,8 @@
 import random, string, sys
 import json,re
 sys.path.append('/home/mrknow/Dokumenty/praca/kodi/specto/plugin.video.specto/mylib/')
+sys.path.append('/home/mrknow/Dokumenty/praca/kodi/filmkodi/script.mrknow.urlresolver/lib/')
+
 
 print ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(25))
 
@@ -14,37 +16,57 @@ from resources.lib.libraries import control
 from resources.lib import resolvers
 
 from resources.lib.resolvers import openload
-from resources.lib.sources.watchfree_mv_tv import source
+from resources.lib.sources.muchmovies_mv_tv import source
 #from resources.lib.sources.animeultima_tv import source
 
 from resources.lib.indexers import movies
 
 #openloadlink = 'https://openload.co/embed/7xKm9d-wcT4'
 my = source()
-#a = my.get_movie('tt2379713','Spectre','2015')
-#control.log('############ DAYT res-1 %s' % a)
+a = my.get_movie('tt3799694','The Nice Guys','2016')
+#a = my.get_movie('tt2948356','Zootopia','2016')
+control.log('############ DAYT res-1 %s' % a)
 
-#b = my.get_sources(a,'','','')
-#control.log('############ DAYT res-2 %s' % b)
+b = my.get_sources(a,'','','')
+control.log('############ DAYT res-2 %s' % b)
+
+for i in b:
+    print ("y",i['url'])
+    #print i
+
+c = my.resolve(b[0]['url'])
+control.log('############ DAYT res-3 %s' % b)
+
+
+exit()
 
 #{'tmdb': '60948', 'tvdb': '272644', 'tvshowtitle': '12 Monkeys', 'imdb': 'tt3148266', 'year': '2015', 'action': 'seasons', 'tvrage': '36903'}
 #PARAMS: {'tmdb': '1424', 'tvdb': '264586', 'tvshowtitle': 'Orange Is the New Black', 'imdb': 'tt2372162', 'year': '2013', 'action': 'seasons', 'tvrage': '32950'}
 
-imdb = 'tt2372162'
-tvdb = '264586'
-title = 'Orange Is the New Black'
-year = '2015'
-data = '2016-05-23'
+# 'name': 'Animal Kingdom S01E04', 'title': 'Dead to Me', 'tvdb': '304262', 'season': '1', 'tvshowtitle': 'Animal Kingdom', 'date': '2016-06-28'
+imdb = 'tt5574490'
+tvdb = '304262'
+title = 'Animal Kingdom'
+year = '2016'
+data = '2016-06-28'
 
 
 
-c=my.get_show('tt3148266',tvdb,'12 Monkeys','2015')
+c=my.get_show('tt3148266',tvdb,title,year)
 control.log('############ DAYT res-1 %s' % c)
 #PARAMS: {'tmdb': '60948', 'episode': '6', 'name': '12 Monkeys S02E06', 'title': 'Immortal', 'tvdb': '272644', 'season': '2', 'tvshowtitle': '12 Monkeys', 'date': '2016-05-23', 'meta': '{"rating": "8.0", "code": "tt3148266", "tmdb": "60948", "imdb": "tt3148266", "year": "2015", "duration": "2700", "plot": "Cole\'s partnership with Ramse is put to the test when they travel back to the 1970s to try to prevent the Twelve from murdering a disturbed Vietnam veteran with a connection to the Witness.", "votes": "47", "thumb": "http://thetvdb.com/banners/episodes/272644/5565074.jpg", "title": "Immortal", "tvdb": "272644", "mpaa": "TV-14", "fanart": "http://thetvdb.com/banners/fanart/original/272644-20.jpg", "season": "2", "status": "Continuing", "poster": "http://thetvdb.com/banners/posters/272644-12.jpg", "tvshowtitle": "12 Monkeys", "studio": "Syfy", "genre": "Mystery / Science-Fiction", "tvrage": "36903", "banner": "http://thetvdb.com/banners/graphical/272644-g5.jpg", "episode": "6", "name": "12 Monkeys S02E06", "premiered": "2016-05-23", "cast": [["Aaron Stanford", ""], ["Amanda Schull", ""], ["Kirk Acevedo", ""], ["Barbara Sukowa", ""], ["Todd Stashwick", ""], ["Emily Hampshire", ""], ["Noah Bean", ""], ["Tom Noonan", ""]], "trailer": "plugin://plugin.video.specto/?action=trailer&name=12+Monkeys"}', 'imdb': 'tt3148266', 'year': '2015', 'action': 'sources', 'tvrage': '36903', 'alter': '0'}
-d=my.get_episode(c,imdb,tvdb,title,data,'2','6')
+d=my.get_episode(c,imdb,tvdb,title,data,'1','2')
 control.log('############ DAYT res-1 %s' % d)
 e=my.get_sources(d,'','','')
-print ("eee",e)
+print ("eee",e[0]['url'])
+for i in e:
+    print ("y",i['url'])
+    print i
+
+exit()
+
+f=my.resolve(e[0]['url'])
+print f
 exit()
 
 #PARAMS: {'tmdb': '62715', 'episode': '7', 'name': 'Dragon Ball Super S04E07', 'title': 'A Message From the Future - Goku Black Invades!',
@@ -69,7 +91,9 @@ control.log('############ get_show  res-1 %s' % c)
 d=my.get_episode(c,imdb,tvdb,title,data,'4','7')
 control.log('############ get_episode res-1 %s' % d)
 e=my.get_sources(d,'','','')
-print ("get_sources",e)
+print ("get_sources",e[0][0])
+print(e)
+f=my.resolve()
 exit()
 
 #url = 'http://ok.ru/video/86215559923'

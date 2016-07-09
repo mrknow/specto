@@ -136,7 +136,7 @@ class source:
                     headers = {'X-Requested-With': 'XMLHttpRequest', 'Referer': u}
                     player = urlparse.urljoin(self.base_link, '/ajax/movie/load_player')
                     post = urllib.urlencode({'id': p[0], 'quality': p[1]})
-                    control.sleep(270)
+                    control.sleep(220)
                     result = client.request(player, post=post, headers=headers)
                     control.log('result %s' % result)
 
