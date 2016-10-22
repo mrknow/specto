@@ -1199,6 +1199,22 @@ msgctxt "#32415"
 msgid "No"
 msgstr ""
 
+msgctxt "#32511"
+msgid "An account already exists."
+msgstr ""
+
+msgctxt "#32512"
+msgid "Do you want to reset?"
+msgstr ""
+
 msgctxt "#33001"
 msgid "Authoriztaion..."
 msgstr ""
+
+msgctxt "#33002"
+msgid "Set download folder location"
+msgstr "Set download folder location"
+
+msgctxt "#33003"
+msgid "Trailer"
+msgstr "Trailer"

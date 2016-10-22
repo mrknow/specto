@@ -18,6 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+# TODO: get Hosts Dict from urlresolver
+
 
 import re,urllib,urlparse,base64
 
@@ -131,7 +133,7 @@ class source:
 
 
     def get_sources(self, url, hosthdDict, hostDict, locDict):
-        control.log('### %s' %url)
+        control.log('### WATCHFREE %s' %url)
         try:
             sources = []
 
@@ -141,13 +143,9 @@ class source:
 
             result = client.request(url)
             result = result.decode('iso-8859-1').encode('utf-8')
-            control.log('### %s' % url)
+            #control.log('### %s' % url)
 
             links = client.parseDOM(result, 'table', attrs = {'class': 'link_ite.+?'})
-
-            for i in hostDict:
-                control.log('Watchfree hosts### i %s' % i)
-
             for i in links:
                 #control.log('### i %s' % i)
 
@@ -160,23 +158,28 @@ class source:
                     url = url.encode('utf-8')
 
                     host = re.findall('([\w]+[.][\w]+)$', urlparse.urlparse(url.strip().lower()).netloc)[0]
-                    print("%@@$^@ host",host)
-
                     if not host in hostDict: raise Exception()
+
+                    #if not host in hostDict:
+                    #    control.log('watchfree HOST; %s' % host)
+                    #    raise Exception()
                     host = client.replaceHTMLCodes(host)
                     host = host.encode('utf-8')
-
+                    try: host = host.split('.')[0]
+                    except: pass
                     quality = client.parseDOM(i, 'div', attrs = {'class': 'quality'})
                     if any(x in ['[CAM]', '[TS]'] for x in quality): quality = 'CAM'
                     else:  quality = 'SD'
-                    quality = quality.encode('utf-8')
-
+                    #quality = quality.encode('utf-8')
                     sources.append({'source': host, 'quality': quality, 'provider': 'Watchfree', 'url': url})
+
+
                 except:
                     pass
 
             return sources
-        except:
+        except Exception as e:
+            control.log('ERROR Watchfree %s' % e)
             return sources
 
 

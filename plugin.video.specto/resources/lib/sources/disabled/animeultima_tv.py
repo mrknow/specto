@@ -111,7 +111,8 @@ class source:
             url = urlparse.urljoin(self.base_link, url)
             sources.append({'source': 'Animeultima', 'quality': 'SD', 'provider': 'Animeultima', 'url': url})
             return sources
-        except:
+        except Exception as e:
+            control.log('ERROR anime %s' % e)
             return sources
 
 

@@ -88,10 +88,10 @@ class source:
             result = re.sub(r'[^\x00-\x7F]+','', result)
             result = client.parseDOM(result, 'li')
             result = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'a')) for i in result]
-            result = [i[0] for i in result if len(i[0]) > 0 and path in i[0][0] and len(i[1]) > 0 and 'Altyaz' in i[1][0]][0][0]
+            print result
 
+            result = [i[0] for i in result if len(i[0]) > 0 and path in i[0][0] and len(i[1]) > 0 and 'ngilizce' in i[1][0]][0][0]
             url = urlparse.urljoin(self.base_link, result)
-
             result = client.request(url)
             result = re.sub(r'[^\x00-\x7F]+','', result)
             result = client.parseDOM(result, 'div', attrs = {'class': 'video-player'})[0]
@@ -109,7 +109,7 @@ class source:
                 control.log('RRRR frame %s' % frame)
 
                 if len(frame) > 0:
-                    url = [client.request(frame[-1], allow_redirect = False)]
+                    url = client.request(frame[-1], redirect=False)
                 else: url = re.compile('"(.+?)"').findall(url)
                 url = [i for i in url if 'ok.ru' in i or 'vk.com' in i or 'openload.co' in i][0]
 
@@ -123,9 +123,10 @@ class source:
 
             for i in url: sources.append({'source': host, 'quality': i['quality'], 'provider': 'Onlinedizi', 'url': i['url'], })
 
-
+            print "Sources", sources
             return sources
-        except:
+        except Exception as e:
+            control.log('ERROR ONLINELID %s' % e)
             return sources
 
 

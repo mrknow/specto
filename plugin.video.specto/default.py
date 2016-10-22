@@ -19,8 +19,7 @@
 '''
 
 #TODO ['notifications-on-startup', False, 'DoFromService', True]
-#TODO Trakt
-#TODO RealDbrid v3
+#TODO http://yify.tv
 
 
 import urlparse,sys
@@ -40,7 +39,7 @@ sys.path.append( os.path.join( ptv.getAddonInfo('path'), "mylib" ) )
 
 params = dict(urlparse.parse_qsl(sys.argv[2].replace('?','')))
 control.log("->----------                PARAMS: %s" % params)
-control.log("->----------                PARAMS2: %s" % sys.argv[2])
+#control.log("->----------                PARAMS2: %s" % sys.argv[2])
 
 
 
@@ -295,7 +294,7 @@ elif action == 'openSettings':
 
 elif action == 'moviePlaycount':
     from resources.lib.libraries import playcount
-    playcount.movies(title, year, imdb, query)
+    playcount.movies(imdb, query)
 
 elif action == 'episodePlaycount':
     from resources.lib.libraries import playcount
@@ -303,7 +302,7 @@ elif action == 'episodePlaycount':
 
 elif action == 'tvPlaycount':
     from resources.lib.libraries import playcount
-    playcount.tvshows(name, year, imdb, tvdb, season, query)
+    playcount.tvshows(name, imdb, tvdb, season, query)
 
 elif action == 'trailer':
     from resources.lib.libraries import trailer

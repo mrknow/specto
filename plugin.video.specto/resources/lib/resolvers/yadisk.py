@@ -39,7 +39,7 @@ def resolve(url):
             post = urllib.urlencode(post)
 
             result = client.request('https://yadi.sk/models/?_m=do-get-resource-url',post=post,cookie=cookie)
-            control.log("-----------------------------YANDEX RES %s" % result)
+            #control.log("-----------------------------YANDEX RES %s" % result)
             result = json.loads(result)
             print('res', result)
             url = result['models'][0]['data']['file']

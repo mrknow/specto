@@ -30,7 +30,7 @@ import urlresolver
 
 def request(url):
     try:
-        #control.log("#RESOLVER#  my url 1 ************ %s " % url)
+        control.log("#RESOLVER#  my url 1 ************ %s " % url)
 
         if '</regex>' in url:
             import regex ; url = regex.resolve(url)
@@ -60,38 +60,9 @@ def request(url):
 
             if z !=False : return z
         except Exception as e:
-            control.log("!!!!!!!!! ERRR #urlresolver#  URL %s " % url)
+            control.log("!!!!!!!!! ERROR #urlresolver#  URL %s " % e)
             pass
-
-        #u = client.shrink_host(url)
-        u = urlparse.urlparse(url).netloc
-        u = u.replace('www.', '').replace('embed.', '')
-        u = u.lower()
-
-        #control.log("#RESOLVER#  URL TO MATCH url 3 ************ %s " % u)
-
-        r = [i['class'] for i in info() if u in i['netloc']][0]
-        r = __import__(r, globals(), locals(), [], -1)
-        #control.log("#RESOLVER#  my url 4 ************ %s " % r)
-
-        r = r.resolve(url)
-        #control.log("#RESOLVER#  my url 5 %s ************ %s " % (r,url))
-
-        if r == None: return r
-
-        elif type(r) == list: return r
-        #elif not r.startswith('http'): return r
-
-        try: h = dict(urlparse.parse_qsl(r.rsplit('|', 1)[1]))
-        except: h = dict('')
-
-        if not 'User-Agent' in h: h['User-Agent'] = client.agent()
-        if not 'Referer' in h: h['Referer'] = url
-
-        r = '%s|%s' % (r.split('|')[0], urllib.urlencode(h))
-        #control.log("#RESOLVER#  my url 6 %s ************ %s " % (r,url))
-
-        return r
+        return None
     except:
         return url
 
@@ -107,6 +78,13 @@ def info():
     }, {
         'class': 'okru',
         'netloc': ['ok.ru']
+    }, {
+        'class': '',
+        'netloc': ['youwatch.com','www.flashx.tv', 'thevideobee.to','auroravid.to'],
+        'host': ['youwatch', 'flashx', 'thevideobee','auroravid'],
+        'quality': 'Low',
+        'captcha': False,
+        'a/c': False
     }, {
         'class': '_180upload',
         'netloc': ['180upload.com'],
@@ -470,7 +448,7 @@ def info():
         'class': 'uploadc',
         'netloc': ['uploadc.com', 'uploadc.ch', 'zalaa.com'],
         'host': ['Uploadc', 'Zalaa'],
-        'quality': 'High',
+        'quality': 'Medium',
         'captcha': False,
         'a/c': False
     }, {
@@ -600,7 +578,7 @@ def info():
         'class': 'zstream',
         'netloc': ['zstream.to'],
         'host': ['zStream'],
-        'quality': 'High',
+        'quality': 'Medium',
         'captcha': False,
         'a/c': False
     }, {

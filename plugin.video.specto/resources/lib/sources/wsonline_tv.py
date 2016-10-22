@@ -29,7 +29,7 @@ from resources.lib import resolvers
 
 class source:
     def __init__(self):
-        self.base_link = 'http://watchseries-online.la'
+        self.base_link = 'http://watchseries-online.se'
         self.search_link = 'index'
 
 
@@ -52,36 +52,28 @@ class source:
             url = client.replaceHTMLCodes(url)
             url = url.encode('utf-8')
             return url
-        except:
+        except Exception as e:
+            control.log('ERROR WSO GET %s' % e)
             return
-
 
     def get_episode(self, url, imdb, tvdb, title, date, season, episode):
         try:
             if url == None: return
+            myses = 's%02de%02d' % (int(season), int(episode))
+            result = client.request(urlparse.urljoin(self.base_link,url))
+            result = re.compile("<li class='listEpisode'>.+?</>",re.DOTALL).findall(result)
+            result = [re.compile("<a href='(.*?)'.*</span>(.*?)</a>").findall(i) for i in result]
+            result = [i[0] for i in result if len(i[0]) > 0]
 
-            year, month = re.compile('(\d{4})-(\d{2})').findall(date)[-1]
-            if int(year) <= 2008: raise Exception()
+            result = [i for i in result if myses in cleantitle.tv(i[1])]
+            result = [i[0] for i in result][0]
+            print result
 
-            cat = urlparse.urljoin(self.base_link, url)
-            cat = cat.split('category/', 1)[-1].rsplit('/')[0]
+            try:
+                url = re.compile('//.+?(/.+)').findall(url)[0]
+            except:
+                url = result
 
-
-            url = urlparse.urljoin(self.base_link, '/episode/%s-s%02de%02d' % (cat, int(season), int(episode)))
-            result = client.request(url, output='response', error=True)
-
-            if '404' in result[0]:
-                url = urlparse.urljoin(self.base_link, '/%s/%s/%s-s%02de%02d' % (year, month, cat, int(season), int(episode)))
-                result = client.request(url, output='response', error=True)
-
-            if '404' in result[0]:
-                url = urlparse.urljoin(self.base_link, '/%s/%s/%s-%01dx%01d' % (year, month, cat, int(season), int(episode)))
-                result = client.request(url, output='response', error=True)
-
-            if '404' in result[0]: raise Exception()
-
-            try: url = re.compile('//.+?(/.+)').findall(url)[0]
-            except: url = result
             url = client.replaceHTMLCodes(url)
             url = url.encode('utf-8')
             return url
@@ -90,9 +82,8 @@ class source:
 
 
     def get_sources(self, url, hosthdDict, hostDict, locDict):
+        sources = []
         try:
-            sources = []
-
             if url == None: return sources
 
             url = urlparse.urljoin(self.base_link, url)
@@ -104,23 +95,27 @@ class source:
             for i in links:
                 try:
                     host = client.parseDOM(i, 'a')[0]
-                    host = host.split('<', 1)[0]
+                    #host = host.split('<', 1)[0]
+                    #host = host.rsplit('.', 1)[0].split('.', 1)[-1]
+                    #host = host.strip().lower()
+                    if not host in hostDict: raise Exception()
                     host = host.rsplit('.', 1)[0].split('.', 1)[-1]
                     host = host.strip().lower()
-                    if not host in hostDict: raise Exception()
                     host = client.replaceHTMLCodes(host)
                     host = host.encode('utf-8')
 
                     url = client.parseDOM(i, 'a', ret='href')[0]
                     url = client.replaceHTMLCodes(url)
                     url = url.encode('utf-8')
+                    print("Url",url)
 
                     sources.append({'source': host, 'quality': 'SD', 'provider': 'wsonline', 'url': url})
                 except:
                     pass
 
             return sources
-        except:
+        except Exception as e:
+            control.log('ERROR WSO %s' % e)
             return sources
 
 

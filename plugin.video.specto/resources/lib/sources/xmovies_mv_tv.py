@@ -31,39 +31,40 @@ from resources.lib import resolvers
 
 class source:
     def __init__(self):
+        self.domains = ['xmovies8.tv']
         self.base_link = 'http://xmovies8.tv'
-        self.base_link_2 = 'http://xmovies8.tv'
         self.search_link = '/movies/search?s=%s'
-        self.headers = {'X-Requested-With': 'XMLHttpRequest'}
-        self.player_link = '/lib/picasa.php'
-        self.player_post_1 = 'mx=%s&isseries=0&part=0'
-        self.player_post_2 = 'mx=%s&isseries=1&part=0'
-        self.player_post_3 = 'mx=%s&isseries=1&part=%s'
 
 
     def get_movie(self, imdb, title, year):
         try:
-            query = urlparse.urljoin(self.base_link_2, self.search_link)
+            query = urlparse.urljoin(self.base_link, self.search_link)
             query = query % urllib.quote_plus(title)
 
+            #for i in range(5):
             r = client.request(query)
+            #    if not r == None: break
+
             t = cleantitle.get(title)
 
-            r = zip(client.parseDOM(r, 'a', ret='href', attrs = {'class': 'movie-item-link'}), client.parseDOM(r, 'a', ret='title', attrs = {'class': 'movie-item-link'}))
-            r = [(i[0], i[1], re.findall('(\d{4})', i[1])) for i in r]
-            #control.log('R %s' % r)
-            r = [(i[0], i[1], i[2][-1]) for i in r if len(i[2]) > 0]
-            #control.log('R %s' % r)
-            r = [i[0] for i in r if t == cleantitle.get(i[1]) and year == i[2]][0]
-            control.log('R %s' % r)
+            r = client.parseDOM(r, 'div', attrs = {'class': 'col-lg.+?'})
+            print("R1",r)
 
-            url = urlparse.urljoin(self.base_link, r)
-            url = urlparse.urlparse(url).path
+            r = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'a', ret='title')) for i in r]
+            r = [(i[0][0], i[1][0]) for i in r if len(i[0]) > 0 and len(i[1]) > 0]
+            r = [(i[0], i[1], re.findall('(\d{4})', i[1])) for i in r]
+            r = [(i[0], i[1], i[2][-1]) for i in r if len(i[2]) > 0]
+            r = [i[0] for i in r if t == cleantitle.get(i[1]) and year == i[2]][0]
+
+            print("R6", r)
+
+            url = re.findall('(?://.+?|)(/.+)', r)[0]
             url = client.replaceHTMLCodes(url)
             url = url.encode('utf-8')
             return url
-        except:
-            pass
+        except Exception as e:
+            control.log('ERROR XMOVIES GET %s' % e)
+            return
 
     def get_show(self, imdb, tvdb, tvshowtitle, year):
         try:
@@ -83,7 +84,7 @@ class source:
 
             query = '%s season %s' % (tvshowtitle, season)
             query = self.search_link % (urllib.quote_plus(query))
-
+            print("R",query)
             result = client.request(query)
             result = json.loads(result)
             result = result['results']
@@ -119,63 +120,63 @@ class source:
             if url == None: return sources
 
             u = urlparse.urljoin(self.base_link, url)
+            r = u.replace('/watching.html', '') + '/watching.html'
 
-            r = client.request(u)
-            #control.log('R %s' % r)
+            for i in range(5):
+                post = client.request(u)
+                if not post == None: break
+
+            post = re.findall('movie=(\d+)', post)[0]
+            post = urllib.urlencode({'id': post, 'episode_id': '0', 'link_id': '0', 'from': 'v3'})
+
+            headers = {
+            'Accept-Formating': 'application/json, text/javascript',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Server': 'cloudflare-nginx',
+            'Referer': r}
+
+            url = urlparse.urljoin(self.base_link, '/ajax/movie/load_episodes')
+
+            for i in range(5):
+                r = client.request(url, post=post, headers=headers)
+                if not r == None: break
 
             r = re.findall("load_player\(\s*'([^']+)'\s*,\s*'?(\d+)\s*'?", r)
             r = list(set(r))
             r = [i for i in r if i[1] == '0' or int(i[1]) >= 720]
-            control.log('R %s' % r)
+
 
             links = []
 
             for p in r:
                 try:
-                    print ('P',p )
-                    headers = {'X-Requested-With': 'XMLHttpRequest', 'Referer': u}
-                    player = urlparse.urljoin(self.base_link, '/ajax/movie/load_player')
+                    play = urlparse.urljoin(self.base_link, '/ajax/movie/load_player_v2')
+
                     post = urllib.urlencode({'id': p[0], 'quality': p[1]})
-                    control.sleep(220)
-                    result = client.request(player, post=post, headers=headers)
-                    control.log('result %s' % result)
 
-                    frame = client.parseDOM(result, 'iframe', ret='src')
-                    embed = client.parseDOM(result, 'embed', ret='flashvars')
+                    for i in range(5):
+                        url = client.request(play, post=post, headers=headers)
+                        if not url == None: break
 
-                    if frame:
-                        if 'player.php' in frame[0]:
-                            frame = client.parseDOM(result, 'input', ret='value', attrs={'type': 'hidden'})[0]
+                    url = json.loads(url)['link']
 
-                            headers = {'Referer': urlparse.urljoin(self.base_link, frame[0])}
+                    url = client.request(url, headers=headers, output='geturl')
 
-                            url = client.request(frame, headers=headers, output='geturl')
 
-                            links += [
-                                {'source': 'gvideo', 'url': url, 'quality': client.googletag(url)[0]['quality']}]
+                    if 'openload.' in url:
+                        links += [{'source': 'openload', 'url': url, 'quality': 'HD'}]
 
-                        elif 'openload.' in frame[0]:
-                            links += [{'source': 'openload.co', 'url': frame[0], 'quality': 'HQ'}]
+                    elif 'videomega.' in url:
+                        links += [{'source': 'videomega', 'url': url, 'quality': 'HD'}]
 
-                        elif 'videomega.' in frame[0]:
-                            links += [{'source': 'videomega.tv', 'url': frame[0], 'quality': 'HQ'}]
-
-                    elif embed:
-                        url = urlparse.parse_qs(embed[0])['fmt_stream_map'][0]
-
-                        url = [i.split('|')[-1] for i in url.split(',')]
-
-                        for i in url:
-                            try: links.append({'source': 'gvideo', 'url': i, 'quality': client.googletag(i)[0]['quality'],'direct': True})
-                            except: pass
+                    else:
+                        try: links.append({'source': 'gvideo', 'url': url, 'quality': client.googletag(url)[0]['quality']})
+                        except: pass
 
                 except:
                     pass
 
-            for i in links:
-                #sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'Xmovies', 'url': i['url'], 'direct': i['direct'], 'debridonly': False})
-                sources.append({'source':  i['source'], 'quality': i['quality'], 'provider': 'Xmovies', 'url': i['url']})
-
+            for i in links: sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'Xmovies', 'url': i['url']})
 
             return sources
         except Exception as e:

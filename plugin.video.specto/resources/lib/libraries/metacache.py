@@ -57,7 +57,7 @@ def fetch(items, lang):
                 try: items[i].update({'fanart': item['fanart']})
                 except: pass
 
-            item = dict((k,v) for k, v in item.iteritems() if not k == 'poster' and not k == 'banner' and not k == 'fanart')
+            item = dict((k,v) for k, v in item.iteritems() if not k == 'fanart')
             items[i].update(item)
 
             items[i].update({'metacache': True})

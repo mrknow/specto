@@ -25,6 +25,7 @@ from resources.lib.libraries import client
 
 def resolve(url):
     try:
+        return
         result = client.request(url, close=False)
 
         f = client.parseDOM(result, 'a', ret='href', attrs = {'id': 'go-next'})[0]

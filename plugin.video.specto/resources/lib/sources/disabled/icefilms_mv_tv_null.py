@@ -28,8 +28,8 @@ from resources.lib import resolvers
 
 class source:
     def __init__(self):
-        self.base_link = 'http://ipv6.icefilms.info'
-        self.link_1 = 'http://ipv6.icefilms.info'
+        self.base_link = 'http://www.icefilms.info'
+        self.link_1 = 'http://www.icefilms.info'
         self.link_2 = 'https://icefilms.unblocked.pw'
         self.moviesearch_link = '/movies/a-z/%s'
         self.tvsearch_link = '/tv/a-z/%s'

@@ -22,7 +22,6 @@ import re,urllib,urlparse,json,base64
 
 from resources.lib.libraries import cleantitle
 from resources.lib.libraries import client
-from resources.lib.libraries import client2
 from resources.lib.libraries import cache
 from resources.lib.libraries import control
 
@@ -96,13 +95,13 @@ class source:
 
             return url
         except:
-            pass
+            return
 
 
     def pelispedia_tvcache(self):
         result = []
 
-        for i in range(0,10):
+        for i in range(0,15):
             try:
                 u = self.search2_link % str(i * 48)
                 u = urlparse.urljoin(self.base_link, u)
@@ -219,7 +218,8 @@ class source:
             for i in links: sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'Pelispedia', 'url': i['url']})
 
             return sources
-        except:
+        except Exception as e:
+            control.log('ERROR PELISP %s' % e)
             return sources
 
 

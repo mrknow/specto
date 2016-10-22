@@ -34,6 +34,8 @@ openloadhdr = {
     'Connection': 'keep-alive'}
 
 def resolve(url):
+    return
+
     #try:
     control.log('[openload] - 1 %s' % url)
     if check(url) == False: return

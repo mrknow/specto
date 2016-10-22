@@ -1,10 +1,41 @@
-2016.07.09.2
-Add - Genvideo
-Add - separate addon called script.mrknow.urlresolver (from tknorris repo)
-Fix - WSOnline - thx @bjgood
-Fix - Muchmovies
+2016.10.20.1 - add source yesmovies, fix cancel button while loading sources,  todo: fmovies,
+
+2016.10.18.02 - fix - Latest Movies and Latest Episodes
+
+2016.10.06.02 - add - Added Documentaries as Genre, Trakt.tv - API Images will be removed on Oct 31, 2016. - added images from filmkodi
+
+2016.10.04.02 - small fix - muchmovies, watchseriesfree, fmovies
+
+2016.09.20.1 - fix - wsonline, fix - sd hosts now are showing
+
+2016.09.20.1 - fix - putlocker, movieshd, xmovies, add - hevcbluray
+
+2016.09.01.1 - fix - fmovie, sezonlukdizi
+
+2016.08.29.1 - fix cache, and iwatchonline, muchmovies, todo: fmovies
+
+2016.08.23.4
+    fix - muchmovies, putlocker, movieshd
+    fix - iwatchonline
 
 
+2016.08.14.1:
+    download fix - if download folder is not set, display settings
+    sources fix - movie25, tunemovie, dayt.se
+    TVShows - add section networks (copy from exodus)
+
+2016.08.01.1:
+    imdb fix - movie and tvshows now works
+
+2016.07.30.2:
+    openload fix - Code take from plugin IPTVPlayer: "https://gitlab.com/iptvplayer-for-e2/iptvplayer-for-e2/
+
+
+2016.07.09.2:
+    Add - Genvideo
+    Add - separate addon called script.mrknow.urlresolver (from tknorris repo)
+    Fix - WSOnline - thx @bjgood
+    Fix - Muchmovies
 
 Specto v2016.06.26.2
 ------------------------

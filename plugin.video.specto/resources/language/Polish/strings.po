@@ -1134,6 +1134,18 @@ msgctxt "#32415"
 msgid "No"
 msgstr ""
 
+msgctxt "#32511"
+msgid "An account already exists."
+msgstr "Konto już istnieje."
+
+msgctxt "#32512"
+msgid "Do you want to reset?"
+msgstr "Czy chcesz usunąć powiązanie z trakt.tv?"
+
 msgctxt "#33001"
 msgid "Authoriztaion..."
 msgstr "Autoryzacja"
+
+msgctxt "#33002"
+msgid "Set download folder location"
+msgstr "Ustaw katalog pobierania plików"

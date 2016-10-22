@@ -123,6 +123,10 @@ cacheFile = os.path.join(dataPath, 'cache.db')
 
 cookieDir = os.path.join(dataPath, 'Cookies')
 
+progressDialogBG = xbmcgui.DialogProgressBG()
+
+info_lang = xbmc.getLanguage(xbmc.ISO_639_1)
+
 try:
     makeFile(cookieDir)
 except:

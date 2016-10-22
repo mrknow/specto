@@ -24,7 +24,9 @@ from resources.lib.libraries import client
 
 
 def resolve(url):
+    return
     try:
+
         url = url.replace('/embed-', '/')
         url = re.compile('//.+?/([\w]+)').findall(url)[0]
         url = 'http://thevideo.me/embed-%s.html' % url

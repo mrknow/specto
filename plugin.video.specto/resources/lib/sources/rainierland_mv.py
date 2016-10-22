@@ -30,7 +30,7 @@ from resources.lib import resolvers
 
 class source:
     def __init__(self):
-        self.base_link = 'http://rainierland.com'
+        self.base_link = 'http://rainierland.bz'
         self.search_link = '/?s=%s'
 
 
@@ -117,12 +117,11 @@ class source:
 
     def get_sources(self, url, hosthdDict, hostDict, locDict):
         sources = []
-        #control.log("rainierland-sources-0 @@@@@@@@@@@@@@@@@@@@@@@@@@@@ ")
-
         try:
             r = urlparse.urljoin(self.base_link, url)
-
-            result = client.request(r)
+            #control.log("rainierland-sources-0 %s" % r)
+            headers= {'Referer':r}
+            result = client.request(r, headers=headers)
             #control.log("rainierland-sources-1 @@@@@@@@@@@@@@@@@@@@@@@@@@@@ %s" % result)
             r = client.parseDOM(result, 'div', attrs = {'class': 'screen fluid-width-video-wrapper'})[0]
             #control.log("rainierland-sources-2 @@@@@@@@@@@@@@@@@@@@@@@@@@@@ %s" % r)
@@ -130,7 +129,7 @@ class source:
             #control.log("rainierland-sources-3 @@@@@@@@@@@@@@@@@@@@@@@@@@@@ %s" % r)
             if len(r) > 0:
                 t = urlparse.urljoin(self.base_link, r[0])
-                r2 = client.request(t)
+                r2 = client.request(t, headers=headers)
                 #control.log("rainierland-sources-4 @@@@@@@@@@@@@@@@@@@@@@@@@@@@ %s" % r2)
                 r3 = re.compile('<source src="(.*?)"').findall(r2)
                 for i in r3:
@@ -144,18 +143,19 @@ class source:
                 for i in r4:
                     try:
                         url = resolvers.request(i)
-                        sources.append({'source': 'openload', 'quality': 'HQ', 'provider': 'Rainierland', 'url': url})
+                        if url != None:
+                            sources.append({'source': 'openload', 'quality': 'HQ', 'provider': 'Rainierland', 'url': url})
                     except:
                         pass
 
             return sources
 
-        except:
+        except Exception as e:
+            control.log('ERROR rainier %s' % e)
             return sources
 
-
     def resolve(self, url):
-        control.log("rainierland-sources-0 @@@@@@@@@@@@@@@@@@@@@@@@@@@@ %s" % url)
+        #control.log("rainierland-sources-0 @@@@@@@@@@@@@@@@@@@@@@@@@@@@ %s" % url)
 
         try:
             if 'requiressl=yes' in url: url = url.replace('http://', 'https://')

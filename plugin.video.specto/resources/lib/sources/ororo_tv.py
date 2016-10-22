@@ -133,7 +133,8 @@ class source:
             sources.append({'source': 'ororo', 'quality': 'HD', 'provider': 'Ororo', 'url': url})
 
             return sources
-        except:
+        except Exception as e:
+            control.log('ERROR oro %s' % e)
             return sources
 
 

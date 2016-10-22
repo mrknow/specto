@@ -96,11 +96,15 @@ class source:
 
             url = urlparse.urljoin(self.base_link, url)
 
-            result = self.request(url, 'Links - Quality')
+            result = client.request(url)
+            #print result
+
             result = result.replace('\n','')
+            print result
 
             quality = re.compile('>Links - Quality(.+?)<').findall(result)[0]
             quality = quality.strip()
+            print("Q",quality)
 
             if quality == 'CAM' or quality == 'TS': quality = 'CAM'
             elif quality == 'SCREENER': quality = 'SCR'
@@ -112,28 +116,35 @@ class source:
             for i in links:
                 try:
                     url = client.parseDOM(i, 'a', ret='href')[0]
-
                     try: url = urlparse.parse_qs(urlparse.urlparse(url).query)['u'][0]
                     except: pass
                     try: url = urlparse.parse_qs(urlparse.urlparse(url).query)['q'][0]
                     except: pass
-                    url = urlparse.parse_qs(urlparse.urlparse(url).query)['url'][0]
-
+                    url = urlparse.urlparse(url).query
                     url = base64.b64decode(url)
+                    url = re.findall('((?:http|https)://.+?/.+?)(?:&|$)', url)[0]
                     url = client.replaceHTMLCodes(url)
                     url = url.encode('utf-8')
+                    print("URL1",url)
 
                     host = re.findall('([\w]+[.][\w]+)$', urlparse.urlparse(url.strip().lower()).netloc)[0]
-                    #if not host in hostDict: raise Exception()
+                    if not host in hostDict: raise Exception()
+                    try: host = host.split('.')[0]
+                    except: pass
+
                     host = client.replaceHTMLCodes(host)
                     host = host.encode('utf-8')
+                    print("URL4", host)
 
                     sources.append({'source': host.split('.')[0], 'quality': 'SD', 'provider': 'Movie25', 'url': url})
+
                 except:
                     pass
 
             return sources
-        except:
+        except Exception as e:
+            control.log('ERROR MOVIE25 %s' % e)
+            pass
             return sources
 
 

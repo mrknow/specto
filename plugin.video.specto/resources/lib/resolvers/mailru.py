@@ -33,6 +33,7 @@ def resolve(url):
         cookie = requests.get(url).headers['Set-Cookie']
 
         u = json.loads(result)['videos']
+        print("u",u)
         h = "|Cookie=%s" % urllib.quote(cookie)
 
         url = []

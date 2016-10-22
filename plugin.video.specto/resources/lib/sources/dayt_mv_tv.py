@@ -33,19 +33,18 @@ except:
 
 class source:
     def __init__(self):
-        self.base_link = 'http://dayt.se'
+        self.base_link = 'http://cyro.se'
         self.search_link = '/forum/search.php?do=process'
         self.forum_link = '/forum/forum.php'
         self.forum_prefix = '/forum'
         self.data_link = 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL21ya25vdy9kYXRhYmFzZS9tYXN0ZXIvZGF5dHNlMS56aXA='
+        self.watch_link = '/watch/%s'
         self.headers = {}
 
     def get_movie(self,imdb, title, year):
-
         try:
-            url = '%s (%s)' % (title, year)
-            url = client.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
+            url = {'imdb': imdb, 'title': title, 'year': year}
+            url = urllib.urlencode(url)
             return url
         except:
             return
@@ -77,66 +76,83 @@ class source:
     def get_sources(self, url, hosthdDict, hostDict, locDict):
         try:
             sources = []
-            control.log('#Dayt url %s' % url)
 
             if url == None: return sources
-            content = re.compile('(.+?)\sS\d*E\d*$').findall(url)
-            control.log('#Dayt content %s' % content)
 
-            if len(content) == 0:
-                control.log('#Dayt ttttttt')
-                title, year = re.compile('(.+?) \((\d{4})\)').findall(url)[0]
-                mytitle = cleantitle.movie(title)
-                control.log('#Dayt title, year: %s,%s' % (title, year))
+            data = urlparse.parse_qs(url)
+            data = dict([(i, data[i][0]) if data[i] else (i, '') for i in data])
 
-                data = os.path.join(control.dataPath, 'daytse1.db')
-                download = True
-                try:download = abs(datetime.datetime.fromtimestamp(os.path.getmtime(data)) - (datetime.datetime.now())) > datetime.timedelta(days=2)
-                except:pass
-                if download == True:
-                    control.log('#Dayt DDDOOOWNLOAD ')
-                    #result = client.request(base64.b64decode(self.data_link))
-                    #with open(data, "wb") as code:
-                    #    code.write(result)
-                    result = client.request(base64.b64decode(self.data_link))
-                    print(len(result))
-                    control.log(">>>>>>>>>>>>>>> ONEC Downloading")
-                    zip = zipfile.ZipFile(StringIO.StringIO(result))
-                    zip.extractall(control.dataPath)
-                    zip.close()
+            url = (data['title'].translate(None, '\/:*?"\'<>|!,')).replace(' ', '-').replace('--', '-').lower()
+            url = urlparse.urljoin(self.base_link, self.watch_link % url)
 
-                dbcon = database.connect(data)
-                dbcur = dbcon.cursor()
-                control.log("#Dayt DDDOOOWNLOAD SELECT * FROM movies WHERE title like '%"+cleantitle.movie(title)+"%'")
-                dbcur.execute("SELECT * FROM movies WHERE title like '%"+cleantitle.movie(title)+"%'")
-                result = dbcur.fetchone()
-                #myurl = urlparse.urljoin(self.base_link, '/movies/' + urllib.quote_plus(result[1]))
-                myurl = urlparse.urljoin(self.base_link, '/movies/' + result[1])
+            r = client.request(url, output='geturl')
 
-                myhead = {'Referer': 'http://dayt.se/movies/'}
-                result10 = client.request(myurl, headers=myhead)
-                result10 = client.parseDOM(result10, 'div', attrs={'id': '5throw'})[0]
-                result10 = client.parseDOM(result10, 'a', attrs={'rel': 'nofollow'}, ret='href')
-                mquality = 'HD'
-                if '1080'in result[2]: mquality = '1080p'
-                for i in result10:
-                    if 'mail.ru' in i:
-                        myresolve = resolvers.request(i)
-                        sources.append({'source': 'MAIL.RU', 'quality': mquality, 'provider': 'Dayt', 'url': myresolve})
-                    if 'yadi.sk' in i:
-                        myresolve = resolvers.request(i)
-                        sources.append({'source': 'YADISK', 'quality': mquality, 'provider': 'Dayt', 'url': myresolve})
+            if r == None: raise Exception()
 
-                result = client.parseDOM(result, 'iframe', ret='src')
-                result = [i for i in result if 'pasep' in i][0]
-                result = client.request(result)
-                result = client.parseDOM(result, 'iframe', ret='src')[0]
-                result = client.request(result)
-                result = client.parseDOM(result, 'iframe', ret='src')[0]
-                links = resolvers.request(result)
-                for i in links: sources.append({'source': 'gvideo', 'quality': i[1], 'provider': 'Dayt', 'url': i[0]})
-                return sources
-        except:
+            r = client.request(url)
+            r = re.sub(r'[^\x00-\x7F]+',' ', r)
+
+
+            y = re.findall('Date\s*:\s*.+?>.+?(\d{4})', r)
+            y = y[0] if len(y) > 0 else None
+
+            if not (data['imdb'] in r or data['year'] == y): raise Exception()
+
+
+            q = client.parseDOM(r, 'title')
+            q = q[0] if len(q) > 0 else None
+
+            quality = '1080p' if ' 1080' in q else 'HD'
+
+
+            r = client.parseDOM(r, 'div', attrs = {'id': '5throw'})[0]
+            r = client.parseDOM(r, 'a', ret='href', attrs = {'rel': 'nofollow'})
+
+            links = []
+
+            for url in r:
+                try:
+                    if 'yadi.sk' in url:
+                        url = resolvers.request(url)
+                    elif 'mail.ru' in url:
+                        url = resolvers.request(url)
+                    else:
+                        raise Exception()
+
+                    if url == None: raise Exception()
+                    links += [{'source': 'cdn', 'url': url, 'quality': quality}]
+                except:
+                    pass
+
+
+            try:
+                r = client.parseDOM(result, 'iframe', ret='src')
+                r = [i for i in r if 'pasep' in i][0]
+
+                for i in range(0, 4):
+                    try:
+                        r = client.request(r)
+                        r = re.sub(r'[^\x00-\x7F]+',' ', r)
+                        r = client.parseDOM(r, 'iframe', ret='src')[0]
+                        if 'google' in r: break
+                    except:
+                        break
+
+                if not 'google' in r: raise Exception()
+                #url = directstream.google(r)
+                url = r
+
+                for i in url:
+                    try: links += [{'source': 'gvideo', 'url': i['url'], 'quality': i['quality']}]
+                    except: pass
+            except:
+                pass
+
+            for i in links: sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'Dayt', 'url': i['url']})
+
+            return sources
+        except Exception as e:
+            control.log('ERROR dayyt %s' % e)
             return sources
 
 

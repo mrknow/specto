@@ -452,6 +452,9 @@ class libepisodes:
 
 
     def service(self):
+        try: control.fix_metahandler()
+        except: pass
+
         try:
             control.makeFile(control.dataPath)
             dbcon = database.connect(control.libcacheFile)
@@ -473,7 +476,7 @@ class libepisodes:
         try: control.window.setProperty(self.property, serviceProperty)
         except: return
 
-        while (not xbmc.abortRequested):
+        while not xbmc.abortRequested:
             try:
                 serviceProperty = control.window.getProperty(self.property)
 

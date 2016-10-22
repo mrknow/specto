@@ -49,6 +49,7 @@ def addFavourite(meta, content, query):
         except: id = meta['tvdb']
 
         if 'title' in meta: title = item['title'] = meta['title']
+        if 'originaltitle' in meta: title = item['originaltitle'] = meta['originaltitle']
         if 'tvshowtitle' in meta: title = item['title'] = meta['tvshowtitle']
         if 'year' in meta: item['year'] = meta['year']
         if 'poster' in meta: item['poster'] = meta['poster']
