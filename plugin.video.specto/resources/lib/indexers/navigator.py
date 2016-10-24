@@ -72,7 +72,7 @@ class navigator:
         #        gui_utils.get_pin()
         #else:
         #    profile = control.traktapi.get_user_profile()
-        #    control.set_setting('trakt.user', '%s (%s)' % (profile['username'], profile['name']))
+        #    control.set_setting('trakt_user', '%s (%s)' % (profile['username'], profile['name']))
 
     #def trakt_pin_auth(self):
     #    gui_utils.get_pin()
