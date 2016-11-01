@@ -34,7 +34,7 @@ from resources.lib import resolvers
 
 class source:
     def __init__(self):
-        self.base_link = 'http://www.flixanity.me'
+        self.base_link = 'http://flixanity.watch'
         #self.search_link = '/api/v1/cautare/apr'
         self.social_lock = 'evokjaqbb8'
         self.search_link = '/api/v1/cautare/'+ self.social_lock

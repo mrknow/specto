@@ -346,8 +346,8 @@ msgid "[B]IMDB[/B] : Import TV Watchlist..."
 msgstr "[B]IMDB[/B] : Import TV Watchlist..."
 
 msgctxt "#30141"
-msgid "[B]TRAKT[/B] : Trakt Setup"
-msgstr "[B]TRAKT[/B] : Trakt Setup"
+msgid "[B]DIAGNOSTIC[/B] : Log uploader"
+msgstr ""
 
 msgctxt "#30142"
 msgid "Authorization..."
@@ -1218,3 +1218,43 @@ msgstr "Set download folder location"
 msgctxt "#33003"
 msgid "Trailer"
 msgstr "Trailer"
+msgctxt "#32011"
+msgid "Error posting the crashlog file"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Error posting the old file"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Post this paste url for your %s, together with a problem description, on the Mrknow support forum:[CR]%s"
+msgstr ""
+
+msgctxt "#32031"
+msgid "logfile"
+msgstr ""
+
+msgctxt "#32032"
+msgid "old log"
+msgstr ""
+
+
+msgctxt "#32021"
+msgid "No old log file found"
+msgstr ""
+
+msgctxt "#32001"
+msgid "The file is empty"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Failed to read the file"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Failed to connect to the server"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Failed to retrieve the paste url"
+msgstr ""

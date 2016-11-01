@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-# TODO: get Hosts Dict from urlresolver
+# TODO: get Hosts Dict from urlresolver2
 
 
 import re,urllib,urlparse,base64
@@ -47,7 +47,8 @@ class source:
 
             result = client.parseDOM(result, 'div', attrs = {'class': 'item'})
 
-            title = 'watch' + cleantitle.get(title)
+            title = 'watchputlocker' + cleantitle.get(title)
+
             years = ['(%s)' % str(year), '(%s)' % str(int(year)+1), '(%s)' % str(int(year)-1)]
 
             result = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'a', ret='title')) for i in result]
@@ -57,6 +58,7 @@ class source:
             except: pass
 
             match = [i[0] for i in result if title == cleantitle.get(i[1]) and '(%s)' % str(year) in i[1]]
+            print match
 
             match2 = [i[0] for i in match]
             match2 = [x for y,x in enumerate(match2) if x not in match2[:y]]
@@ -88,7 +90,7 @@ class source:
 
             result = client.parseDOM(result, 'div', attrs = {'class': 'item'})
 
-            tvshowtitle = 'watch' + cleantitle.get(tvshowtitle)
+            tvshowtitle = 'watchputlocker' + cleantitle.get(tvshowtitle)
             years = ['(%s)' % str(year), '(%s)' % str(int(year)+1), '(%s)' % str(int(year)-1)]
 
             result = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'a', ret='title')) for i in result]
@@ -146,6 +148,7 @@ class source:
             #control.log('### %s' % url)
 
             links = client.parseDOM(result, 'table', attrs = {'class': 'link_ite.+?'})
+            print links
             for i in links:
                 #control.log('### i %s' % i)
 
@@ -158,6 +161,7 @@ class source:
                     url = url.encode('utf-8')
 
                     host = re.findall('([\w]+[.][\w]+)$', urlparse.urlparse(url.strip().lower()).netloc)[0]
+                    print host
                     if not host in hostDict: raise Exception()
 
                     #if not host in hostDict:

@@ -33,7 +33,7 @@
 		<setting id="easynews" type="bool" label="Easynews" default="false" />
 		<setting id="fmovies" type="bool" label="Fmovies" default="true" />
 		<setting id="genvideos" type="bool" label="Genvideos" default="true" />
-		<setting id="hevcfilm" type="bool" label="Hevcfilm" default="true" />
+		<setting id="hevcfilm" type="bool" label="Hevcfilm" default="false" />
 		<setting id="iwatchonline" type="bool" label="Iwatchonline" default="true" />
 		<setting id="movie25" type="bool" label="Movie25" default="true" />
 		<setting id="movieshd" type="bool" label="MoviesHD" default="true" />

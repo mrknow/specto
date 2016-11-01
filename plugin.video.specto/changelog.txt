@@ -1,4 +1,6 @@
-2016.10.20.1 - add source yesmovies, fix cancel button while loading sources,  todo: fmovies,
+2016.10.28.2 - rename urlresolver to urlresolver9
+
+2016.10.20.2 - add source yesmovies, fix cancel button while loading sources, fix fmovies,
 
 2016.10.18.02 - fix - Latest Movies and Latest Episodes
 

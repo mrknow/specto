@@ -347,6 +347,10 @@ msgctxt "#30140"
 msgid "[B]IMDB[/B] : Import TV Watchlist..."
 msgstr "[B]IMDB[/B] : Importuj listę obejrzanyc seriali..."
 
+msgctxt "#30141"
+msgid "[B]DIAGNOSTIC[/B] : Log uploader"
+msgstr ""
+
 msgctxt "#30142"
 msgid "Authorization..."
 msgstr "Autoryzzacja..."
