@@ -542,13 +542,13 @@ def info():
     }, {
         'class': 'vk',
         'netloc': ['vk.com']
-    }, {
-        'class': 'vodlocker',
-        'netloc': ['vodlocker.com'],
-        'host': ['Vodlocker'],
-        'quality': 'Low',
-        'captcha': False,
-        'a/c': False
+    #}, {
+    #    'class': 'vodlocker',
+    #    'netloc': ['vodlocker.com'],
+    #    'host': ['Vodlocker'],
+    #    'quality': 'Low',
+    #    'captcha': False,
+    #    'a/c': False
     }, {
         'class': 'xfileload',
         'netloc': ['xfileload.com'],

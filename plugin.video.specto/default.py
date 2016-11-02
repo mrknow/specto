@@ -267,6 +267,8 @@ elif action == 'calendar':
 elif action == 'tvWidget':
     from resources.lib.indexers import episodes
     episodes.episodes().widget()
+    #episodes.episodes().calendar(url)
+
 
 elif action == 'episodeFavourites':
     from resources.lib.indexers import episodes

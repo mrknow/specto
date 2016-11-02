@@ -1,115 +1,12 @@
+2016.11.1.1 - fix calendar and last episodes
+
 2016.10.28.2 - rename urlresolver to urlresolver9
-
 2016.10.20.2 - add source yesmovies, fix cancel button while loading sources, fix fmovies,
-
 2016.10.18.02 - fix - Latest Movies and Latest Episodes
-
 2016.10.06.02 - add - Added Documentaries as Genre, Trakt.tv - API Images will be removed on Oct 31, 2016. - added images from filmkodi
-
 2016.10.04.02 - small fix - muchmovies, watchseriesfree, fmovies
-
 2016.09.20.1 - fix - wsonline, fix - sd hosts now are showing
-
 2016.09.20.1 - fix - putlocker, movieshd, xmovies, add - hevcbluray
-
 2016.09.01.1 - fix - fmovie, sezonlukdizi
-
 2016.08.29.1 - fix cache, and iwatchonline, muchmovies, todo: fmovies
-
-2016.08.23.4
-    fix - muchmovies, putlocker, movieshd
-    fix - iwatchonline
-
-
-2016.08.14.1:
-    download fix - if download folder is not set, display settings
-    sources fix - movie25, tunemovie, dayt.se
-    TVShows - add section networks (copy from exodus)
-
-2016.08.01.1:
-    imdb fix - movie and tvshows now works
-
-2016.07.30.2:
-    openload fix - Code take from plugin IPTVPlayer: "https://gitlab.com/iptvplayer-for-e2/iptvplayer-for-e2/
-
-
-2016.07.09.2:
-    Add - Genvideo
-    Add - separate addon called script.mrknow.urlresolver (from tknorris repo)
-    Fix - WSOnline - thx @bjgood
-    Fix - Muchmovies
-
-Specto v2016.06.26.2
-------------------------
-Fix - realdebrid
-Add - serieswatch
-Add - separate addon called SpectoThemepak
-
-Specto v2016.06.18.1
-------------------------
-Fix - putlocker, muchmovies, fmovies, daytse, xvideoss
-
-------------------------
-Specto v2016.06.06.1
-------------------------
-- oneclickwatch - disabled
-- openload - fixed (maybe?)
-------------------------
-Specto v2016.05.10.6
-------------------------
-Small Fix - putlocker, muchmovies, allmyvideo, cloudtime
-
-------------------------
-Specto v2016.05.08.7
-------------------------
-Fix - searching
-Fix - oneclickwatch
-Fix - putlocker
-Add - resolvers yadi.sk, cloud.mail.ru
-Add DAYT 1080p source
-
-------------------------
-Specto v2016.05.08.1
-------------------------
-Fix - dizilab for TV
-Fix - oneclickwatch
-Fix -videomega, uptobox resolvers
-Trakt.tv - now working
-
-
-------------------------
-Specto v2016.04.23.1
-------------------------
-Fix scraper - beter handling cloudflare for 1080p sites
-Added Sources:
-    - Pelispedia
-    - rainierland
-
-------------------------
-Specto v2016.04.20.1
-------------------------
-Fix muchmoovies - small source fix
-
-------------------------
-Specto v2016.03.26.1
-------------------------
-Fix marked as watched - Metahandler
-------------------------
-Specto v2016.03.12.3
-------------------------
-Cache repair
-Movies repair - done in 90%
-TV Shows repair  - done in 80%
-
-------------------------
-Specto v2016.03.11.3
-------------------------
-Cache repair
-Movies repair - done in 90%
-TV Shows repair  - done in 2%
-
-------------------------
-Specto v2016.03.06
-------------------------
-Openload   decodeOpenLoad made by mortael
 
