@@ -3,7 +3,7 @@
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
 		<import addon="script.module.requests" version="1.0.0" />
-		<import addon="script.module.metahandler" version="2.9.0" />
+		<import addon="script.module.metahandler" />
 		<import addon="plugin.video.youtube" optional="true" />
 		<import addon="script.mrknow.urlresolver" />
 		<import addon="script.specto.media" />

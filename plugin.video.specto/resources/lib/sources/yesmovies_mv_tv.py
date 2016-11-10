@@ -40,7 +40,7 @@ class source:
     def __init__(self):
         self.base_link = 'http://yesmovies.to'
         self.search_link = '/ajax/movie_suggest_search.html'
-        self.info_link = '/ajax/movie_get_info/%s.html?is_login=false'
+        self.info_link = '/ajax/movie_info/%s.html?is_login=false'
         self.server_link = '/ajax/v3_movie_get_episodes/%s/%s/%s/movie.html'
         self.series_link = '/ajax/v3_movie_get_episodes/%s/%s/%s/series.html'
 
@@ -56,7 +56,7 @@ class source:
 
     def get_movie(self, imdb, title, year):
         try:
-            t = cleantitle.get(title)
+            t = cleantitle.query2(title)
             hash = hashlib.md5(title).hexdigest()
             query = urllib.urlencode({'keyword': title, 'hash':hash})
             url = urlparse.urljoin(self.base_link, self.search_link)
@@ -66,15 +66,22 @@ class source:
             r = [i[0] for i in r if cleantitle.get(t) == cleantitle.get(i[1])][:2]
             r = [(i, re.findall('(\d+)', i)[-1]) for i in r]
             url = None
+            print r
 
             for i in r:
                 try:
+                    print i[1]
                     #y, q = cache.get(self.myesmovies_info(), 9000, i[1])
-                    y, q = self.myesmovies_info(i[1])
-                    if not y == year: raise Exception()
+                    y, q = self.myesmovies_info(i[0])
+                    print("yQ",y,q,year)
+                    if not y == year:
+                        print "NOT",type(y),type(year)
+                        raise Exception()
                     return urlparse.urlparse(i[0]).path
                 except:
                     pass
+            print(url)
+
             return url
 
 
@@ -110,19 +117,26 @@ class source:
             url = urlparse.urljoin(self.base_link, self.search_link)
             r = client.request(url, post=query, headers=self.headers)
             r = json.loads(r)['content']
-            print('>>>',r)
+            print('>>>>>>>',r)
 
             r = zip(client.parseDOM(r, 'a', ret='href', attrs = {'class': 'ss-title'}), client.parseDOM(r, 'a', attrs = {'class': 'ss-title'}))
+            print "RRRR", r
             r = [(i[0], re.findall('(.+?) - season (\d+)$', i[1].lower())) for i in r]
+            print "RRRR", r
             r = [(i[0], i[1][0][0], i[1][0][1]) for i in r if len(i[1]) > 0]
+            print "RRRR", r
             r = [i for i in r if t == cleantitle.get(i[1])]
-            r = [i[0] for i in r if season == '%01d' % int(i[2])][:2]
+            print "RRRR", r
+            print "AAA", '%01d' % int(r[0][2]), season
+            r = [i[0] for i in r if season == '%01d' % int(i[2])]
+            print "RRRR", r
+
             r = [(i, re.findall('(\d+)', i)[-1]) for i in r]
             print('>>>',r)
 
             for i in r:
                 try:
-                    y, q = cache.get(self.myesmovies_info, 9000, i[1])
+                    y, q = cache.get(self.myesmovies_info, 9000, i[0])
                     if not y in years: raise Exception()
                     return urlparse.urlparse(i[0]).path + '?episode=%01d' % int(episode)
                 except:
@@ -132,11 +146,12 @@ class source:
 
     def myesmovies_info(self, url):
         try:
-            u = urlparse.urljoin(self.base_link, self.info_link)
-            u = client.request(u % url, headers=self.headers)
-            q = client.parseDOM(u, 'div', attrs = {'class': 'jtip-quality'})[0]
-            y = client.parseDOM(u, 'div', attrs = {'class': 'jt-info'})
-            y = [i.strip() for i in y if i.strip().isdigit() and len(i.strip()) == 4][0]
+            u = client.request(url)
+            #print "U",u
+            r = re.findall('<p><strong>Quality:</strong>[^"]+"quality">(.*?)</s[^R]+Release:</strong>(.*?)</p>',u)[0]
+            print r
+            q = str(r[0])
+            y = str(r[1].strip())
             return (y, q)
         except:
             return

@@ -253,7 +253,7 @@ class player(xbmc.Player):
         except:
             pass
         try:
-            ok = self.currentTime / self.totalTime >= .9
+            ok = self.currentTime / self.totalTime >= .8
             if ok: self.setWatchedStatus()
         except:
             pass

@@ -421,7 +421,7 @@ class sources:
             except:
                 pass
 
-        if len(self.sources) >= 10: return True
+        if len(self.sources) >= 5: return True
         else: return False
 
 

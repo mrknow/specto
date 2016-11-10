@@ -993,7 +993,7 @@ class episodes:
             items = []
         except:
             return
-        control.log('trakt_list2' % url)
+        control.log('trakt_list2 %s' % url)
         for item in result:
             try:
                 num_1 = 0
@@ -1037,6 +1037,7 @@ class episodes:
                 tvrage = tvrage.encode('utf-8')
 
                 items.append({'imdb': imdb, 'tmdb': tmdb, 'tvdb': tvdb, 'tvrage': tvrage, 'tvshowtitle': tvshowtitle, 'year': year, 'season': season, 'episode': episode})
+
             except:
                 pass
 
@@ -1215,7 +1216,9 @@ class episodes:
                 plot = client.replaceHTMLCodes(plot)
                 plot = plot.encode('utf-8')
 
-                self.list.append({'title': title, 'season': season, 'episode': episode, 'tvshowtitle': tvshowtitle, 'year': year, 'premiered': premiered, 'status': status, 'alter': alter, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'director': director, 'writer': writer, 'cast': cast, 'plot': plot, 'name': name, 'code': imdb, 'imdb': imdb, 'tmdb': tmdb, 'tvdb': tvdb, 'tvrage': tvrage, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb, 'action': 'episodes'})
+                #self.list.append({'title': title, 'season': season, 'episode': episode, 'tvshowtitle': tvshowtitle, 'year': year, 'premiered': premiered, 'status': status, 'alter': alter, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'director': director, 'writer': writer, 'cast': cast, 'plot': plot, 'name': name, 'code': imdb, 'imdb': imdb, 'tmdb': tmdb, 'tvdb': tvdb, 'tvrage': tvrage, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb, 'action': 'episodes'})
+                self.list.append({'title': title, 'season': season, 'episode': episode, 'tvshowtitle': tvshowtitle, 'year': year, 'premiered': premiered, 'status': 'Continuing', 'alter': alter, 'studio': studio, 'genre': genre, 'duration': duration, 'rating': rating, 'votes': votes, 'mpaa': mpaa, 'director': '0', 'writer': '0', 'cast': '0', 'plot': plot, 'name': name, 'code': imdb, 'imdb': imdb, 'tmdb': tmdb, 'tvdb': tvdb, 'tvrage': tvrage, 'poster': poster, 'banner': banner, 'fanart': fanart, 'thumb': thumb})
+
             except:
                 pass
 

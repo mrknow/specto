@@ -109,7 +109,7 @@ class movies:
                     if url == self.trakthistory_link: raise Exception()
                     if not '/users/me/' in url: raise Exception()
                     if trakt.getActivity() > cache.timeout(self.trakt_list, url, self.trakt_user): raise Exception()
-                    self.list = cache.get(self.trakt_list, 720, url, self.trakt_user)
+                    self.list = cache.get(self.trakt_list, 72, url, self.trakt_user)
                 except:
                     self.list = cache.get(self.trakt_list, 0, url, self.trakt_user)
 
