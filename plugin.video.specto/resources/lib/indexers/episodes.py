@@ -30,6 +30,7 @@ from resources.lib.libraries import favourites
 from resources.lib.libraries import workers
 from resources.lib.libraries import views
 from resources.lib.libraries import playcount
+from resources.lib.libraries import trakt_api2
 
 
 class seasons:
@@ -822,6 +823,20 @@ class episodes:
         if idx == True: self.addDirectory(self.list)
         return self.list
 
+    def removeHiddenShows(self, shows):
+        hiddentvshows = cache.get(trakt_api2.TraktAPI2().get_hidden_progress, 24)        
+
+        hiddentvshowslugs = [hidden['show']['ids']['slug'] for hidden in hiddentvshows]  
+        control.log("hidden shows: %s" % str(hiddentvshowslugs))
+
+        visible = []
+        for show in shows:
+            if show['show']['ids']['slug'] in hiddentvshowslugs:
+                continue
+            visible.append(show)
+
+        return visible
+
 
     def trakt_list(self, url):
         control.log('trakt_list %s' % url)
@@ -834,6 +849,8 @@ class episodes:
             items = json.loads(result)
         except:
             return
+
+        items = self.removeHiddenShows(items)
 
         for item in items:
             try:
@@ -994,6 +1011,9 @@ class episodes:
         except:
             return
         control.log('trakt_list2 %s' % url)
+        
+        result = self.removeHiddenShows(result)
+
         for item in result:
             try:
                 num_1 = 0
