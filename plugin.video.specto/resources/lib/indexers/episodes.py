@@ -993,7 +993,7 @@ class episodes:
             items = []
         except:
             return
-        control.log('trakt_list2' % url)
+        control.log('trakt_list2 %s' % url)
         for item in result:
             try:
                 num_1 = 0
