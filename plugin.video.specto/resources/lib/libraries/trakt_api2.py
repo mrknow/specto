@@ -47,8 +47,8 @@ class TransientTraktError(Exception):
     pass
 
 BASE_URL = 'api-v2launch.trakt.tv'
-V2_API_KEY = '41cc25669cf6974588f04131b72f7821037ccb5e7e23345c7c1e974b80b9f255'
-CLIENT_SECRET = 'cb89a1a5b7febbb0366d7ca272cd78a591d5826ce21455efc15d9bc45ecccd2e'
+V2_API_KEY = control.trakt_key
+CLIENT_SECRET = control.trakt_secret
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 RESULTS_LIMIT = 10
 HIDDEN_SIZE = 100
@@ -67,7 +67,7 @@ class TraktAPI2():
             data['code'] = pin
             data['grant_type'] = 'authorization_code'
         else:
-            refresh_token = control.setting('trakt_refresh_token')
+            refresh_token = control.setting('trakt.refresh')
             if refresh_token:
                 data['refresh_token'] = refresh_token
                 data['grant_type'] = 'refresh_token'
@@ -459,16 +459,16 @@ class TraktAPI2():
                         # auth failure retry or a token request
                         elif auth_retry or url.endswith('/token'):
                             self.token = None
-                            control.set_setting('trakt_oauth_token', '')
-                            control.set_setting('trakt_refresh_token', '')
+                            control.set_setting('trakt.token', '')
+                            control.set_setting('trakt.refresh', '')
                             control.infoDialog('Trakt Call Authentication Failed (%s)' % (e.code),"Trakt ERROR")
                             raise TraktAuthError('Trakt Call Authentication Failed (%s)' % (e.code))
                         # first try token fail, try to refresh token
                         else:
                             result = self.get_token()
                             self.token = result['access_token']
-                            control.set_setting('trakt_oauth_token', result['access_token'])
-                            control.set_setting('trakt_refresh_token', result['refresh_token'])
+                            control.set_setting('trakt.token', result['access_token'])
+                            control.set_setting('trakt.refresh', result['refresh_token'])
                             auth_retry = True
                     elif e.code == 404:
                         control.infoDialog('Object Not Found (%s)' % (e.code), "Trakt ERROR")

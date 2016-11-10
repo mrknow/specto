@@ -79,14 +79,14 @@ def get_pin():
                     trakt_api = TraktAPI2(use_https=False, timeout=300)
                     result = trakt_api.get_token(pin=pin)
                     print("---",result)
-                    control.set_setting('trakt_oauth_token', result['access_token'])
-                    control.set_setting('trakt_refresh_token', result['refresh_token'])
+                    control.set_setting('trakt.token', result['access_token'])
+                    control.set_setting('trakt.refresh', result['refresh_token'])
                     TOKEN = result['access_token']
                     trakt_api = TraktAPI2(TOKEN, use_https=False, timeout=300)
                     profile = trakt_api.get_user_profile(cached=False)
                     print("Profile",profile)
                     print("Profile",profile['username'])
-                    control.set_setting('trakt_user', profile['username'])
+                    control.set_setting('trakt.user', profile['username'])
                     control.infoDialog('Trakt Authorization Success !', 'Trakt Success')
 
                     return True
