@@ -35,7 +35,7 @@ from resources.lib import resolvers
 class source:
     def __init__(self):
         self.base_link = 'http://flixanity.watch'
-        #self.search_link = '/api/v1/cautare/apr'
+        self.sitemap = '/sitemap.xml'
         self.social_lock = 'evokjaqbb8'
         self.search_link = '/api/v1/cautare/'+ self.social_lock
 
@@ -43,6 +43,17 @@ class source:
 
     def get_movie(self, imdb, title, year):
         try:
+            """
+            r = '/movie/%s' % (cleantitle.query10(title))
+            control.log('>>>>>>   %s' % r)
+            result = client.request(urlparse.urljoin(self.base_link, r))
+            result = client.parseDOM(result,'span', attrs={'class':'dat'})[0]
+            if year == str(result.strip()):
+                url = r.encode('utf-8')
+                control.log('>>>>>>  Putlocker URL  %s' % url)
+                return url
+            return
+            """
             tk = cache.get(self.putlocker_token, 8)
             set = self.putlocker_set()
             rt = self.putlocker_rt(tk + set)
@@ -72,12 +83,20 @@ class source:
             url = url.encode('utf-8')
             print("U",url)
             return url
+
         except:
             return
 
 
     def get_show(self, imdb, tvdb, tvshowtitle, year):
         try:
+            """
+            url = {'imdb': imdb, 'tvdb': tvdb, 'tvshowtitle': tvshowtitle, 'year': year}
+            url = urllib.urlencode(url)
+            return url
+        except:
+            return None
+            """
             tk = cache.get(self.putlocker_token, 8)
             set = self.putlocker_set()
             rt = self.putlocker_rt(tk + set)
@@ -115,12 +134,23 @@ class source:
         try:
             if url == None: return
 
-            r = '%s/season/%01d/episode/%01d' % (url, int(season), int(episode))
+            url = urlparse.parse_qs(url)
+            url = dict([(i, url[i][0]) if url[i] else (i, '') for i in url])
+            print url
+            tvshowtitle =  cleantitle.query10(url['tvshowtitle'])
 
-            url = re.findall('(?://.+?|)(/.+)', r)[0]
-            url = client.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
-            return url
+            r = '/tv-show/%s/season/%01d/episode/%01d' % (tvshowtitle, int(season), int(episode))
+            y = '/tv-show/%s/season/%01d' % (tvshowtitle, int(season))
+
+            control.log('>>>>>>   %s' % y)
+            result = client.request(urlparse.urljoin(self.base_link, y))
+            result = client.parseDOM(result,'span', attrs={'class':'dat'})[0]
+            if url['year'] == str(result.strip()):
+                url = r.encode('utf-8')
+                control.log('>>>>>>  Putlocker URL  %s' % url)
+                return url
+
+            return
         except:
             return
 

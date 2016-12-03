@@ -26,9 +26,9 @@ from resources.lib.libraries import control
 from resources.lib.resolvers import realdebrid
 from resources.lib.resolvers import premiumize
 try:
-    import urlresolver
-except:
     import urlresolver9 as urlresolver
+except:
+    pass
 
 
 def request(url):

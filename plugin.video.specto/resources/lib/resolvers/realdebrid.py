@@ -181,10 +181,11 @@ def status():
         return False
 
 def getHosts():
+    myhosts2 = rdDict()
     myhosts = rdDict()
     for i in range(len(myhosts)):
         myhosts[i] = myhosts[i].split('.')[-2].encode('utf-8')
-
+    myhosts = myhosts + myhosts2
     #control.log("@@@@  REALDEBRID HOSTS %s ### " % (myhosts))
     return myhosts
 

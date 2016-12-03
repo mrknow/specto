@@ -43,10 +43,7 @@ from resources.lib.resolvers import zstream
 
 class source:
     def __init__(self):
-        self.base_link = 'https://www.iwatchonline.lol'
-        self.link_1 = 'https://www.iwatchonline.lol'
-        self.link_2 = 'https://www.iwatchonline.video'
-        self.link_3 = 'https://www.iwatchonline.cr'
+        self.base_link = 'https://www.iwatchonline.cr'
         self.search_link = '/advance-search'
         self.show_link = '/tv-shows/%s'
         self.episode_link = '/episode/%s-s%02de%02d'
@@ -57,15 +54,12 @@ class source:
             query = self.search_link
             post = {'searchquery': title, 'searchin': '1'}
             post = urllib.urlencode(post)
-
-
             result = ''
-            links = [self.link_1, self.link_3]
-            for base_link in links:
-                headers = {"Content-Type":"application/x-www-form-urlencoded", "Referer":urlparse.urljoin(base_link, query)}
-                result = client.request(urlparse.urljoin(base_link, query), post=post, headers=headers)
-                if 'widget search-page' in str(result): break
 
+            headers = {"Content-Type":"application/x-www-form-urlencoded", "Referer":urlparse.urljoin(self.base_link, query)}
+            result = client.request(urlparse.urljoin(self.base_link, query), post=post, headers=headers)
+            #if 'widget search-page' in str(result): break
+            print("R",result)
             result = client.parseDOM(result, 'div', attrs = {'class': 'widget search-page'})[0]
             result = client.parseDOM(result, 'td')
 
@@ -81,7 +75,8 @@ class source:
             url = urlparse.urlparse(url).path
             url = url.encode('utf-8')
             return url
-        except:
+        except Exception as e:
+            control.log("ERR iwatch %s" % e)
             return
 
     def get_show(self, imdb, tvdb, tvshowtitle, year):
@@ -135,13 +130,8 @@ class source:
             if url == None: return self.sources
 
             result = ''
-            links = [self.link_1, self.link_3]
-            for base_link in links:
-                headers = {"Referer":urlparse.urljoin(base_link, url)}
-                result, headers, content, cookie = client.request(urlparse.urljoin(base_link, url), output='extended', headers=headers)
-                myref=urlparse.urljoin(base_link, url)
-                #control.log('### %s' % result)
-                if 'original-title' in str(result): break
+            headers = {"Referer":urlparse.urljoin(self.base_link, url)}
+            result, headers, content, cookie = client.request(urlparse.urljoin(self.base_link, url), output='extended', headers=headers)
 
             links = client.parseDOM(result, 'tr', attrs = {'id': 'pt.+?'})
 
@@ -159,7 +149,7 @@ class source:
                     host = host.encode('utf-8')
 
                     if '>Cam<' in i or '>TS<' in i: quality = 'CAM'
-                    elif '>HD<' in i and host in hosthdDict: quality = 'HD'
+                    #elif '>HD<' in i and host in hostDict: quality = 'HD'
                     else: quality = 'SD'
 
                     #if quality == 'HD' and not host in hosthdDict: raise Exception()
@@ -167,7 +157,6 @@ class source:
 
                     if '>3D<' in i: info = '3D'
                     else: info = ''
-                    #control.log('### host:%s q:%s' % (host,quality))
 
                     url = re.compile('href=[\'|\"|\s|\<]*(.+?)[\'|\"|\s|\>]').findall(i)[0]
                     url = client.replaceHTMLCodes(url)
@@ -179,8 +168,10 @@ class source:
 
 
                     url = url.encode('utf-8')
-                    #control.log('########  IWATCH LINK url:%s  host:%s q:%s' % (url,host,quality))
-                    mylinks.append({'source': host, 'quality': quality, 'url': url})
+                    control.log('########  IWATCH LINK url:%s  host:%s q:%s' % (url,host,quality))
+                    self.sources.append(
+                        {'source': host, 'quality': quality, 'provider': 'Iwatchonline', 'url': url})
+
 
                 except:
                     pass
@@ -188,17 +179,19 @@ class source:
             #for i in mylinks:
             #    control.log(">>>>>>>>>>>>>>> ONE IWACH LINKS %s" % (i))
 
-            threads = []
-            for i in mylinks: threads.append(workers.Thread(self.check, i, headers, cookie,hostDict,hosthdDict))
-            [i.start() for i in threads]
-            for i in range(0, 10 * 2):
-                is_alive = [x.is_alive() for x in threads]
-                if all(x == False for x in is_alive): break
-                time.sleep(0.5)
+            #threads = []
+            #for i in mylinks: threads.append(workers.Thread(self.check, i, headers, cookie,hostDict,hosthdDict))
+            #[i.start() for i in threads]
+            #for i in range(0, 10 * 2):
+            #    is_alive = [x.is_alive() for x in threads]
+            #    if all(x == False for x in is_alive): break
+            #    time.sleep(0.5)
 
             return self.sources
 
-        except:
+
+        except Exception as e:
+            control.log("ERR iwatch %s" % e)
             return self.sources
 
     def check(self, i, headers, cookie, myhostDict, myhosthdDict):
@@ -206,16 +199,19 @@ class source:
             url = client.replaceHTMLCodes(i['url'])
             r = client.request(url, headers=headers, cookie=cookie, output='headers')
             url = r['Refresh'].replace('0;url=','')
+            control.log('#%s'% url)
             host = re.findall('([\w]+[.][\w]+)$', urlparse.urlparse(url.strip().lower()).netloc)[0]
-            if not host in myhostDict:
-                #control.log('movie25 HOST; %s' % host)
-                raise Exception()
-            self.sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'Iwatchonline', 'url': url})
+
+            if host in myhostDict:
+                self.sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'Iwatchonline', 'url': url})
         except:
             pass
 
     def resolve(self, url):
         try:
+            r = client.request(url, output='headers')
+            url = r['Refresh'].replace('0;url=','')
+            #control.log('#%s'% url)
             url = resolvers.request(url)
             return url
         except:

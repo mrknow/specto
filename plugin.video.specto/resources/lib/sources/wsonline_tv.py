@@ -29,7 +29,7 @@ from resources.lib import resolvers
 
 class source:
     def __init__(self):
-        self.base_link = 'http://watchseries-online.se'
+        self.base_link = 'http://watchseries-online.nl'
         self.search_link = 'index'
 
 
@@ -94,22 +94,23 @@ class source:
 
             for i in links:
                 try:
-                    host = client.parseDOM(i, 'a')[0]
+                    host = client.parseDOM(i, 'a')[0].strip()
+                    #control.log('#host# %s' % host)
                     #host = host.split('<', 1)[0]
                     #host = host.rsplit('.', 1)[0].split('.', 1)[-1]
                     #host = host.strip().lower()
-                    if not host in hostDict: raise Exception()
-                    host = host.rsplit('.', 1)[0].split('.', 1)[-1]
-                    host = host.strip().lower()
-                    host = client.replaceHTMLCodes(host)
-                    host = host.encode('utf-8')
+                    if host in hostDict:
+                        host = host.rsplit('.', 1)[0].split('.', 1)[-1]
+                        host = host.strip().lower()
+                        host = client.replaceHTMLCodes(host)
+                        host = host.encode('utf-8')
 
-                    url = client.parseDOM(i, 'a', ret='href')[0]
-                    url = client.replaceHTMLCodes(url)
-                    url = url.encode('utf-8')
-                    print("Url",url)
+                        url = client.parseDOM(i, 'a', ret='href')[0]
+                        url = client.replaceHTMLCodes(url)
+                        url = url.encode('utf-8')
+                        print("Url",url)
 
-                    sources.append({'source': host, 'quality': 'SD', 'provider': 'wsonline', 'url': url})
+                        sources.append({'source': host, 'quality': 'SD', 'provider': 'wsonline', 'url': url})
                 except:
                     pass
 

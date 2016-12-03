@@ -1258,3 +1258,15 @@ msgstr ""
 msgctxt "#32004"
 msgid "Failed to retrieve the paste url"
 msgstr ""
+
+msgctxt "#32006"
+msgid "Opensubtitles username"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Opensubtitles password"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Opensubtitles Login Details"
+msgstr ""

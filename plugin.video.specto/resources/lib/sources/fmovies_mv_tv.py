@@ -276,16 +276,35 @@ class source:
             return
 
 
-    def __get_token(self, data):
-        n = 0
-        for key in data:
-            if not key.startswith('_'):
-                for i, c in enumerate(data[key]):
-                    t = 125612
-                    n += ord(c) * t + len(data[key]) + i
-        #print("NNN",n,data)
-        return {'_token': hex(n)[2:]}
-
+    def __get_token(self, OOOO0O00000O000O0):
+        OO000OO0OO00OO000 = 0
+        for O0OO0OOO0O0OO0O00 in OOOO0O00000O000O0:
+            OOOOOOO0OO00O000O = list(range(0, 256))
+            if not O0OO0OOO0O0OO0O00.startswith('_'):
+                O0O000O000O00OOO0 = 0
+                OO0OO00OOOO00O000 = 0
+                for O0OO00O0O00O0OOO0 in range(0, 256):
+                    O0O000O000O00OOO0 = (O0O000O000O00OOO0 + OOOOOOO0OO00O000O[O0OO00O0O00O0OOO0] + ord(
+                        O0OO0OOO0O0OO0O00[O0OO00O0O00O0OOO0 % len(O0OO0OOO0O0OO0O00)])) % 256
+                    O0O0OO0000O0O0O00 = OOOOOOO0OO00O000O[O0OO00O0O00O0OOO0]
+                    OOOOOOO0OO00O000O[O0OO00O0O00O0OOO0] = OOOOOOO0OO00O000O[O0O000O000O00OOO0]
+                    OOOOOOO0OO00O000O[O0O000O000O00OOO0] = O0O0OO0000O0O0O00
+                O0O000O000O00OOO0 = 0
+                for O0OOO00000O000OO0 in range(0, len(OOOO0O00000O000O0[O0OO0OOO0O0OO0O00])):
+                    O0OO00O0O00O0OOO0 = O0OOO00000O000OO0 + 1  # line:15
+                    O0O000O000O00OOO0 = (O0O000O000O00OOO0 + OOOOOOO0OO00O000O[O0OO00O0O00O0OOO0]) % (256)
+                    O0O0OO0000O0O0O00 = OOOOOOO0OO00O000O[O0OO00O0O00O0OOO0]
+                    OOOOOOO0OO00O000O[O0OO00O0O00O0OOO0] = OOOOOOO0OO00O000O[O0O000O000O00OOO0]
+                    OOOOOOO0OO00O000O[O0O000O000O00OOO0] = O0O0OO0000O0O0O00
+                    OO0OO00OOOO00O000 += ord(OOOO0O00000O000O0[O0OO0OOO0O0OO0O00][O0OOO00000O000OO0]) ^ (
+                                                                                                            OOOOOOO0OO00O000O[
+                                                                                                                (
+                                                                                                                    OOOOOOO0OO00O000O[
+                                                                                                                        O0OO00O0O00O0OOO0] +
+                                                                                                                    OOOOOOO0OO00O000O[
+                                                                                                                        O0O000O000O00OOO0]) % 256]) + O0OOO00000O000OO0
+                OO000OO0OO00OO000 += OO0OO00OOOO00O000
+        return {'_': str(OO000OO0OO00OO000)}
 
     def __get_xtoken(self):
         url = urlparse.urljoin(self.base_link, 'fghost?%s' % (random.random()))

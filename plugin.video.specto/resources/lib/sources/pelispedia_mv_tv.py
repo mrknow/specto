@@ -33,120 +33,62 @@ class source:
     def __init__(self):
         self.base_link = 'http://www.pelispedia.tv'
         self.base_link = 'http://www.pelispedia.tv'
-        self.search_link = 'aHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vY3VzdG9tc2VhcmNoL3YxZWxlbWVudD9rZXk9QUl6YVN5Q1ZBWGlVelJZc01MMVB2NlJ3U0cxZ3VubU1pa1R6UXFZJnJzej1maWx0ZXJlZF9jc2UmbnVtPTEwJmhsPWVuJmN4PTAxMzA0MzU4NDUzMDg1NzU4NzM4MTpkcGR2Y3FlbGt3dyZnb29nbGVob3N0PXd3dy5nb29nbGUuY29tJnE9JXM='
-        self.search2_link = '/api/more.php?rangeStart=%s&tipo=serie'
-        self.search3_link = '/buscar/?s=%s'
+        self.movie_link = '/pelicula/%s/'
+        self.tvsearch_link = '/serie/%s/'
+
 
 
     def get_movie(self, imdb, title, year):
-        try:
-            t = cleantitle.get(title)
-
-            query = '%s %s' % (title, year)
-            query = base64.b64decode(self.search_link) % urllib.quote_plus(query)
-
-            result = client.request(query)
-            result = json.loads(result)['results']
-
-            result = [(i['url'], i['titleNoFormatting']) for i in result]
-            result = [(i[0], re.findall('(?:^Ver |)(.+?)(?: HD |)\((\d{4})', i[1])) for i in result]
-            result = [(i[0], i[1][0][0], i[1][0][1]) for i in result if len(i[1]) > 0]
-
-            r = [i for i in result if t == cleantitle.get(i[1]) and year == i[2]]
-
-            if len(r) == 0:
-                t = 'http://www.imdb.com/title/%s' % imdb
-                t = client.request(t, headers={'Accept-Language':'es-ES'})
-                t = client.parseDOM(t, 'title')[0]
-                t = re.sub('(?:\(|\s)\d{4}.+', '', t).strip()
-                t = cleantitle.get(t)
-
-                r = [i for i in result if t == cleantitle.get(i[1]) and year == i[2]]
-
-            try: url = re.findall('//.+?(/.+)', r[0][0])[0]
-            except: url = r[0][0]
-            try: url = re.findall('(/.+?/.+?/)', url)[0]
-            except: pass
-            url = client.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
-
-            return url
-        except:
-            pass
 
         try:
             t = cleantitle.get(title)
 
-            query = self.search3_link % urllib.quote_plus(cleantitle.query(title))
+            query = self.movie_link % cleantitle.query10(title)
             query = urlparse.urljoin(self.base_link, query)
-
-            result = client.request(query)
-            result = re.sub(r'[^\x00-\x7F]+','', result)
-
-            r = result.split('<li class=')
-            r = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'i'), re.findall('\((\d{4})\)', i)) for i in r]
-            r = [(i[0][0], re.sub('\(|\)','', i[1][0]), i[2][0]) for i in r if len(i[0]) > 0 and len(i[1]) > 0 and len(i[2]) > 0]
-            r = [i[0] for i in r if t == cleantitle.get(i[1]) and year == i[2]][0]
-
-            try: url = re.findall('//.+?(/.+)', r)[0]
-            except: url = r
-            url = client.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
-
-            return url
+            control.log('PELISPEDIA URL %s' % query)
+            result = client.request(query).decode('gb18030').encode('utf-8')
+            result = client.parseDOM(result, 'div', attrs={'id': 'player'})[0]
+            r = [(re.findall('(.*?)<a', client.parseDOM(result, 'center')[0])[0].strip(),
+                      re.findall('>\((.*?)\)</a>', client.parseDOM(result, 'center')[0])[0])]
+            r = [i for i in r if t == cleantitle.get(i[0]) and year == (i[1])][0]
+            return query
         except:
             return
-
-
-    def pelispedia_tvcache(self):
-        result = []
-
-        for i in range(0,15):
-            try:
-                u = self.search2_link % str(i * 48)
-                u = urlparse.urljoin(self.base_link, u)
-
-                r = str(client.request(u))
-                r = re.sub(r'[^\x00-\x7F]+','', r)
-                r = r.split('<li class=')
-                r = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'i'), re.findall('\((\d{4})\)', i)) for i in r]
-                r = [(i[0][0], re.sub('\(|\)','', i[1][0]), i[2][0]) for i in r if len(i[0]) > 0 and len(i[1]) > 0 and len(i[2]) > 0]
-
-                if len(r) == 0: break
-                result += r
-            except:
-                pass
-
-        if len(result) == 0: return
-        result = [(re.sub('http.+?//.+?/','/', i[0]), cleantitle.get(i[1]), i[2]) for i in result]
-        return result
-
 
     def get_show(self, imdb, tvdb, tvshowtitle, year):
         try:
-            result = cache.get(self.pelispedia_tvcache, 120)
+            url = self.tvsearch_link % cleantitle.query10(tvshowtitle)
 
-            tvshowtitle = cleantitle.get(tvshowtitle)
+            r = urlparse.urljoin(self.base_link, url)
+            r = client.request(r, limit='1')
+            r = client.parseDOM(r, 'title')
 
-            result = [i[0] for i in result if tvshowtitle == i[1] and  year == i[2]][0]
+            if not r:
+                url = 'http://www.imdb.com/title/%s' % imdb
+                url = client.request(url, headers={'Accept-Language':'es-ES'})
+                url = client.parseDOM(url, 'title')[0]
+                url = re.sub('\((?:.+?|)\d{4}.+', '', url).strip()
+                url = cleantitle.normalize(url.encode("utf-8"))
+                url = self.tvsearch_link % cleantitle.geturl(url)
 
-            url = urlparse.urljoin(self.base_link, result)
-            url = urlparse.urlparse(url).path
-            url = client.replaceHTMLCodes(url)
-            url = url.encode('utf-8')
+                r = urlparse.urljoin(self.base_link, url)
+                r = client.request(r, limit='1')
+                r = client.parseDOM(r, 'title')
+
+            if not year in r[0]: raise Exception()
+
             return url
         except:
             return
 
-
     def get_episode(self, url, imdb, tvdb, title, premiered, season, episode):
-        if url == None: return
+        try:
+            if url == None: return
 
-        url = [i for i in url.split('/') if not i == ''][-1]
-        url = '/pelicula/%s-season-%01d-episode-%01d/' % (url, int(season), int(episode))
-        url = client.replaceHTMLCodes(url)
-        url = url.encode('utf-8')
-        return url
+            url = '/pelicula/%s-season-%01d-episode-%01d/' % (url.strip('/').split('/')[-1], int(season), int(episode))
+            return url
+        except:
+            return
 
 
     def get_sources(self, url, hosthdDict, hostDict, locDict):
@@ -168,20 +110,31 @@ class source:
             r = client.parseDOM(result, 'div', attrs = {'id': 'botones'})[0]
             r = client.parseDOM(r, 'a', ret='href')
             r = [(i, urlparse.urlparse(i).netloc) for i in r]
-            r = [i[0] for i in r if 'pelispedia' in i[1]]
 
             links = []
 
-            for u in r:
+            for u, h in r:
+                if not 'pelispedia' in h and not 'thevideos.tv' in h: continue
+
                 result = client.request(u, headers={'Referer': f})
 
                 try:
+                    if 'pelispedia' in h: raise Exception()
+
                     url = re.findall('sources\s*:\s*\[(.+?)\]', result)[0]
-                    url = re.findall('"file"\s*:\s*"(.+?)"', url)
-                    url = [i.split()[0].replace('\\/', '/') for i in url]
+                    url = re.findall('file\s*:\s*(?:\"|\')(.+?)(?:\"|\')\s*,\s*label\s*:\s*(?:\"|\')(.+?)(?:\"|\')', url)
+                    url = [i[0] for i in url if '720' in i[1]][0]
+
+                    links.append({'source': 'cdn', 'quality': 'HD', 'url': url, 'direct': False})
+                except:
+                    pass
+
+                try:
+                    url = re.findall('sources\s*:\s*\[(.+?)\]', result)[0]
+                    url = re.findall('file\s*:\s*(?:\"|\')(.+?)(?:\"|\')', url)
 
                     for i in url:
-                        try: links.append({'source': 'gvideo', 'quality': client.googletag(i)[0]['quality'], 'url': i})
+                        try: links.append({'source': 'gvideo', 'quality': client.googletag(i)[0]['quality'], 'url': i, 'direct': True})
                         except: pass
                 except:
                     pass
@@ -192,11 +145,11 @@ class source:
                     post = re.findall('gkpluginsphp.*?link\s*:\s*"([^"]+)', result)[0]
                     post = urllib.urlencode({'link': post})
 
-                    url = urlparse.urljoin(self.base_link, '/Pe_flv_flsh/plugins/gkpluginsphp.php')
+                    url = urlparse.urljoin(self.base_link, '/Pe_flsh/plugins/gkpluginsphp.php')
                     url = client.request(url, post=post, headers=headers)
                     url = json.loads(url)['link']
 
-                    links.append({'source': 'gvideo', 'quality': 'HD', 'url': url})
+                    links.append({'source': 'gvideo', 'quality': 'HD', 'url': url, 'direct': True})
                 except:
                     pass
 
@@ -204,20 +157,24 @@ class source:
                     headers = {'X-Requested-With': 'XMLHttpRequest'}
 
                     post = re.findall('var\s+parametros\s*=\s*"([^"]+)', result)[0]
-                    post = urlparse.parse_qs(urlparse.urlparse(post).query)['pic'][0]
-                    post = urllib.urlencode({'sou': 'pic', 'fv': '21', 'url': post})
 
-                    url = urlparse.urljoin(self.base_link, '/Pe_Player_Html5/pk/pk/plugins/protected.php')
+
+                    post = urlparse.parse_qs(urlparse.urlparse(post).query)['pic'][0]
+                    post = urllib.urlencode({'sou': 'pic', 'fv': '23', 'url': post})
+
+                    url = urlparse.urljoin(self.base_link, '/Pe_Player_Html5/pk/pk_2/plugins/protected.php')
                     url = client.request(url, post=post, headers=headers)
                     url = json.loads(url)[0]['url']
 
-                    links.append({'source': 'cdn', 'quality': 'HD', 'url': url})
+                    links.append({'source': 'cdn', 'quality': 'HD', 'url': url, 'direct': True})
                 except:
                     pass
 
-            for i in links: sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'Pelispedia', 'url': i['url']})
+            for i in links:
+                sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'Pelispedia', 'url': i['url']})
 
             return sources
+
         except Exception as e:
             control.log('ERROR PELISP %s' % e)
             return sources

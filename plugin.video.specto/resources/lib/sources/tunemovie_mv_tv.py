@@ -35,6 +35,7 @@ class source:
         #http://tunemovie.is/search-movies/The+Hateful+Eight.html
 
     def get_movie(self, imdb, title, year):
+        return
         try:
             query = urlparse.urljoin(self.base_link, self.search_link)
             query = query % urllib.quote_plus(title)
@@ -59,6 +60,7 @@ class source:
 
 
     def get_show(self, imdb, tvdb, tvshowtitle, year):
+        return
         try:
             url = '%s (%s)' % (tvshowtitle, year)
             url = client.replaceHTMLCodes(url)

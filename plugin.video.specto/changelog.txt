@@ -1,6 +1,6 @@
+2016.11.18.3 - fix movieshd, putlocker, fmovies. Remove changelog
 
-2016.11.1.2 - fix calendar and last episodes, yesmovies
-
+2016.11.1.2 - fix calendar and last episodes, yesmoviesscanScope($scope.model, 'Fred');
 2016.10.28.2 - rename urlresolver to urlresolver9
 2016.10.20.2 - add source yesmovies, fix cancel button while loading sources, fix fmovies,
 2016.10.18.02 - fix - Latest Movies and Latest Episodes

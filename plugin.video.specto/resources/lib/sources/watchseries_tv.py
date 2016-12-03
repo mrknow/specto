@@ -92,7 +92,7 @@ class source:
             return url
         except Exception as e:
             control.log('ERROR watchser GET %s' % e)
-            return
+            return None
 
 
     def get_episode(self, url, imdb, tvdb, title, date, season, episode):
