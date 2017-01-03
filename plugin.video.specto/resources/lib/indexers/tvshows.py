@@ -75,12 +75,12 @@ class tvshows:
         self.trending_link = 'http://api-v2launch.trakt.tv/shows/trending?limit=20&page=1'
 
         self.search_link = 'http://api-v2launch.trakt.tv/search?type=show&query=%s'
-        self.traktlists_link = 'http://api-v2launch.trakt.tv/users/%s/lists' % self.trakt_user
-        self.traktlist_link = 'http://api-v2launch.trakt.tv/users/%s/lists/%s/items' % (self.trakt_user, '%s')
-        self.traktcollection_link = 'http://api-v2launch.trakt.tv/users/%s/collection/shows' % self.trakt_user
-        self.traktwatchlist_link = 'http://api-v2launch.trakt.tv/users/%s/watchlist/shows' % self.trakt_user
-        self.traktfeatured_link = 'http://api-v2launch.trakt.tv/recommendations/shows?limit=20'
-        self.traktratings_link = 'https://api-v2launch.trakt.tv/users/%s/ratings/shows' % self.trakt_user
+        self.traktlists_link = 'http://api-v2launch.trakt.tv/users/me/lists'
+        self.traktlist_link = 'http://api-v2launch.trakt.tv/users/me/lists/%s/items' % '%s'
+        self.traktcollection_link = 'http://api-v2launch.trakt.tv/users/me/collection/shows' 
+        self.traktwatchlist_link = 'http://api-v2launch.trakt.tv/users/me/watchlist/shows' 
+        self.traktfeatured_link = 'http://api-v2launch.trakt.tv/recommendations/shows?limit=40'
+        self.traktratings_link = 'https://api-v2launch.trakt.tv/users/me/ratings/shows' 
         self.imdblists_link = 'http://www.imdb.com/user/ur%s/lists?tab=all&sort=modified:desc&filter=titles' % self.imdb_user
         self.imdblist_link = 'http://www.imdb.com/list/%s/?view=detail&sort=title:asc&title_type=tv_series,mini_series&start=1'
         self.imdbwatchlist_link = 'http://www.imdb.com/user/ur%s/watchlist' % self.imdb_user
