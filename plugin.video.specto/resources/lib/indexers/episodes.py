@@ -560,7 +560,7 @@ class episodes:
 
         self.mycalendar_link = 'http://api-v2launch.trakt.tv/calendars/my/shows/%s/31/' % (self.datetime - datetime.timedelta(days = 32)).strftime('%Y-%m-%d')
 
-        self.progress_link = 'http://api-v2launch.trakt.tv/users/%s/watched/shows' % self.trakt_user
+        self.progress_link = 'http://api-v2launch.trakt.tv/users/me/watched/shows'
         self.calendar_link = 'http://api-v2launch.trakt.tv/calendars/all/shows/%s/%s'
         self.calendar_link = 'http://api.tvmaze.com/schedule?date=%s'
 
