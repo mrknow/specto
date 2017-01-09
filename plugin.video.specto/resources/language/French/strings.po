@@ -793,7 +793,7 @@ msgstr "À l'affiche"
 
 msgctxt "#30810"
 msgid "People Watching"
-msgstr "Les gens regardents"
+msgstr "Les gens regardent"
 
 msgctxt "#30811"
 msgid "Latest Episodes"
