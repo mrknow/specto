@@ -77,7 +77,7 @@ msgstr "À l'Affiche"
 
 msgctxt "#30026"
 msgid "People Watching"
-msgstr "Regardé en ce moment"
+msgstr "Visionnés en ce moment"
 
 msgctxt "#30027"
 msgid "Most Popular"
@@ -129,7 +129,7 @@ msgstr "Chaînes TV"
 
 msgctxt "#30054"
 msgid "People Watching"
-msgstr "Visionné en ce moment"
+msgstr "Visionnées en ce moment"
 
 msgctxt "#30055"
 msgid "Most Popular"
@@ -229,11 +229,11 @@ msgstr "[B]IMDB[/B] : Séries À Voir"
 
 msgctxt "#30093"
 msgid "Movie Lists"
-msgstr "Liste de Films"
+msgstr "Listes de Films"
 
 msgctxt "#30094"
 msgid "TV Show Lists"
-msgstr "Listes des Séries"
+msgstr "Listes de Séries"
 
 msgctxt "#30095"
 msgid "Favourite Movies"
@@ -257,7 +257,7 @@ msgstr "Films"
 
 msgctxt "#30100"
 msgid "TV"
-msgstr "TV"
+msgstr "Séries"
 
 msgctxt "#30111"
 msgid "[B]SETTINGS[/B] : General"
@@ -281,7 +281,7 @@ msgstr "[B]SOURCES[/B] : Films"
 
 msgctxt "#30116"
 msgid "[B]SOURCES[/B] : TV"
-msgstr "[B]SOURCES[/B] : TV"
+msgstr "[B]SOURCES[/B] : Séries"
 
 msgctxt "#30117"
 msgid "[B]HOSTS[/B] : HD Priority"
@@ -309,7 +309,7 @@ msgstr "[B]Specto[/B] : Téléchargements"
 
 msgctxt "#30131"
 msgid "[B]LIBRARY[/B] : Settings"
-msgstr "[B]LIBRAIRIE[/B] : Configuration..."
+msgstr "[B]LIBRAIRIE[/B] : Configurations..."
 
 msgctxt "#30132"
 msgid "[B]Specto[/B] : Update folders..."
@@ -325,27 +325,27 @@ msgstr "[B]Specto[/B] : Répertoire des Séries..."
 
 msgctxt "#30135"
 msgid "[B]TRAKT[/B] : Import Collection..."
-msgstr "[B]TRAKT[/B] : Importer Collection..."
+msgstr "[B]TRAKT[/B] : Importer la Collection..."
 
 msgctxt "#30136"
 msgid "[B]TRAKT[/B] : Import Watchlist..."
-msgstr "[B]TRAKT[/B] : Importer les Listes de visionnage..."
+msgstr "[B]TRAKT[/B] : Importer la Listes de visionnage..."
 
 msgctxt "#30137"
 msgid "[B]TRAKT[/B] : Import TV Collection..."
-msgstr "[B]TRAKT[/B] : Importer Collection TV..."
+msgstr "[B]TRAKT[/B] : Importer la Collection TV..."
 
 msgctxt "#30138"
 msgid "[B]TRAKT[/B] : Import TV Watchlist..."
-msgstr "[B]TRAKT[/B] : Importer les Listes de visionnage TV..."
+msgstr "[B]TRAKT[/B] : Importer la Listes de visionnage TV..."
 
 msgctxt "#30139"
 msgid "[B]IMDB[/B] : Import Watchlist..."
-msgstr "[B]IMDB[/B] : Importer les Listes de visionnage..."
+msgstr "[B]IMDB[/B] : Importer la Liste de visionnage..."
 
 msgctxt "#30140"
 msgid "[B]IMDB[/B] : Import TV Watchlist..."
-msgstr "[B]IMDB[/B] : Importer les Listes de visionnage TV..."
+msgstr "[B]IMDB[/B] : Importer la Liste de visionnage TV..."
 
 msgctxt "#30151"
 msgid "Movies"
@@ -405,7 +405,7 @@ msgstr "Ajouter aux favoris"
 
 msgctxt "#30210"
 msgid "Remove from favourites"
-msgstr "Supprimer des favoris"
+msgstr "Retirer des favoris"
 
 msgctxt "#30211"
 msgid "Add to Library"
@@ -793,7 +793,7 @@ msgstr "À l'affiche"
 
 msgctxt "#30810"
 msgid "People Watching"
-msgstr "Les gens regardent"
+msgstr "Les gens regardents"
 
 msgctxt "#30811"
 msgid "Latest Episodes"
@@ -893,7 +893,7 @@ msgstr "Reprendre la lecture"
 
 msgctxt "#30845"
 msgid "Playback Info"
-msgstr "Informations de lecture"
+msgstr "Afficher les informations de lecture"
 
 msgctxt "#30860"
 msgid "Movies"
@@ -1035,7 +1035,7 @@ msgstr "Afficher les notifications pendant la mise à jour"
 
 msgctxt "#30926"
 msgid "Update library after adding content"
-msgstr "Mettre à jour la librarie après l'ajout de contenu"
+msgstr "Mettre à jour la librairie après l'ajout de contenu"
 
 msgctxt "#30927"
 msgid "Avoid creating duplicate content"
