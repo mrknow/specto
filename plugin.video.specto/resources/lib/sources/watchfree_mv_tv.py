@@ -101,6 +101,7 @@ class source:
             result = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'a', ret='title')) for i in result]
             result = [(i[0][0], i[1][0]) for i in result if len(i[0]) > 0 and len(i[1]) > 0]
             result = [i for i in result if any(x in i[1] for x in years)]
+            print "Resu", result
 
             r = []
             for i in result:
@@ -110,24 +111,29 @@ class source:
                 try: u = urlparse.parse_qs(urlparse.urlparse(u).query)['q'][0]
                 except: pass
                 r += [(u, i[1])]
-
             match = [i[0] for i in r if tvshowtitle == cleantitle.get(i[1]) and '(%s)' % str(year) in i[1]]
-
             match2 = [i[0] for i in r]
             match2 = [x for y,x in enumerate(match2) if x not in match2[:y]]
+
             if match2 == []: return
 
             for i in match2[:5]:
                 try:
                     if len(match) > 0: url = match[0] ; break
+                    print "i",i
                     r = client.request(urlparse.urljoin(self.base_link, i), 'tv_episode_item')
-                    if imdb in str(r): url = i ; break
+                    print "r",imdb
+                    print "r",r
+                    if imdb in str(r):
+                        url = i
+                        break
                 except:
                     pass
 
             url = re.findall('(?://.+?|)(/.+)', url)[0]
             url = client.replaceHTMLCodes(url)
             url = url.encode('utf-8')
+            print "URL",url
             return url
         except:
             return
@@ -142,7 +148,7 @@ class source:
             result = client.parseDOM(result, 'div', attrs = {'class': 'tv_episode_item'})
 
             title = cleantitle.get(title)
-            premiered = re.compile('(\d{4})-(\d{2})-(\d{2})').findall(premiered)[0]
+            premiered = re.compile('(\d{4})-(\d{2})-(\d{2})').findall(date)[0]
             premiered = '%s %01d %s' % (premiered[1].replace('01','January').replace('02','February').replace('03','March').replace('04','April').replace('05','May').replace('06','June').replace('07','July').replace('08','August').replace('09','September').replace('10','October').replace('11','November').replace('12','December'), int(premiered[2]), premiered[0])
 
             result = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'span', attrs = {'class': 'tv_episode_name'}), client.parseDOM(i, 'span', attrs = {'class': 'tv_num_versions'})) for i in result]
@@ -186,6 +192,7 @@ class source:
                 try:
                     url = client.parseDOM(i, 'a', ret='href')
                     url = [x for x in url if 'gtfo' in x][-1]
+                    print "URL", url
                     try: url = urlparse.parse_qs(urlparse.urlparse(url).query)['u'][0]
                     except: pass
                     try: url = urlparse.parse_qs(urlparse.urlparse(url).query)['q'][0]
@@ -196,6 +203,7 @@ class source:
                     url = url.encode('utf-8')
 
                     host = re.findall('([\w]+[.][\w]+)$', urlparse.urlparse(url.strip().lower()).netloc)[0]
+                    print "Host", host
                     if not host in hostDict: raise Exception()
                     host = client.replaceHTMLCodes(host)
                     host = host.encode('utf-8')

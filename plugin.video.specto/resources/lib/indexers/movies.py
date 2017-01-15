@@ -111,7 +111,7 @@ class movies:
                     if trakt.getActivity() > cache.timeout(self.trakt_list, url, self.trakt_user): raise Exception()
                     self.list = cache.get(self.trakt_list, 72, url, self.trakt_user)
                 except:
-                    self.list = cache.get(self.trakt_list, 0, url, self.trakt_user)
+                    self.list = cache.get(self.trakt_list, 2, url, self.trakt_user)
 
                 if '/users/me/' in url:
                     self.list = sorted(self.list, key=lambda k: re.sub('(^the |^a )', '', k['title'].lower()))
@@ -124,7 +124,7 @@ class movies:
 
 
             elif u in self.imdb_link and ('/user/' in url or '/list/' in url):
-                self.list = cache.get(self.imdb_list, 0, url, idx)
+                self.list = cache.get(self.imdb_list, 2, url, idx)
                 if idx == True: self.worker()
 
             elif u in self.imdb_link:

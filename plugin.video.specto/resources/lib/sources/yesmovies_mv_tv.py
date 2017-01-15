@@ -38,29 +38,32 @@ import requests
 
 class source:
     def __init__(self):
-        self.base_link = 'http://yesmovies.to'
+        self.base_link = 'https://yesmovies.to'
         self.search_link = '/ajax/movie_suggest_search.html'
         self.info_link = '/ajax/movie_info/%s.html?is_login=false'
         self.server_link = '/ajax/v3_movie_get_episodes/%s/%s/%s/movie.html'
         self.series_link = '/ajax/v3_movie_get_episodes/%s/%s/%s/series.html'
+        self.url_img = '/resources/images/zootopia/%s'
 
         self.direct_link = '/ajax/v2_load_episode/%s'
         self.embed_link = '/ajax/load_embed/%s'
         self.key = 'xwh38if39ucx'
         self.key2 = '8qhfm9oyq1ux'
         self.key3 = 'ctiw4zlrn09tau7kqvc153uo'
-        self.di8j1v = "1egh436fk3k9xwh38if39ucxh9ssnlpw0x8qhfm9oyq1uxxcmrqek0mlctiw4zlrn09tau7kqvc153uoubmv6tl738x17yypy64jpk9brwfv2rora4t59ta938cz87togvc8i72t6zz8wpy3mjd1vede3g8o1ep937i2p051u7slbt9w252fopaouuskrhk7q82k5r8hub0saxb044pgtqdcy4uadrkmxpczoyu7t6sd219ikb8h0uvz7zoh6s32";
-
+        self.di8j1v = "1egh436fk3k9xwh38if39ucxh9ssnlpw0x8qhfm9oyq1uxxcmrqek0mlctiw4zlrn09tau7kqvc153uoubmv6tl738x17yypy64jpk9brwfv2rora4t59ta938cz87togvc8i72t6zz8wpy3mjd1vede3g8o1ep937i2p051u7slbt9w252fopaouuskrhk7q82k5r8hub0saxb044pgtqdcy4uadrkmxpczoyu7t6sd219ikb8h0uvz7zoh6s32"
         self.headers = {'X-Requested-With': 'XMLHttpRequest'}
 
 
     def get_movie(self, imdb, title, year):
         try:
+            r1, headers, content, cookie2 = client.request(self.base_link, limit='0', output='extended')
             t = cleantitle.query2(title)
             hash = hashlib.md5(title).hexdigest()
             query = urllib.urlencode({'keyword': title, 'hash':hash})
             url = urlparse.urljoin(self.base_link, self.search_link)
-            r = client.request(url, post=query, headers=self.headers)
+            headers['X-Requested-With']= 'XMLHttpRequest'
+            r = client.request(url, post=query, headers=headers)
+            print "res",r
             r = json.loads(r)['content']
             r = zip(client.parseDOM(r, 'a', ret='href', attrs = {'class': 'ss-title'}), client.parseDOM(r, 'a', attrs = {'class': 'ss-title'}))
             r = [i[0] for i in r if cleantitle.get(t) == cleantitle.get(i[1])][:2]
@@ -77,10 +80,10 @@ class source:
                     if not y == year:
                         print "NOT",type(y),type(year)
                         raise Exception()
+                    print("URL", urlparse.urlparse(i[0]).path, i[0])
                     return urlparse.urlparse(i[0]).path
                 except:
                     pass
-            print(url)
 
             return url
 
@@ -190,37 +193,38 @@ class source:
                 print r
 
             else:
-
                 url = urlparse.urljoin(self.base_link, url)
+
+                url2 = urlparse.urljoin(self.base_link, self.url_img % re.findall('(\d+)', url)[0])
                 headers = {'Referer':  url, 'User-Agent':agent}
-                r, headers, content, cookie = client.request(url, limit='0', output='extended' , headers=headers)
+                r, headers, content, cookie2 = client.request(url2, limit='0', output='extended' , headers=headers)
+                r = client.request(url, headers=headers, cookie=cookie2)
                 u = client.parseDOM(r,'a', ret='href', attrs = {'class': 'mod-btn mod-btn-watch'})[0]
                 headers['Referer']=u
                 mid, episode, server= re.findall('-(\d+)/(\d+)-(\d+)/watching\.html$', u)[0]
                 u = urlparse.urljoin(self.base_link, self.server_link % (mid, server, episode))
                 headers['X-Requested-With']='XMLHttpRequest'
-                r = client.request(u, headers=headers, cookie=cookie)
+                r = client.request(u, headers=headers, cookie=cookie2)
                 r = re.findall('onclick=\"load_episode\((\d+),(\d+)\)\"', r)
             links = []
 
             for i in r:
                 try:
-                    key_gen = self.random_generator()
+                    key_gen = self.__get_token(hash_len=6)
                     episode_id = i[0]
                     hash_id = self.uncensored(episode_id + self.di8j1v[56:80], key_gen)
-                    cookie = '%s%s%s=%s' % (self.di8j1v[12:24], episode_id, self.di8j1v[34:46], key_gen)
+                    cookie = '%s%s%s=%s; %s' % (self.di8j1v[12:24], episode_id, self.di8j1v[34:46], key_gen, cookie2)
                     request_url2 = self.base_link + '/ajax/v2_get_sources/' + episode_id + '.html?hash=' + urllib.quote(hash_id)
-                    headers = {'Cookie': cookie, 'Referer': headers['Referer'] + '\+' + cookie,
-                               'x-requested-with': 'XMLHttpRequest', 'User-Agent': agent}
+                    headers = {'Cookie': cookie, 'Referer': headers['Referer'],
+                               'X-requested-with': 'XMLHttpRequest', 'User-Agent': agent}
+
                     result = client.request(request_url2, headers=headers)
-                    #print "RESULT", result, request_url2
                     q = json.loads(result)['playlist'][0]['sources']
                     for j in q: links.append(client.googletag(j['file'])[0])
-                except:
+                except Exception as e:
                     pass
 
             for i in links:
-                print "IIIIIIIIIIIIIIIIIIIIIIIII", i
                 sources.append({'source': 'gvideo', 'quality': i['quality'], 'provider': 'Yesmovies', 'url': i['url']})
 
             return sources
@@ -235,18 +239,49 @@ class source:
 
     def random_generator(self, size=6, chars=string.ascii_lowercase + string.digits):
         return ''.join(random.choice(chars) for x in range(size))
-
+    def __get_token(self, hash_len=16):
+        chars = string.digits + string.ascii_uppercase + string.ascii_lowercase
+        base = hashlib.sha512(str(int(time.time()) / 60 / 60)).digest()
+        return ''.join([chars[int(ord(c) % len(chars))] for c in base[:hash_len]])
 
     def uncensored(self, a, b):
-        sResult = ''
+        c = ''
         i = 0
-        for i in range(0, len(a)):
-            sChar = a[i]
-            ile = i % len(b)
-            sKeyChar = b[ile-1]
-            sChar = int(ord(sChar) + ord(sKeyChar))
-            sChar = chr(sChar)
-            sResult = sResult + sChar
-        return base64.b64encode((sResult))
+        for i, d in enumerate(a):
+            e = b[i % len(b) - 1]
+            d = int(self.__jav(d) + self.__jav(e))
+            c += chr(d)
+
+        return base64.b64encode(c)
+
+    def __jav(self, a):
+        b = str(a)
+        code = ord(b[0])
+        if 0xD800 <= code and code <= 0xDBFF:
+            c = code
+            if len(b) == 1:
+                return code
+            d = ord(b[1])
+            return ((c - 0xD800) * 0x400) + (d - 0xDC00) + 0x10000
+
+        if 0xDC00 <= code and code <= 0xDFFF:
+            return code
+        return code
 
 
+    """
+    function uncensored(sData, sKey) {
+    var sResult = "";
+    var i = 0;
+    for (i = 0; i < sData.length; i++) {
+        var sChar = sData.substr(i, 1);
+        var sKeyChar = sKey.substr(i % sKey.length - 1, 1);
+        sChar = Math.floor(jav(sChar) + jav(sKeyChar));
+        sChar = String.fromCharCode(sChar);
+        sResult = sResult + sChar
+    }
+    return encode64(sResult)
+    :path:/ajax/v2_get_sources/145651.html?hash=YZZsrW5kk9ag7m2tnNSlp3Knkddu4qqpk5Nsqq6i
+                v2_get_sources/145651.html?hash=mp%2Bem6SUzN/S3KPd1d3XlajXyuCg0ODZzJyemOTS
+                v2_get_sources/208328.html?hash=aJpxqGZumd6i7GiwotynpW2ql99w4KWsmZtuqKml
+    """

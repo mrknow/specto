@@ -168,7 +168,7 @@ class source:
 
 
                     url = url.encode('utf-8')
-                    control.log('########  IWATCH LINK url:%s  host:%s q:%s' % (url,host,quality))
+                    #control.log('########  IWATCH LINK url:%s  host:%s q:%s' % (url,host,quality))
                     self.sources.append(
                         {'source': host, 'quality': quality, 'provider': 'Iwatchonline', 'url': url})
 

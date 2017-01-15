@@ -290,3 +290,4 @@ def get_ua():
     else:
         user_agent = setting('current_ua')
     return user_agent
+

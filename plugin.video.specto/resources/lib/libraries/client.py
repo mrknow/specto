@@ -41,7 +41,7 @@ ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) A
 #SMU_USER_AGENT = 'URLResolver for Kodi/%s' % (addon_version)
 
 def request(url, close=True, redirect=True, error=False, proxy=None, post=None, headers=None, mobile=False, limit=None, referer=None, cookie=None, output='', timeout='30'):
-    #try:
+    try:
         #control.log('@@@@@@@@@@@@@@ - URL:%s' % url)
         handlers = []
 
@@ -184,9 +184,9 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
             response.close()
 
         return result
-    #except Exception as e:
-    #    control.log('Client ERR %s, url:' % (e,url))
-    #    return
+    except Exception as e:
+        control.log('Client ERR %s, url:' % (e,url))
+        return
 
 def source(url, close=True, error=False, proxy=None, post=None, headers=None, mobile=False, safe=False, referer=None, cookie=None, output='', timeout='30'):
     return request(url, close, error, proxy, post, headers, mobile, safe, referer, cookie, output, timeout)
@@ -478,3 +478,15 @@ def parseJSString(s):
         return val
     except:
         pass
+
+def googlepass(url):
+    try:
+        try: headers = dict(urlparse.parse_qsl(url.rsplit('|', 1)[1]))
+        except: headers = None
+        url = request(url.split('|')[0], headers=headers, output='geturl')
+        if 'requiressl=yes' in url: url = url.replace('http://', 'https://')
+        else: url = url.replace('https://', 'http://')
+        if headers: url += '|%s' % urllib.urlencode(headers)
+        return url
+    except:
+        return

@@ -171,7 +171,9 @@ class sources:
                     item.addContextMenuItems(cm, replaceItems=True)
 
                     control.addItem(handle=int(sys.argv[1]), url='%s?%s' % (sysaddon, query), listitem=item, isFolder=False)
-                except:
+                except Exception as e:
+                    control.log('ERROR Sources.addItem %s' % e)
+
                     pass
             control.content(int(sys.argv[1]), 'files')
             control.directory(int(sys.argv[1]), cacheToDisc=True)

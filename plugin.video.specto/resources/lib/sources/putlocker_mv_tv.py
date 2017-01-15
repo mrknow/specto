@@ -125,6 +125,7 @@ class source:
             url = re.findall('(?://.+?|)(/.+)', r)[0]
             url = client.replaceHTMLCodes(url)
             url = url.encode('utf-8')
+            print(">>>",url)
             return url
         except:
             return
@@ -134,23 +135,25 @@ class source:
         try:
             if url == None: return
 
-            url = urlparse.parse_qs(url)
-            url = dict([(i, url[i][0]) if url[i] else (i, '') for i in url])
-            print url
-            tvshowtitle =  cleantitle.query10(url['tvshowtitle'])
+            #url = urlparse.parse_qs(url)
+            #url = dict([(i, url[i][0]) if url[i] else (i, '') for i in url])
+            #tvshowtitle =  cleantitle.query10(url['tvshowtitle'])
+            tvshowtitle =  url.split('/')[-1]
+
 
             r = '/tv-show/%s/season/%01d/episode/%01d' % (tvshowtitle, int(season), int(episode))
-            y = '/tv-show/%s/season/%01d' % (tvshowtitle, int(season))
+            #y = '/tv-show/%s/season/%01d' % (tvshowtitle, int(season))
 
-            control.log('>>>>>>   %s' % y)
-            result = client.request(urlparse.urljoin(self.base_link, y))
-            result = client.parseDOM(result,'span', attrs={'class':'dat'})[0]
-            if url['year'] == str(result.strip()):
-                url = r.encode('utf-8')
-                control.log('>>>>>>  Putlocker URL  %s' % url)
-                return url
+            control.log('AAAA y >>>>>>   %s' % r)
+            #result = client.request(urlparse.urljoin(self.base_link, y))
+            #print "ResUlt get_episode",result
+            #result = client.parseDOM(result,'span', attrs={'class':'dat'})[0]
+            #if url['year'] == str(result.strip()):
+            #    url = r.encode('utf-8')
+            #    control.log('>>>>>>  Putlocker URL  %s' % url)
+            #    return url
 
-            return
+            return r
         except:
             return
 
@@ -179,7 +182,7 @@ class source:
         return s2
 
     def get_sources(self, url, hosthdDict, hostDict, locDict):
-        print(">>>>", url)
+        print("GetRes>>>>", url)
 
         try:
             sources = []
