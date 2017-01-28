@@ -839,11 +839,11 @@ class movies:
 
     def super_info(self, i):
         try:
-            #control.log('[super_info] ID:%s' % (str(i)))
+            control.log('[super_info] ID:%s' % (str(i)))
 
             zero ='0'.encode('utf-8')
 
-            if self.list[i]['metacache'] == True: raise Exception()
+            if self.list[i]['metacache'] == True: raise ValueError('Super in metacache' )
 
             try: imdb = self.list[i]['imdb']
             except: imdb = '0'
@@ -996,8 +996,7 @@ class movies:
             #control.log("><><><><> ITEM META IMDB %s" % imdb)
 
         except Exception as e:
-            control.log('$Super error: %s' % e)
-
+            #control.log('Super_info error: %s' % e)
             pass
 
 

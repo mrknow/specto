@@ -1,5 +1,9 @@
-2016.11.18.3 - fix movieshd, putlocker, fmovies. Remove changelog
+2017.01.28.1 - added gvideo hosts from exodus
 
+2017.01.20.2 - small fix movieshd, putlocker, in trakt episodes fix posters and fanart.
+    Chcecking corect date and time setup on tv box
+2016.11.20.3 small fix putlocker
+2016.11.18.3 - fix movieshd, putlocker, fmovies. Remove changelog
 2016.11.1.2 - fix calendar and last episodes, yesmoviesscanScope($scope.model, 'Fred');
 2016.10.28.2 - rename urlresolver to urlresolver9
 2016.10.20.2 - add source yesmovies, fix cancel button while loading sources, fix fmovies,

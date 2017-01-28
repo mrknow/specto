@@ -119,8 +119,8 @@ class source:
 
             result = ''
 
-            result, headers, content, cookie  = client.request(urlparse.urljoin(self.base_link, url), output='extended')
-            #result, headers, content, cookie = client.request(url, limit='0', output='extended')
+            r100 = client.request(urlparse.urljoin(self.base_link, url), output='extended')
+            cookie = r100[4];headers = r100[3];result = r100[0]
 
             self.headers['Referer'] = urlparse.urljoin(self.base_link, url)
             self.headers['Cookie'] = cookie

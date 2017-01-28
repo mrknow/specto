@@ -21,7 +21,7 @@
 
 import re,urllib,json,time,urllib2
 from resources.lib.libraries import client
-from resources.lib.libraries import client2
+#from resources.lib.libraries import client2
 from resources.lib.libraries import control
 
 FF_USER_AGENT = urllib.quote_plus('Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0')
@@ -58,7 +58,7 @@ def check(url):
         id = re.compile('//.+?/(?:embed|f)/([0-9a-zA-Z-_]+)').findall(url)[0]
         url = 'https://openload.co/embed/%s/' % id
 
-        result = client2.http_get(url)
+        #result = client2.http_get(url)
         if result == None: return False
         if '>We are sorry!<' in result: return False
         return True

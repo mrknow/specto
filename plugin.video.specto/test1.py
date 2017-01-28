@@ -1,72 +1,205 @@
 # -*- coding: utf-8 -*-
 
-import random, string, sys
-import json,re
+import sys
+
 sys.path.append('/home/mrknow/Dokumenty/praca/kodi/specto/plugin.video.specto/mylib/')
 sys.path.append('/home/mrknow/Dokumenty/praca/kodi/filmkodi/script.mrknow.urlresolver/lib/')
 
 
-print ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(25))
 
-from resources.lib.sources import sezonlukdizi_tv
-
-from resources.lib.libraries import client
-from resources.lib.libraries import cleantitle
 from resources.lib.libraries import control
-from resources.lib import resolvers
 
-from resources.lib.resolvers import openload
-from resources.lib.sources.muchmovies_mv_tv import source
-#from resources.lib.sources.animeultima_tv import source
+"""
+url = 'http://openload.co/embed/7wlGOdWQnT4'
+url = 'https://openload.co/embed/CFDSAsN4Zeo/Animal.Kingdom.US.S01E06.720p.HDTV.X264-DIMENSION.mp4'
+url ='http://openload.co/embed/ExatdBfcJ38'
+url = 'https://openload.co/embed/rZ04_L_uRuU'
+#url = 'https://openload.co/embed/rZ04_L_uRuU'
+#url = 'https://cloud.mail.ru/public/5TFB/spjSFgKSo'
+#url = 'http://www.cda.pl/video/10603989f'
+#url = 'http://www.cda.pl/video/1852188d/Ultimatum-Bournea---The-Bourne-Ultimatum-HD?wersja=720p'
 
-from resources.lib.indexers import movies
 
-#openloadlink = 'https://openload.co/embed/7xKm9d-wcT4'
-my = source()
-a = my.get_movie('tt3799694','The Nice Guys','2016')
-#a = my.get_movie('tt2948356','Zootopia','2016')
-control.log('############ DAYT res-1 %s' % a)
-
-b = my.get_sources(a,'','','')
-control.log('############ DAYT res-2 %s' % b)
-
-for i in b:
-    print ("y",i['url'])
-    #print i
-
-c = my.resolve(b[0]['url'])
-control.log('############ DAYT res-3 %s' % b)
-
+url='http://shared.sx/8addffca7f'
+url = 'http://openload.co/embed/JlSTfXTluk8'
+import urlresolver9
+z = False
+hmf = urlresolver9.HostedMediaFile(url, include_disabled=True, include_universal=False)
+print hmf
+if hmf:
+    print 'yay! we can resolve this one'
+    z = hmf.resolve()
+else:
+    print 'dupa'
+print("URL", z)
 
 exit()
 
-#{'tmdb': '60948', 'tvdb': '272644', 'tvshowtitle': '12 Monkeys', 'imdb': 'tt3148266', 'year': '2015', 'action': 'seasons', 'tvrage': '36903'}
-#PARAMS: {'tmdb': '1424', 'tvdb': '264586', 'tvshowtitle': 'Orange Is the New Black', 'imdb': 'tt2372162', 'year': '2013', 'action': 'seasons', 'tvrage': '32950'}
+"""
+def getmovie(myclass):
+    a = myclass.get_movie('tt3799694', 'The Nice Guys', '2016')
+    #a = my.get_movie('tt3110958','Mechanic: Resurrection','2016')
+    #a = myclass.get_movie('tt2948356','Zootopia','2016')
+    # a = my.get_movie('tt5377604','Pitbull. New Order','2016')
+    control.log('############ DAYT res-1 %s' % a)
 
-# 'name': 'Animal Kingdom S01E04', 'title': 'Dead to Me', 'tvdb': '304262', 'season': '1', 'tvshowtitle': 'Animal Kingdom', 'date': '2016-06-28'
+    b = myclass.get_sources(a, '', '', '')
+    print('>>>>>>>>>>>>>>>>  get_sources', len(b), b)
+    #print('>>>>>>>>>>>>>>>>  get_sources', len(b))
+    #print('>>>>>>>>>>>>>>>>  get_sources', len(b))
+
+
+def getserial(myclass):
+    c=myclass.get_show(imdb,tvdb,title,year)
+    control.log('############ DAYT res-1 %s' % c)
+    #exit()
+    #PARAMS: {'tmdb': '60948', 'episode': '6', 'name': '12 Monkeys S02E06', 'title': 'Immortal', 'tvdb': '272644', 'season': '2', 'tvshowtitle': '12 Monkeys', 'date': '2016-05-23', 'meta': '{"rating": "8.0", "code": "tt3148266", "tmdb": "60948", "imdb": "tt3148266", "year": "2015", "duration": "2700", "plot": "Cole\'s partnership with Ramse is put to the test when they travel back to the 1970s to try to prevent the Twelve from murdering a disturbed Vietnam veteran with a connection to the Witness.", "votes": "47", "thumb": "http://thetvdb.com/banners/episodes/272644/5565074.jpg", "title": "Immortal", "tvdb": "272644", "mpaa": "TV-14", "fanart": "http://thetvdb.com/banners/fanart/original/272644-20.jpg", "season": "2", "status": "Continuing", "poster": "http://thetvdb.com/banners/posters/272644-12.jpg", "tvshowtitle": "12 Monkeys", "studio": "Syfy", "genre": "Mystery / Science-Fiction", "tvrage": "36903", "banner": "http://thetvdb.com/banners/graphical/272644-g5.jpg", "episode": "6", "name": "12 Monkeys S02E06", "premiered": "2016-05-23", "cast": [["Aaron Stanford", ""], ["Amanda Schull", ""], ["Kirk Acevedo", ""], ["Barbara Sukowa", ""], ["Todd Stashwick", ""], ["Emily Hampshire", ""], ["Noah Bean", ""], ["Tom Noonan", ""]], "trailer": "plugin://plugin.video.specto/?action=trailer&name=12+Monkeys"}', 'imdb': 'tt3148266', 'year': '2015', 'action': 'sources', 'tvrage': '36903', 'alter': '0'}
+    d=myclass.get_episode(c,imdb,tvdb,title2,data,sezon,epis)
+    control.log('############ episode %s' % d)
+    time.sleep(2)
+    e=myclass.get_sources(d,'','','')
+    print ("eee",e)
+
+    for i in e:
+        print ("y",i['url'])
+        print i
+
+    #f=my.resolve(e[0]['url'])
+    #print("mylink",f)
+
+
+from resources.lib.sources.pelispedia_mv_tv import source as pelispedia
+from resources.lib.sources.putlocker_mv_tv import source as putlocker
+from resources.lib.sources.muchmovies_mv_tv import source as muchmovies
+from resources.lib.sources.pubfilm_mv_tv import source as pubfilm
+from resources.lib.sources.yesmovies_mv_tv import source as yesmovies
+from resources.lib.sources.fmovies_mv_tv import source as fmovies
+from resources.lib.sources.movie25_mv_tv import source as pmovie
+from resources.lib.sources.watchfree_mv_tv import source as watchfree
+from resources.lib.sources.onemovies_mv_tv import source as onemovies
+from resources.lib.sources.xmovies_mv_tv import source as xmovies
+#from resources.lib.sources.genvideos_mv import source as genvid
+from resources.lib.sources.moviexk_mv_tv import source as mxk
+from resources.lib.sources.moviefree_mv_tv import source as moviefree
+
+
+
+
+
+
+
+
+
+my1 = yesmovies()
+my2 = pelispedia()
+my3 = fmovies()
+my4 = putlocker()
+my5 = muchmovies()
+my6 = pubfilm()
+my7 = fmovies()
+
+my1000 = xmovies()
+my2000 = None
+
+import time
+#http://fmovies.to/ajax/episode/info?ts=1481295600&_=2338&id=902kxx&update=0
+#http://fmovies.to/ajax/episode/info?ts=1481364000&_=2337&id=902kxx&update=0
+
+#http://fmovies.to/ajax/episode/info?_=2341&id=902kxx&ts=1481367917&update=0
+#ts - 1481295600
+#     1481342057
+print int(time.time())
+
+
+#x = 0
+#for i in [my1, my2, my3, my4]:
+#    x = x +1
+#    print "--------------- %s" % x
+#    getmovie(i)
+
+try:
+    #a = my1000.get_movie('tt3799694', 'The Nice Guys', '2016')
+    #a = my1000.get_movie('','Snowden','2016')
+    #a = my1000.get_movie('tt2948356','Zootopia','2016')
+    a  = my1000.get_movie('tt4649416','Almost Christmas','2016')
+    #a = my1000.get_movie('','split','2016')
+
+    print "------------"
+    print a
+    print "------------"
+
+    b = my1000.get_sources(a, '', '', '')
+    print "------------"
+    print b
+    print "------------"
+    for i in b:
+        print ("y", i['url'])
+        print my1000.resolve(i['url'])
+    exit()
+except Exception as e:
+    print 'ERRORRRR %s' % e
+    pass
+exit()
+
+title2=''
 imdb = 'tt5574490'
 tvdb = '304262'
-title = 'Animal Kingdom'
+title = 'Ballers'
+year = '2015'
+data = '2016-06-28'
+epis= '10'
+sezon = '2'
+
+#imdb = 'tt2364582'
+#tvdb = '263365'
+#title = "Brain Games"
+#year = '2011'
+#data = '2011-10-09'
+#epis= '1'
+#sezon = '1'
+
+#imdb = 'tt2078690'
+#tvdb = '263365'
+#title = "Marvel's Agents of S.H.I.E.L.D."
+#year = '2016'
+#data = '2016-09-20'
+#epis= '1'
+#sezon = '4'
+
+
+imdb = 'tt5574490'
+tvdb = '304262'
+title = 'Westworld'
 year = '2016'
 data = '2016-06-28'
+epis= '9'
+sezon = '1'
 
+imdb = 'tt2191671'
+tvdb = '262856'
+title = 'Elementary'
+year = '2012'
+data = '2015-11-19'
+epis= '3'
+sezon = '4'
+title2="Tag, You're Me"
 
-
-c=my.get_show('tt3148266',tvdb,title,year)
-control.log('############ DAYT res-1 %s' % c)
-#PARAMS: {'tmdb': '60948', 'episode': '6', 'name': '12 Monkeys S02E06', 'title': 'Immortal', 'tvdb': '272644', 'season': '2', 'tvshowtitle': '12 Monkeys', 'date': '2016-05-23', 'meta': '{"rating": "8.0", "code": "tt3148266", "tmdb": "60948", "imdb": "tt3148266", "year": "2015", "duration": "2700", "plot": "Cole\'s partnership with Ramse is put to the test when they travel back to the 1970s to try to prevent the Twelve from murdering a disturbed Vietnam veteran with a connection to the Witness.", "votes": "47", "thumb": "http://thetvdb.com/banners/episodes/272644/5565074.jpg", "title": "Immortal", "tvdb": "272644", "mpaa": "TV-14", "fanart": "http://thetvdb.com/banners/fanart/original/272644-20.jpg", "season": "2", "status": "Continuing", "poster": "http://thetvdb.com/banners/posters/272644-12.jpg", "tvshowtitle": "12 Monkeys", "studio": "Syfy", "genre": "Mystery / Science-Fiction", "tvrage": "36903", "banner": "http://thetvdb.com/banners/graphical/272644-g5.jpg", "episode": "6", "name": "12 Monkeys S02E06", "premiered": "2016-05-23", "cast": [["Aaron Stanford", ""], ["Amanda Schull", ""], ["Kirk Acevedo", ""], ["Barbara Sukowa", ""], ["Todd Stashwick", ""], ["Emily Hampshire", ""], ["Noah Bean", ""], ["Tom Noonan", ""]], "trailer": "plugin://plugin.video.specto/?action=trailer&name=12+Monkeys"}', 'imdb': 'tt3148266', 'year': '2015', 'action': 'sources', 'tvrage': '36903', 'alter': '0'}
-d=my.get_episode(c,imdb,tvdb,title,data,'1','2')
-control.log('############ DAYT res-1 %s' % d)
-e=my.get_sources(d,'','','')
-print ("eee",e[0]['url'])
-for i in e:
-    print ("y",i['url'])
-    print i
-
+getserial(my2000)
 exit()
 
-f=my.resolve(e[0]['url'])
-print f
+
+#{'name': 'Mr. Robot S02E08', 'tvdb': '289590', 'content': 'episode', 'source':
+# '{"rating": "8.7", "code": "tt4158110", "tmdb": "62560", "imdb": "tt4158110", "year": "2015", "duration": "2700",
+# ""season": "2", "status": "Continuing", "tvshowtitle": "Mr. Robot",
+#imdb = 'tt4158110'
+#tvdb = '289590'
+#title = 'Mr. Robot'
+#year = '2015'
+#data = '2016-06-28'
+#epis= '8'
+#sezon = '2'
+import time
+
 exit()
 
 #PARAMS: {'tmdb': '62715', 'episode': '7', 'name': 'Dragon Ball Super S04E07', 'title': 'A Message From the Future - Goku Black Invades!',
@@ -96,91 +229,6 @@ print(e)
 f=my.resolve()
 exit()
 
-#url = 'http://ok.ru/video/86215559923'
-#print resolvers.request(url)
 
 
 
-"""
-src='http://dayt.se/forum/search.php?do=process'
-
-post={'titleonly':1,'securitytoken':'guest','do':'process','q':'London + Has Fallen','B1':''}
-result = client.source(src, post=post)
-result = client.parseDOM(result, 'h3', attrs={'class': 'searchtitle'})
-result = [(client.parseDOM(i, 'a', attrs={'class': 'title'}, ret='href')[0],client.parseDOM(i, 'a', attrs={'class': 'title'})[0]) for i in result]
-control.log('############ DAYT res-1 %s' % result)
-result = [i for i in result if title in cleantitle.movie(i[1])]
-result = [i[0] for i in result if any(x in i[1] for x in years)][0]
-result = re.compile('(.+?)(?:&amp)').findall(result)[0]
-
-control.log('############ DAYT res-1 %s' % result)
-
-
-
-exit()
-result = client.parseDOM(result, 'iframe', ret='src')
-result = [i for i in result if 'pasep' in i][0]
-
-control.log('############ DAYT res-1 %s' % result)
-result = client.source(result)
-result = client.parseDOM(result, 'iframe', ret='src')[0]
-result = client.source(result)
-result = client.parseDOM(result, 'iframe', ret='src')[0]
-control.log('############ DAYT res-2 %s' % result)
-#control.log('############ DAYT res-2 %s' % resolvers.request(result))
-
-
-result10 = client.parseDOM(result2, 'div', attrs = {'id': '5throw'})[0]
-result10 = client.parseDOM(result10, 'a', attrs = {'rel': 'nofollow'}, ret='href')
-for i in result10:
-    print resolvers.request(i)
-
-
-control.log('############ DAYT res-2 %s' % result10)
-https://cloclo9.cldmail.ru/2dfVwUu76bo9TkKgZDPE/G/GT9F/FoCczQknq?key=9170c586eac96c6fbe53d3b77bf5d59b1ac4538a
-
-
-src='https://cloud.mail.ru/public/GT9F/FoCczQknq'
-src='https://cloud.mail.ru/public/6i3K/8aL4QRjZU'
-#print resolvers.request(src)
-
-result20 = client.source(src)
-title= client.parseDOM(result20, 'title')
-print title
-
-vid = src.split('public')[-1]
-token  = re.compile('"tokens":{"download":"([^"]+)"}').findall(result20)[0]
-weblink = re.compile('"weblink_get":\[{"count":\d+,"url":"([^"]+)"}\]').findall(result20)[0]
-print("Dane",token,weblink,vid)
-
-
-if len(token)>0 and len(weblink)>0:
-    url = weblink + vid + '?key='+token
-
-    #result20 = json.loads(result20)
-    control.log('############ DAYT res-2 %s' % url)
-    #https://cloclo9.cldmail.ru/2dfVwUu76bo9TkKgZDPE/G/GT9F/FoCczQknq?key=9170c586eac96c6fbe53d3b77bf5d59b1ac4538a
-
-
-
-
-
-
-src=' http://dayt.se/forum/forumdisplay.php?356-The-Flash'
-mytitile = cleantitle.tv('S%02dE%02d' % (2,19)).lower()
-control.log('############ DAYT mytitle %s' % mytitile)
-
-
-result = client.source(src)
-result = client.parseDOM(result, 'h3', attrs={'class': 'threadtitle'})
-result = [(client.parseDOM(i, 'a', attrs={'class': 'title'}, ret='href')[0],client.parseDOM(i, 'a', attrs={'class': 'title'})[0]) for i in result]
-result = [i for i in result if mytitile in i[1].lower()]
-result = [(re.compile('(.+?)(?:&amp)').findall(i[0]), i[1]) for i in result][0][0]
-control.log('############ DAYT res-2 %s' % result[0])
-
-    #a = client.parseDOM(i, 'a', attrs={'class': 'title'})[0]
-    #a1 = client.parseDOM(i, 'a', attrs={'class': 'title'},ret='href')[0]
-
-    #control.log('############ DAYT res-20 %s' % a)
-    #control.log('############ DAYT res-21 %s' % a1)
-"""

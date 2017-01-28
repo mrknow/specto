@@ -25,18 +25,9 @@ from resources.lib.libraries import cleantitle
 from resources.lib.libraries import client
 
 from resources.lib.libraries import control
-from resources.lib.libraries import workers
 
 from resources.lib import resolvers
-from resources.lib.resolvers import openload
-from resources.lib.resolvers import uptobox
-from resources.lib.resolvers import cloudzilla
-from resources.lib.resolvers import vidspot
-from resources.lib.resolvers import streamin
-from resources.lib.resolvers import thevideo
-from resources.lib.resolvers import vodlocker
-from resources.lib.resolvers import vidto
-from resources.lib.resolvers import zstream
+
 
 
 
@@ -127,11 +118,13 @@ class source:
         try:
             self.sources = []
             mylinks = []
-            if url == None: return self.sources
+            if url == None: return []
 
             result = ''
             headers = {"Referer":urlparse.urljoin(self.base_link, url)}
-            result, headers, content, cookie = client.request(urlparse.urljoin(self.base_link, url), output='extended', headers=headers)
+            r100 = client.request(urlparse.urljoin(self.base_link, url), output='extended', headers=headers)
+            cookie = r100[4] ; headers = r100[3] ; result = r100[0]
+
 
             links = client.parseDOM(result, 'tr', attrs = {'id': 'pt.+?'})
 
@@ -192,7 +185,7 @@ class source:
 
         except Exception as e:
             control.log("ERR iwatch %s" % e)
-            return self.sources
+            return []
 
     def check(self, i, headers, cookie, myhostDict, myhosthdDict):
         try:

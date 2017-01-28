@@ -21,7 +21,6 @@
 import re,urllib,urlparse,json
 
 from resources.lib.libraries import cleantitle
-from resources.lib.libraries import cloudflare
 from resources.lib.libraries import client
 from resources.lib.libraries import cache
 from resources.lib.libraries import control
@@ -85,51 +84,58 @@ class source:
 
             url = urlparse.urljoin(self.base_link, url)
 
-            result = client.request(url)
-            #result = result.encode('windows-1254')
-            #print result
+            for i in range(3):
+                result = client.request(url)
+                if not result == None: break
 
             result = re.sub(r'[^\x00-\x7F]+', ' ', result)
-            #print result
+
             pages = []
-            try:
-                r = client.parseDOM(result, 'div', attrs = {'id': 'embed'})
-                print ("r",r[0])
-                pages.append(client.parseDOM(r, 'iframe', ret='src')[0])
-                print pages
 
-
-            except:
-                pass
-            try:
-                r = client.parseDOM(result, 'div', attrs = {'id': 'playerMenu'})[0]
-                r = client.parseDOM(r, 'div', ret='data-id', attrs = {'class': 'item'})[0]
-                r = client.request(urlparse.urljoin(self.base_link, self.video_link), post=urllib.urlencode( {'id': r} ))
-                pages.append(client.parseDOM(r, 'iframe', ret='src')[0])
-            except:
-                pass
+            r = client.parseDOM(result, 'div', attrs={'id': 'embed'})[0]
+            pages.append(client.parseDOM(r, 'iframe', ret='src')[0])
 
             for page in pages:
                 try:
-                    if not 'http' in page: page = 'http:'+page
-                    result = client.request(page)
-                    #print result
+                    if not page.startswith('http'):
+                        page = 'http:' + page
+
+                    for i in range(3):
+                        result = client.request(page)
+                        if not result == None: break
 
                     captions = re.search('kind\s*:\s*(?:\'|\")captions(?:\'|\")', result)
                     if not captions: raise Exception()
 
-                    result = re.compile('"?file"?\s*:\s*"([^"]+)"\s*,\s*"?label"?\s*:\s*"(\d+)p?[^"]*"').findall(result)
-                    print result
+                    try:
+                        r = re.findall('url\s*:\s*\'(http(?:s|)://api.pcloud.com/.+?)\'', result)[0]
+                        r = client.request(r)
+                        r = json.loads(r)['variants']
+                        r = [(i['hosts'], i['path'], i['height']) for i in r if
+                             'hosts' in i and 'path' in i and 'height' in i]
+                        r = [('%s%s' % (i[0][0], i[1]), str(i[2])) for i in r if len(i[0]) > 0]
+                        r = [(i[0] if i[0].startswith('http') else 'http://%s' % i[0], i[1]) for i in r]
+                        host = 'cdn';
+                        direct = False;
+                        l = r
+                    except:
+                        pass
 
-                    links = [(i[0], '1080p') for i in result if int(i[1]) >= 1080]
-                    links += [(i[0], 'HD') for i in result if 720 <= int(i[1]) < 1080]
-                    links += [(i[0], 'SD') for i in result if 480 <= int(i[1]) < 720]
+                    try:
+                        r = re.findall('"?file"?\s*:\s*"([^"]+)"\s*,\s*"?label"?\s*:\s*"(\d+)p?[^"]*"', result)
+                        if not r: raise Exception()
+                        host = 'gvideo';
+                        direct = True;
+                        l = r
+                    except:
+                        pass
 
-                    for i in links:
-                        if not 'http' in i[0]: myurl = 'http:'+i[0]
-                        else: myurl = [0]
+                    links = [(i[0], '1080p') for i in l if int(i[1]) >= 1080]
+                    links += [(i[0], 'HD') for i in l if 720 <= int(i[1]) < 1080]
+                    links += [(i[0], 'SD') for i in l if 480 <= int(i[1]) < 720]
 
-                        sources.append({'source': 'gvideo', 'quality': i[1], 'provider': 'Sezonlukdizi', 'url': myurl})
+                    for i in links: sources.append(
+                        {'source': host, 'quality': i[1],'provider': 'Sezonlukdizi', 'url': i[0]})
                 except:
                     pass
 

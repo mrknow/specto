@@ -56,7 +56,9 @@ class source:
 
     def get_movie(self, imdb, title, year):
         try:
-            r1, headers, content, cookie2 = client.request(self.base_link, limit='0', output='extended')
+            r = client.request(self.base_link, limit='0', output='extended')
+            cookie2 = r[4] ; headers = r[3] ; r1 = r[0]
+
             t = cleantitle.query2(title)
             hash = hashlib.md5(title).hexdigest()
             query = urllib.urlencode({'keyword': title, 'hash':hash})
@@ -174,7 +176,9 @@ class source:
                 #print episode_num, url
                 url = urlparse.urljoin(self.base_link, url)
                 headers = {'Referer':  url, 'User-Agent':agent}
-                r, headers, content, cookie = client.request(url, limit='0', output='extended' , headers=headers)
+                r100= client.request(url, limit='0', output='extended' , headers=headers)
+                cookie = r100[4];headers = r100[3];r = r100[0]
+
                 u = client.parseDOM(r,'a', ret='href', attrs = {'class': 'mod-btn mod-btn-watch'})[0]
                 headers['Referer']=u
                 mid, episode, server= re.findall('-(\d+)/(\d+)-(\d+)/watching\.html$', u)[0]
@@ -197,7 +201,9 @@ class source:
 
                 url2 = urlparse.urljoin(self.base_link, self.url_img % re.findall('(\d+)', url)[0])
                 headers = {'Referer':  url, 'User-Agent':agent}
-                r, headers, content, cookie2 = client.request(url2, limit='0', output='extended' , headers=headers)
+                r  = client.request(url2, limit='0', output='extended' , headers=headers)
+                cookie2 = r[4]; headers = r[3]; result = r[0]
+
                 r = client.request(url, headers=headers, cookie=cookie2)
                 u = client.parseDOM(r,'a', ret='href', attrs = {'class': 'mod-btn mod-btn-watch'})[0]
                 headers['Referer']=u
@@ -225,7 +231,7 @@ class source:
                     pass
 
             for i in links:
-                sources.append({'source': 'gvideo', 'quality': i['quality'], 'provider': 'Yesmovies', 'url': i['url']})
+                sources.append({'source': 'gvideo', 'quality': i['quality'].encode('utf-8'), 'provider': 'Yesmovies', 'url': i['url'].encode('utf-8')})
 
             return sources
         except Exception as e:

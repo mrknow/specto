@@ -154,11 +154,9 @@ class source:
 
             referer = url
             result = client.request(url, limit='0')
-            result, headers, content, cookie1 = client.request(url, limit='0', output='extended')
-            #http://fmovies.to/user/ajax/menu-bar?ts=1481367600&_=1623
-            #Cookie:"__cfduid=d3e825f4e60935fb63188dccb8206b16b1481368143;
-            # session=88aca375fa71b2005ea33dd8b540c80bb7aa2b9f; user-info=null;
-            # MarketGidStorage=%7B%220%22%3A%7B%22svspr%22%3A%22%22%2C%22svsds%22%3A3%2C%22TejndEEDj%22%3A%22MTQ4MTM2ODE0NzM0NzQ4NTMyOTAx%22%7D%2C%22C48532%22%3A%7B%22page%22%3A1%2C%22time%22%3A1481368147359%7D%2C%22C77945%22%3A%7B%22page%22%3A1%2C%22time%22%3A1481368147998%7D%2C%22C77947%22%3A%7B%22page%22%3A1%2C%22time%22%3A1481368148109%7D%7D"
+            r = client.request(url, limit='0', output='extended')
+            cookie1 = r[4] ; headers = r[3] ; r1 = r[0]
+
             print("r22", cookie1)
 
             hash_url = urlparse.urljoin(self.base_link, '/user/ajax/menu-bar')
@@ -166,7 +164,9 @@ class source:
             query = {'ts': myts}
             query.update(self.__get_token(query))
             hash_url = hash_url + '?' + urllib.urlencode(query)
-            r1, headers, content, cookie2 = client.request(hash_url, limit='0', output='extended', cookie=cookie1)
+            r = client.request(hash_url, limit='0', output='extended', cookie=cookie1)
+            cookie2 = r[4] ; headers = r[3] ; r1 = r[0]
+
             print("r22", cookie2)
 
 

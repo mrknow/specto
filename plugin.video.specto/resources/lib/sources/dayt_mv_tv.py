@@ -89,7 +89,7 @@ class source:
 
             if r == None: raise Exception()
 
-            r = client.request(url)
+            r = result= client.request(url)
             r = re.sub(r'[^\x00-\x7F]+',' ', r)
 
 

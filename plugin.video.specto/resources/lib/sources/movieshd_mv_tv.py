@@ -33,8 +33,10 @@ from resources.lib import resolvers
 class source:
     def __init__(self):
         self.base_link = 'http://cartoonhd.online'
-        self.social_lock = 'evokjaqbb8'
-        self.search_link = '/api/v2/cautare/' + self.social_lock
+        #http://api.cartoonh0A6ru35yevokjaqbb8
+        self.social_lock = '0A6ru35yevokjaqbb8'
+        #http://api.cartoonhd.online/api/v1/0A6ru35yevokjaqbb8
+        self.search_link = 'http://api.cartoonhd.online/api/v1/' + self.social_lock
 
 
     def get_movie(self, imdb, title, year):
@@ -47,12 +49,13 @@ class source:
 
             headers = {'X-Requested-With': 'XMLHttpRequest'}
 
-            url = urlparse.urljoin(self.base_link, self.search_link)
+            #url = urlparse.urljoin(self.base_link, self.search_link)
+            url = self.search_link
 
             post = {'q': title.lower(), 'limit': '100', 'timestamp': tm, 'verifiedCheck': tk, 'set': set, 'rt': rt, 'sl': sl}
             post = urllib.urlencode(post)
 
-            r = client.request(url, post=post, headers=headers, output='cookie2')
+            r = client.request(url, post=post, headers=headers)
             r = json.loads(r)
 
             t = cleantitle.get(title)
@@ -82,7 +85,7 @@ class source:
             headers = {'X-Requested-With': 'XMLHttpRequest'}
 
 
-            url = urlparse.urljoin(self.base_link, self.search_link)
+            url =  self.search_link
 
             post = {'q': tvshowtitle.lower(), 'limit': '20', 'timestamp': tm, 'verifiedCheck': tk, 'set': set, 'rt': rt, 'sl': sl}
             post = urllib.urlencode(post)
@@ -125,7 +128,9 @@ class source:
 
             url1 = urlparse.urljoin(self.base_link, url)
 
-            result, headers, content, cookie = client.request(url1, output='extended')
+            r100 = client.request(url1, output='extended')
+            cookie = r100[4] ; headers = r100[3] ; result = r100[0]
+
 
             try:
                 auth = re.findall('__utmx=(.+)', cookie)[0].split(';')[0]
@@ -165,7 +170,7 @@ class source:
             print headers
 
 
-            r = client.request(u, post=post, headers=headers, output='cookie2')
+            r = client.request(u, post=post, headers=headers, output='')
             print("####",r)
             r = str(json.loads(r))
             r = client.parseDOM(r, 'iframe', ret='.+?') + client.parseDOM(r, 'IFRAME', ret='.+?')
@@ -177,7 +182,7 @@ class source:
                 except: pass
 
             links += [{'source': 'openload', 'quality': 'SD', 'url': i} for i in r if 'openload.co' in i]
-            links += [{'source': 'videomega', 'quality': 'SD', 'url': i} for i in r if 'videomega.tv' in i]
+            links += [{'source': 'videomega', 'quality': 'SD', 'url': i} for i in r if 'thevideo.me' in i]
             for i in links: sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'MoviesHD', 'url': i['url']})
 
             return sources
@@ -188,15 +193,10 @@ class source:
 
     def resolve(self, url):
         try:
-            if 'requiressl=yes' in url: url = url.replace('http://', 'https://')
-            else: url = url.replace('https://', 'http://')
-
-            control.log('@#@ PUT %s' % url)
-            if 'openload.co' in url or 'videomega.tv' in url:
-                control.log('@#@ PUT resolving ')
+            if 'openload.co' in url or 'thevideo.me' in url or 'vidto.me' in url:
                 url = resolvers.request(url)
-
-            return url
+            else:
+                return client.googlepass(url)
         except:
             return
 

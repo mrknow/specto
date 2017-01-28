@@ -1270,3 +1270,8 @@ msgstr ""
 msgctxt "#32008"
 msgid "Opensubtitles Login Details"
 msgstr ""
+
+msgctxt "#32020"
+msgid "You have to set your clock in your tv box."
+msgstr "You have to set your clock in your tv box."
+

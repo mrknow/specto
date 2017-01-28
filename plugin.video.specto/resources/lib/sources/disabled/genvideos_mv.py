@@ -21,7 +21,6 @@
 import re,urlparse,json,os,base64,urllib
 
 from resources.lib.libraries import cleantitle
-from resources.lib import resolvers
 from resources.lib.libraries import client
 from resources.lib.libraries import control
 
@@ -34,16 +33,16 @@ except:
 
 class source:
     def __init__(self):
-        self.base_link = 'http://genvideos.org'
+        self.base_link = 'https://watch32hd.co'
         self.search_link = '/results?q=%s'
         self.post = 'http://genvideos.org/video_info/iframe'
         self.headers = {}
 
     def get_movie(self,imdb, title, year):
         try:
-            query = self.search_link % (title)
+            query = self.search_link % (urllib.quote_plus(title))
             url = urlparse.urljoin(self.base_link, client.replaceHTMLCodes(query))
-            result = client.request(url, headers=self.headers)
+            result = client.request(url)
             result = client.parseDOM(result, 'div', attrs = {'class': 'cell'})
             title = cleantitle.movie(title)
             years = ['(%s)' % str(year), '(%s)' % str(int(year)+1), '(%s)' % str(int(year)-1)]

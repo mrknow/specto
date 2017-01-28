@@ -136,7 +136,10 @@ class source:
             ref = urlparse.urljoin(self.base_link, url)
             #control.log("one-sources-0 %s" % ref)
             headers= {'Referer':ref, "User-Agent":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0"}
-            result, headers, content, cookie = client.request(ref,headers=headers, output='extended')
+            r100 = client.request(ref,headers=headers, output='extended')
+            cookie = r100[4] ; headers = r100[3] ; result = r100[0]
+
+
             r = re.compile('id:.(\d+),\s.*episode_id:.(\d+),\s.*link_id:.(\d+)', ).findall(result)
             if len(r) > 0:
                 t = urlparse.urljoin(self.base_link, self.episode_link %(r[0][0], r[0][1], r[0][2], self.now_milliseconds()))
@@ -189,8 +192,6 @@ class source:
         #control.log("rainierland-sources-0 @@@@@@@@@@@@@@@@@@@@@@@@@@@@ %s" % url)
 
         try:
-            if 'requiressl=yes' in url: url = url.replace('http://', 'https://')
-            else: url = url.replace('https://', 'http://')
             return url
         except:
             pass

@@ -48,8 +48,9 @@ def getTrakt(url, post=None):
 
         headers['Authorization'] = 'Bearer %s' % control.setting('trakt.token')
 
-        result = client.request(url, post=post, headers=headers, output='response', error=True)
-        if not (result[0] == '401' or result[0] == '405'): return result[1]
+        #result = client.request(url, post=post, headers=headers, output='response', error=True)
+        result = client.request(url, post=post, headers=headers, output='extended', error=True)
+        if not (result[1] == '401' or result[1] == '405'): return result[0]
 
 
         oauth = 'http://api-v2launch.trakt.tv/oauth/token'

@@ -24,6 +24,8 @@ import time
 
 
 from resources.lib.libraries import control
+from resources.lib.libraries import ntptime
+
 
 
 artPath = control.artPath()
@@ -99,6 +101,14 @@ class navigator:
         self.addDirectoryItem(30009, 'searchNavigator', 'search.jpg', 'DefaultFolder.png')
 
         self.endDirectory()
+
+        if ntptime.checkDate():
+            control.log('Error date time setup')
+            msg = control.lang(32020).encode('utf-8')
+            msg1 ='Go to settings, set your correct date and time'.encode('utf-8')
+            msg = 'You have to set your clock in your tv box.'.encode('utf-8')
+            control.dialog.ok(control.addonInfo('name'),'',msg, msg1 )
+
 
         from resources.lib.libraries import cache
         from resources.lib.libraries import changelog

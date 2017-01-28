@@ -1,31 +1,44 @@
 # -*- coding: utf-8 -*-
 
-import random, string, sys
-import json,re
-sys.path.append('/home/mrknow/Dokumenty/praca/kodi/plugin.video.specto/mylib/')
+import random
+import re
+import string
+import sys
 
-print ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(25))
+sys.path.append('/home/mrknow/Dokumenty/praca/kodi/specto/plugin.video.specto/mylib/')
 
-from resources.lib.sources import sezonlukdizi_tv
+#print ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for _ in range(25))
 
+
+import time, datetime
 from resources.lib.libraries import client2
 from resources.lib.libraries import client
-from resources.lib.libraries import cleantitle
-from resources.lib.libraries import control
-from resources.lib import resolvers
+from resources.lib.libraries import ntptime
 
-from resources.lib.resolvers import openload
-from resources.lib.sources.dayt_mv_tv import source
+#mynow = int(str(int(time.mktime(datetime.datetime.now().timetuple()))))
+#print "Exp_Now", mynow
+
+print 'ExpWhen', ntptime.checkDate()
+
+s= '__cfduid=d4a8b611c1d4b33abacf8d245ec3892d61485465542; PHPSESSID=249b8gc4bfrrbcp754uaaqvh66; history_watch=a%3A1%3A%7Bi%3A0%3Bs%3A109%3A%22%3Ca+href%3D%22http%3A%2F%2Falltube.tv%2Ffilm%2Fvaiana-skarb-oceanu-moana-2016%2F37136%22%3EVaiana%3A+Skarb+oceanu+%2F+Moana+%282016%29%3C%2Fa%3E%22%3B%7D'
+import re,urllib
+print  urllib.unquote(s).decode('utf8')
+#print s.split(';')
+a =  re.findall('(.*?)=(.*?);', urllib.unquote(s))
+
+#exit()
+
+q = {k.strip():v for k,v in re.findall(r'(.*?)=(.*?);', urllib.unquote(s))}
+print q
+
+
+exit()
 
 
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import sqlite3 as lite
-import sys,re
-
-
-
 
 cars = (
     (1, 'Audi', 52642),
