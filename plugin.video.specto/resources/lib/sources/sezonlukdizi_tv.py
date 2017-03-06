@@ -30,7 +30,7 @@ from resources.lib.libraries import control
 class source:
     def __init__(self):
         self.base_link = 'http://sezonlukdizi.com'
-        self.search_link = '/js/dizi.js'
+        self.search_link = '/js/dizi2.js'
         self.video_link = '/ajax/dataEmbed.asp'
 
     def get_show(self, imdb, tvdb, tvshowtitle, year):
