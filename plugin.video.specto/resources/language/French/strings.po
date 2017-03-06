@@ -29,7 +29,7 @@ msgstr "Séries TV"
 
 msgctxt "#30003"
 msgid "Channels"
-msgstr "Canaux"
+msgstr "Chaînes"
 
 msgctxt "#30004"
 msgid "My Specto"
@@ -65,7 +65,7 @@ msgstr "Année"
 
 msgctxt "#30023"
 msgid "People"
-msgstr "Personnes"
+msgstr "Artistes"
 
 msgctxt "#30024"
 msgid "Certificates"
@@ -77,7 +77,7 @@ msgstr "À l'Affiche"
 
 msgctxt "#30026"
 msgid "People Watching"
-msgstr "Regardé en ce moment"
+msgstr "Visionnés en ce moment"
 
 msgctxt "#30027"
 msgid "Most Popular"
@@ -109,7 +109,7 @@ msgstr "Favoris"
 
 msgctxt "#30034"
 msgid "People Search"
-msgstr "Recherché en ce moment"
+msgstr "Rechercher un artiste"
 
 msgctxt "#30035"
 msgid "Search"
@@ -125,11 +125,11 @@ msgstr "Année"
 
 msgctxt "#30053"
 msgid "Networks"
-msgstr "Réseaux"
+msgstr "Chaînes TV"
 
 msgctxt "#30054"
 msgid "People Watching"
-msgstr "Visionné en ce moment"
+msgstr "Visionnées en ce moment"
 
 msgctxt "#30055"
 msgid "Most Popular"
@@ -173,7 +173,7 @@ msgstr "Favoris"
 
 msgctxt "#30065"
 msgid "People Search"
-msgstr "Recherché en ce moment"
+msgstr "Rechercher un artiste"
 
 msgctxt "#30066"
 msgid "Search"
@@ -185,7 +185,7 @@ msgstr "[B]TRAKT[/B] : Collection"
 
 msgctxt "#30082"
 msgid "[B]TRAKT[/B] : Watchlist"
-msgstr "[B]TRAKT[/B] : Liste de Surveillance"
+msgstr "[B]TRAKT[/B] : À Voir"
 
 msgctxt "#30083"
 msgid "[B]TRAKT[/B] : Featured"
@@ -201,11 +201,11 @@ msgstr "[B]TRAKT[/B] : Collection TV"
 
 msgctxt "#30086"
 msgid "[B]TRAKT[/B] : TV Watchlist"
-msgstr "[B]TRAKT[/B] : Liste de surveillance TV"
+msgstr "[B]TRAKT[/B] : Séries À Voir"
 
 msgctxt "#30087"
 msgid "[B]TRAKT[/B] : TV Featured"
-msgstr "[B]TRAKT[/B] : À l'Affiche TV"
+msgstr "[B]TRAKT[/B] : Séries À l'Affiche"
 
 msgctxt "#30088"
 msgid "[B]TRAKT[/B] : TV Ratings"
@@ -221,19 +221,19 @@ msgstr "[B]TRAKT[/B] : Épisodes"
 
 msgctxt "#30091"
 msgid "[B]IMDB[/B] : Watchlist"
-msgstr "[B]IMDB[/B] : Liste de Surveillance"
+msgstr "[B]IMDB[/B] : À Voir"
 
 msgctxt "#30092"
 msgid "[B]IMDB[/B] : TV Watchlist"
-msgstr "[B]IMDB[/B] : Liste de Surveillance TV"
+msgstr "[B]IMDB[/B] : Séries À Voir"
 
 msgctxt "#30093"
 msgid "Movie Lists"
-msgstr "Liste de Films"
+msgstr "Listes de Films"
 
 msgctxt "#30094"
 msgid "TV Show Lists"
-msgstr "Liste d'Émissions de TV"
+msgstr "Listes de Séries"
 
 msgctxt "#30095"
 msgid "Favourite Movies"
@@ -245,11 +245,11 @@ msgstr "Épisodes Favoris"
 
 msgctxt "#30097"
 msgid "Favourite TV"
-msgstr "TV Favorites"
+msgstr "Séries Favorites"
 
 msgctxt "#30098"
 msgid "Downloads"
-msgstr "Téléchargement"
+msgstr "Téléchargements"
 
 msgctxt "#30099"
 msgid "Movies"
@@ -257,23 +257,23 @@ msgstr "Films"
 
 msgctxt "#30100"
 msgid "TV"
-msgstr "TV"
+msgstr "Séries"
 
 msgctxt "#30111"
 msgid "[B]SETTINGS[/B] : General"
-msgstr "[B]CONFIGURATION[/B] : Générale"
+msgstr "[B]CONFIG[/B] : Général"
 
 msgctxt "#30112"
 msgid "[B]SETTINGS[/B] : Accounts"
-msgstr "[B]SETTINGS[/B] : Comptes"
+msgstr "[B]CONFIG[/B] : Comptes"
 
 msgctxt "#30113"
 msgid "[B]SETTINGS[/B] : Playback"
-msgstr "[B]SETTINGS[/B] : Lecture"
+msgstr "[B]CONFIG[/B] : Lecture"
 
 msgctxt "#30114"
 msgid "[B]SETTINGS[/B] : Subtitles"
-msgstr "[B]SETTINGS[/B] : Sous-titres"
+msgstr "[B]CONFIG[/B] : Sous-titres"
 
 msgctxt "#30115"
 msgid "[B]SOURCES[/B] : Movies"
@@ -281,15 +281,15 @@ msgstr "[B]SOURCES[/B] : Films"
 
 msgctxt "#30116"
 msgid "[B]SOURCES[/B] : TV"
-msgstr "[B]SOURCES[/B] : TV"
+msgstr "[B]SOURCES[/B] : Séries"
 
 msgctxt "#30117"
 msgid "[B]HOSTS[/B] : HD Priority"
-msgstr "[B]SERVEURS[/B] : Priorité HD"
+msgstr "[B]SERVEURS[/B] : Priorité des serveurs HD"
 
 msgctxt "#30118"
 msgid "[B]HOSTS[/B] : SD Priority"
-msgstr "[B]SERVEURS[/B] : Priorité SD"
+msgstr "[B]SERVEURS[/B] : Priorité des serveurs SD"
 
 msgctxt "#30119"
 msgid "[B]Specto[/B] : Clear sources..."
@@ -297,55 +297,55 @@ msgstr "[B]Specto[/B] : Effacer sources..."
 
 msgctxt "#30120"
 msgid "[B]Specto[/B] : Clear cache..."
-msgstr "[B]Specto[/B] : Effacer cache..."
+msgstr "[B]Specto[/B] : Effacer le cache..."
 
 msgctxt "#30121"
 msgid "[B]Specto[/B] : Library"
-msgstr "[B]Specto[/B] : Librarie"
+msgstr "[B]Specto[/B] : Librairie"
 
 msgctxt "#30122"
 msgid "[B]Specto[/B] : Downloads"
-msgstr "[B]Specto[/B] : Téléchargement"
+msgstr "[B]Specto[/B] : Téléchargements"
 
 msgctxt "#30131"
 msgid "[B]LIBRARY[/B] : Settings"
-msgstr "[B]LIBRAIRIE[/B] : Configuration..."
+msgstr "[B]LIBRAIRIE[/B] : Configurations..."
 
 msgctxt "#30132"
 msgid "[B]Specto[/B] : Update folders..."
-msgstr "[B]Specto[/B] : Mettre à jour répertoires..."
+msgstr "[B]Specto[/B] : Mettre à jour les répertoires..."
 
 msgctxt "#30133"
 msgid "[B]Specto[/B] : Movie folder..."
-msgstr "[B]Specto[/B] : Répertoire Films..."
+msgstr "[B]Specto[/B] : Répertoire des Films..."
 
 msgctxt "#30134"
 msgid "[B]Specto[/B] : TV folder..."
-msgstr "[B]Specto[/B] : Répertoire TV..."
+msgstr "[B]Specto[/B] : Répertoire des Séries..."
 
 msgctxt "#30135"
 msgid "[B]TRAKT[/B] : Import Collection..."
-msgstr "[B]TRAKT[/B] : Importer Collection..."
+msgstr "[B]TRAKT[/B] : Importer la Collection..."
 
 msgctxt "#30136"
 msgid "[B]TRAKT[/B] : Import Watchlist..."
-msgstr "[B]TRAKT[/B] : Importer Liste de visionnage..."
+msgstr "[B]TRAKT[/B] : Importer la Listes de visionnage..."
 
 msgctxt "#30137"
 msgid "[B]TRAKT[/B] : Import TV Collection..."
-msgstr "[B]TRAKT[/B] : Importer Collection TV..."
+msgstr "[B]TRAKT[/B] : Importer la Collection TV..."
 
 msgctxt "#30138"
 msgid "[B]TRAKT[/B] : Import TV Watchlist..."
-msgstr "[B]TRAKT[/B] : Importer Liste de visionnage TV..."
+msgstr "[B]TRAKT[/B] : Importer la Listes de visionnage TV..."
 
 msgctxt "#30139"
 msgid "[B]IMDB[/B] : Import Watchlist..."
-msgstr "[B]IMDB[/B] : Importer Liste de visionnage..."
+msgstr "[B]IMDB[/B] : Importer la Liste de visionnage..."
 
 msgctxt "#30140"
 msgid "[B]IMDB[/B] : Import TV Watchlist..."
-msgstr "[B]IMDB[/B] : Importer Liste de visionnage TV..."
+msgstr "[B]IMDB[/B] : Importer la Liste de visionnage TV..."
 
 msgctxt "#30151"
 msgid "Movies"
@@ -357,11 +357,11 @@ msgstr "Séries TV"
 
 msgctxt "#30153"
 msgid "People (Movies)"
-msgstr "Personnes (Films)"
+msgstr "Artistes (Films)"
 
 msgctxt "#30154"
 msgid "People (TV)"
-msgstr "Personnes (TV)"
+msgstr "Artistes (TV)"
 
 msgctxt "#30191"
 msgid "Add to Library"
@@ -385,7 +385,7 @@ msgstr "Lire avec..."
 
 msgctxt "#30205"
 msgid "Movie information"
-msgstr "Informations film"
+msgstr "Informations du film"
 
 msgctxt "#30206"
 msgid "Mark as watched"
@@ -405,7 +405,7 @@ msgstr "Ajouter aux favoris"
 
 msgctxt "#30210"
 msgid "Remove from favourites"
-msgstr "Supprimer des favoris"
+msgstr "Retirer des favoris"
 
 msgctxt "#30211"
 msgid "Add to Library"
@@ -413,7 +413,7 @@ msgstr "Ajouter à la librairie"
 
 msgctxt "#30212"
 msgid "Set Movies view"
-msgstr "Définir vue Films"
+msgstr "Changer vue par défaut (Films)"
 
 msgctxt "#30213"
 msgid "[I]Next Page[/I]"
@@ -429,7 +429,7 @@ msgstr "Mettre en file d'attente"
 
 msgctxt "#30233"
 msgid "TV show information"
-msgstr "Informations Série TV"
+msgstr "Informations sur la Série"
 
 msgctxt "#30234"
 msgid "Mark as watched"
@@ -457,7 +457,7 @@ msgstr "Ajouter à la librarie"
 
 msgctxt "#30240"
 msgid "Set TV Shows view"
-msgstr "Définir vue Séries TV"
+msgstr "Changer vue par défaut (Séries)"
 
 msgctxt "#30241"
 msgid "[I]Next Page[/I]"
@@ -469,7 +469,7 @@ msgstr "Mettre en file d'attente"
 
 msgctxt "#30262"
 msgid "TV show information"
-msgstr "Informations Série Tv"
+msgstr "Informations sur la Série"
 
 msgctxt "#30263"
 msgid "Mark as watched"
@@ -497,7 +497,7 @@ msgstr "Ajouter à la librairie"
 
 msgctxt "#30269"
 msgid "Set Seasons view"
-msgstr "Définir vue Saisons"
+msgstr "Changer la vue par défaut (Saisons)"
 
 msgctxt "#30270"
 msgid "Auto-play"
@@ -513,7 +513,7 @@ msgstr "Informations sur l'épisode"
 
 msgctxt "#30273"
 msgid "Set Episodes view"
-msgstr "Définir vue Épisodes"
+msgstr "Changer la vue par défaut (Épisodes)"
 
 msgctxt "#30291"
 msgid "Auto-play"
@@ -533,7 +533,7 @@ msgstr "Rafraîchir"
 
 msgctxt "#30295"
 msgid "Add-on settings"
-msgstr "Paramètres de l'addon"
+msgstr "Paramètres de l'extension"
 
 msgctxt "#30296"
 msgid "Now playing..."
@@ -657,7 +657,7 @@ msgstr "Rafraîchir les sources"
 
 msgctxt "#30507"
 msgid "Add-on settings"
-msgstr "Paramètres de l'addon"
+msgstr "Paramètres de l'extension"
 
 msgctxt "#30508"
 msgid "Now playing..."
@@ -813,7 +813,7 @@ msgstr "Favoris"
 
 msgctxt "#30815"
 msgid "Trakt Progress"
-msgstr "Progrès Trakt"
+msgstr "Progression Trakt"
 
 msgctxt "#30816"
 msgid "Trakt Episodes"
@@ -853,7 +853,7 @@ msgstr "Répertoire"
 
 msgctxt "#30835"
 msgid "File Hosting Filters"
-msgstr "Filtres d'hébergement de fichiers"
+msgstr "Filtres d'hébergeur de fichiers"
 
 msgctxt "#30836"
 msgid "Hosters with captchas"
@@ -893,7 +893,7 @@ msgstr "Reprendre la lecture"
 
 msgctxt "#30845"
 msgid "Playback Info"
-msgstr "Informations de lecture"
+msgstr "Afficher les informations de lecture"
 
 msgctxt "#30860"
 msgid "Movies"
@@ -901,7 +901,7 @@ msgstr "Films"
 
 msgctxt "#30861"
 msgid "TV"
-msgstr "Tv"
+msgstr "Séries"
 
 msgctxt "#30870"
 msgid "HD Hosts"
@@ -997,7 +997,7 @@ msgstr "Comptes"
 
 msgctxt "#30911"
 msgid "User"
-msgstr "Utilisateuir"
+msgstr "Utilisateurs"
 
 msgctxt "#30912"
 msgid "Email"
@@ -1015,7 +1015,7 @@ msgctxt "#30921"
 msgid ""
 "Specto folderswill be imported to library if they are added to media "
 "sources."
-msgstr "Les répertoires Specto seront importés dans la librairie síls sont ajoutés aux sources média."
+msgstr "Les répertoires Specto seront importés dans la librairie s'ils sont ajoutés aux sources média."
 
 msgctxt "#30922"
 msgid "Movies"
@@ -1023,7 +1023,7 @@ msgstr "Films"
 
 msgctxt "#30923"
 msgid "TV"
-msgstr "TV"
+msgstr "Séries"
 
 msgctxt "#30924"
 msgid "Auto update TV Shows"
@@ -1035,7 +1035,7 @@ msgstr "Afficher les notifications pendant la mise à jour"
 
 msgctxt "#30926"
 msgid "Update library after adding content"
-msgstr "Mettre à jour la librarie après l'ajout de contenu"
+msgstr "Mettre à jour la librairie après l'ajout de contenu"
 
 msgctxt "#30927"
 msgid "Avoid creating duplicate content"
@@ -1055,7 +1055,7 @@ msgstr "Sous-titres"
 
 msgctxt "#30941"
 msgid "Subtitles could be unavailable or out of sync."
-msgstr "Les sous-titres peuvent êtres indisponibles ou hors de la synchro."
+msgstr "Les sous-titres peuvent êtres indisponibles ou désynchronisés."
 
 msgctxt "#30942"
 msgid "In that case use your own subtitles."
@@ -1079,7 +1079,7 @@ msgstr "Langue secondaire"
 
 msgctxt "#30950"
 msgid "Downloads"
-msgstr "Téléchargement"
+msgstr "Téléchargements"
 
 msgctxt "#30951"
 msgid "Movies"
@@ -1087,4 +1087,4 @@ msgstr "Films"
 
 msgctxt "#30952"
 msgid "TV"
-msgstr "TV"
+msgstr "Séries"
