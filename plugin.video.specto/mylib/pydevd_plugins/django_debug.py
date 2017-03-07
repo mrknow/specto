@@ -96,6 +96,13 @@ def _is_django_render_call(frame):
             return False
 
         clsname = cls.__name__
+        if IS_DJANGO19:
+            # in Django 1.9 we need to save the flag that there is included template
+            if clsname == 'IncludeNode':
+                if dict_contains(frame.f_locals, 'context'):
+                    context = frame.f_locals['context']
+                    context._has_included_template = True
+
         return clsname != 'TextNode' and clsname != 'NodeList'
     except:
         traceback.print_exc()
@@ -215,13 +222,32 @@ def _get_source_django_18_or_lower(frame):
 
 def _get_template_file_name(frame):
     try:
-        if IS_DJANGO19_OR_HIGHER:
+        if IS_DJANGO19:
             # The Node source was removed since Django 1.9
             if dict_contains(frame.f_locals, 'context'):
                 context = frame.f_locals['context']
-                if hasattr(context, 'template') and hasattr(context.template, 'origin') and \
-                        hasattr(context.template.origin, 'name'):
-                    return normcase(context.template.origin.name)
+                if hasattr(context, '_has_included_template'):
+                    #  if there was included template we need to inspect the previous frames and find its name
+                    back = frame.f_back
+                    while back is not None and frame.f_code.co_name in ('render', '_render'):
+                        locals = back.f_locals
+                        if dict_contains(locals, 'self'):
+                            self = locals['self']
+                            if self.__class__.__name__ == 'Template' and hasattr(self, 'origin') and \
+                                    hasattr(self.origin, 'name'):
+                                return self.origin.name
+                        back = back.f_back
+                else:
+                    if hasattr(context, 'template') and hasattr(context.template, 'origin') and \
+                            hasattr(context.template.origin, 'name'):
+                        return normcase(context.template.origin.name)
+            return None
+        elif IS_DJANGO19_OR_HIGHER:
+            # For Django 1.10 and later there is much simpler way to get template name
+            if dict_contains(frame.f_locals, 'self'):
+                self = frame.f_locals['self']
+                if hasattr(self, 'origin') and hasattr(self.origin, 'name'):
+                    return normcase(self.origin.name)
             return None
 
         source = _get_source_django_18_or_lower(frame)
@@ -380,7 +406,7 @@ def get_breakpoint(plugin, main_debugger, pydb_frame, frame, event, args):
         if django_breakpoints_for_file:
             pydev_log.debug("Breakpoints for that file: %s\n" % django_breakpoints_for_file)
             template_line = _get_template_line(frame)
-            pydev_log.debug("Tracing template line: %d\n" % template_line)
+            pydev_log.debug("Tracing template line: %s\n" % str(template_line))
 
             if dict_contains(django_breakpoints_for_file, template_line):
                 django_breakpoint = django_breakpoints_for_file[template_line]

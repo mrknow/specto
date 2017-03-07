@@ -35,7 +35,6 @@ class source:
         #http://tunemovie.is/search-movies/The+Hateful+Eight.html
 
     def get_movie(self, imdb, title, year):
-        return
         try:
             query = urlparse.urljoin(self.base_link, self.search_link)
             query = query % urllib.quote_plus(title)
@@ -60,7 +59,6 @@ class source:
 
 
     def get_show(self, imdb, tvdb, tvshowtitle, year):
-        return
         try:
             url = '%s (%s)' % (tvshowtitle, year)
             url = client.replaceHTMLCodes(url)
@@ -118,22 +116,35 @@ class source:
 
             if url == None: return sources
 
-            referer = urlparse.urljoin(self.base_link, url)
+            url = urlparse.urljoin(self.base_link, url)
+
+            try: url, episode = re.findall('(.+?)\?episode=(\d*)$', url)[0]
+            except: episode = None
+
+            headers = {'X-Requested-With': 'XMLHttpRequest', 'Referer': url}
 
             for i in range(3):
-                result = client.request(referer)
+                result = client.request(url)
                 if not result == None: break
 
-            r = client.parseDOM(result, 'div', attrs={'class': '[^"]*server_line[^"]*'})
+            if not episode == None:
+                mid = client.parseDOM(result, 'input', ret='value', attrs = {'name': 'phimid'})[0]
+                url = urlparse.urljoin(self.base_link, '/ajax.php')
+                post = {'ipos_server': 1, 'phimid': mid, 'keyurl': episode}
+                post = urllib.urlencode(post)
+
+                for i in range(3):
+                    result = client.request(url, post=post, headers=headers, timeout='10')
+                    if not result == None: break
+
+            r = client.parseDOM(result, 'div', attrs = {'class': '[^"]*server_line[^"]*'})
 
             links = []
 
             for u in r:
                 try:
-                    host = client.parseDOM(u, 'p', attrs={'class': 'server_servername'})[0]
+                    host = client.parseDOM(u, 'p', attrs = {'class': 'server_servername'})[0]
                     host = host.strip().lower().split(' ')[-1]
-
-                    headers = {'X-Requested-With': 'XMLHttpRequest', 'Referer': referer}
 
                     url = urlparse.urljoin(self.base_link, '/ip.temp/swf/plugins/ipplugins.php')
 
@@ -143,10 +154,10 @@ class source:
                     post = {'ipplugins': 1, 'ip_film': p1, 'ip_server': p2, 'ip_name': p3}
                     post = urllib.urlencode(post)
 
-                    if not host in ['google', 'putlocker']: raise Exception()
+                    if not host in ['google', 'putlocker', 'megashare']: raise Exception()
 
                     for i in range(3):
-                        result = client.request(url, post=post, headers=headers)
+                        result = client.request(url, post=post, headers=headers, timeout='10')
                         if not result == None: break
 
                     result = json.loads(result)['s']
@@ -160,15 +171,20 @@ class source:
                         result = client.request(url, post=post, headers=headers)
                         if not result == None: break
 
-                    result = json.loads(result)['data']
-                    result = [i['files'] for i in result]
+                    url = json.loads(result)['data']
 
-                    for i in result:
-                        try:
-                            sources.append({'source': 'gvideo', 'quality': client.googletag(i)[0]['quality'],
-                                            'provider': 'Tunemovie', 'url': i})
-                        except:
-                            pass
+                    if type(url) is list:
+                        url = [i['files'] for i in url]
+                        for i in url:
+                            try: sources.append({'source': 'gvideo', 'quality': client.googletag(i)[0]['quality'], 'url': i})
+                            except: pass
+
+                    else:
+                        url = client.request(url)
+                        url = client.parseDOM(url, 'source', ret='src', attrs = {'type': 'video.+?'})[0]
+                        url += '|%s' % urllib.urlencode({'User-agent': client.randomagent()})
+                        sources.append({'source': 'cdn', 'quality': 'HD','provider': 'Tunemovie', 'url': i})
+
                 except:
                     pass
 
@@ -202,11 +218,5 @@ class source:
 
 
     def resolve(self, url):
-        try:
-            url = client.request(url, output='geturl')
-            if 'requiressl=yes' in url: url = url.replace('http://', 'https://')
-            else: url = url.replace('https://', 'http://')
-            return url
-        except:
-            return
+        return client.googlepass(url)
 

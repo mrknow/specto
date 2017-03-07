@@ -37,11 +37,11 @@ import requests
 class source:
     def __init__(self):
         self.base_link = 'https://123movies.ru'
-        self.search_link = '/ajax/suggest_search'
+        self.search_link = '/movie/search/%s'
         self.info_link = '/ajax/movie_load_info/%s'
-        self.server_link = '/ajax/v2_get_episodes/%s'
-        self.direct_link = '/ajax/v2_get_sources/%s'
-        self.embed_link = '/ajax/load_embed/%s'
+        self.server_link = '/ajax/get_episodes/%s'
+        self.direct_link = '/ajax/v2_load_episode/'
+        self.embed_link = '/ajax/load_embed/'
         self.key = '87wwxtp3dqii'
         self.key2 = '7bcq9826avrbi6m49vd7shxkn985mhod'
         self.key3 = '7bcq9826avrbi6m4'
@@ -50,28 +50,22 @@ class source:
 
         #http://123movies.to/ajax/suggest_search
 
+
+
     def get_movie(self, imdb, title, year):
         try:
-            t = cleantitle.get(title)
 
-            headers = {'X-Requested-With': 'XMLHttpRequest',
-                       "Accept":"application/json, text/javascript, */*; q=0.01"}
-            hash = hashlib.md5(title+self.key4).hexdigest()
-            query = urllib.urlencode({'keyword': title, 'token':hash})
-            print "0", hash, query, title
+            q = self.search_link % (urllib.quote_plus(title))
+            r = urlparse.urljoin(self.base_link, q)
+            headers = {'User-Agent': client.agent()}
 
-            url = urlparse.urljoin(self.base_link, self.search_link)
-            r = client.request(url, post=query, headers=headers)
-            print("1",r)
+            r = client.request(r, headers=headers)
 
-            #token:"bc0cb3a63946c2762ae7a8501b9c7747"
-
-            r = json.loads(r)['content']
-            #print ("2",r)
-            r = zip(client.parseDOM(r, 'a', ret='href', attrs = {'class': 'ss-title'}), client.parseDOM(r, 'a', attrs = {'class': 'ss-title'}))
-            r = [i[0] for i in r if cleantitle.get(t) == cleantitle.get(i[1])][:2]
-            r = [(i, re.findall('(\d+)', i)[-1]) for i in r]
-            #print ("3",r)
+            r =  client.parseDOM(r,'div', attrs={'class': 'ml-item'})
+            print("1", r)
+            r = [(client.parseDOM(i, 'a', ret='href')[0], client.parseDOM(i, 'a')[0]) for i in r]
+            r = [(i[0], re.findall('-(\d+)/',i[0])[0], client.parseDOM(i[1], 'h2')[0]) for i in r]
+            r = [i for i in r if cleantitle.get(title) == cleantitle.get(i[2])]
 
             for i in r:
                 try:
@@ -100,17 +94,38 @@ class source:
             data = dict([(i, data[i][0]) if data[i] else (i, '') for i in data])
 
             t = cleantitle.get(data['tvshowtitle'])
+            title = cleantitle.getsearch(data['tvshowtitle'])
+
             print('###',t,data['tvshowtitle'])
             year = re.findall('(\d{4})', date)[0]
             years = [str(year), str(int(year)+1), str(int(year)-1)]
             season = '%01d' % int(season)
             episode = '%01d' % int(episode)
+            ep_id = '?episode=%01d' % int(episode)
 
-            headers = {'X-Requested-With': 'XMLHttpRequest'}
-            query = urllib.urlencode({'keyword': '%s - Season %s' % (data['tvshowtitle'], season)})
-            url = urlparse.urljoin(self.base_link, self.search_link)
+            headers = {'User-Agent': client.agent()}
+
+            query = (urllib.quote_plus(title)) + "+season+" + season
+            q = self.search_link % (query)
+            r = urlparse.urljoin(self.base_link, q)
+            r = client.request(r, headers=headers)
+
+
+            r =  client.parseDOM(r,'div', attrs={'class': 'ml-item'})
+            print("1", r)
+            r = [(client.parseDOM(i, 'a', ret='href')[0], client.parseDOM(i, 'a')[0]) for i in r]
+            r = [(i[0], re.findall('-(\d+)/',i[0])[0], client.parseDOM(i[1], 'h2')[0]) for i in r]
+            r = [i for i in r if cleantitle.get(title  +"season" + season) == cleantitle.get(i[2])]
+            for i in r:
+                try:
+                    y, q = cache.get(self.muchmovies_info, 9000, i[1])
+                    #print("4",y,q)
+                    if not y == year: raise Exception()
+                    return urlparse.urlparse(i[0]).path + ep_id
+                except:
+                    pass
+
             r = client.request(url, post=query, headers=headers)
-            r = json.loads(r)['content']
             print('>>>',r)
 
             r = zip(client.parseDOM(r, 'a', ret='href', attrs = {'class': 'ss-title'}), client.parseDOM(r, 'a', attrs = {'class': 'ss-title'}))
@@ -148,19 +163,20 @@ class source:
 
     def get_sources(self, url, hosthdDict, hostDict, locDict):
         try:
+            original_url = url
             sources = []
 
             if url == None: return sources
 
             url = urlparse.urljoin(self.base_link, url)
-
-            link = client.request(url)
+            headers = {'User-Agent': client.agent()}
+            link = client.request(url, headers=headers)
 
             url = referer = url.replace('/watching.html', '')
             getc = re.findall('<img title=.*?src="(.*?)"', str(link), re.I | re.DOTALL)[0]
 
             headers = {'Accept': 'image/webp,image/*,*/*;q=0.8', 'Accept-Encoding': 'gzip, deflate, sdch, br',
-                       'Accept-Language': 'en-US,en;q=0.8', 'Referer': referer}
+                       'Accept-Language': 'en-US,en;q=0.8', 'Referer': referer, 'User-Agent': client.agent()}
             mycookie = client.request(getc, headers=headers, output='cookie')
 
             print "VCCCCCCCC", mycookie
@@ -169,7 +185,7 @@ class source:
 
             u = re.findall('-(\d+)', url)[-1]
 
-            headers = {'X-Requested-With': 'XMLHttpRequest', 'Referer': url}
+            headers = {'X-Requested-With': 'XMLHttpRequest', 'Referer': url, 'User-Agent': client.agent()}
 
             quality = cache.get(self.muchmovies_info, 9000, u)[1].lower()
             if quality == 'cam' or quality == 'ts': quality = 'CAM'
@@ -197,11 +213,13 @@ class source:
 
             head_link = '|' + urllib.urlencode(headers)
 
+            for i in r:
+                print "i",i
 
             links = []
-            links += [{'source': 'openload', 'url': self.embed_link % i[1]} for i in r if i[0] == '14']
-            links += [{'source': 'videomega', 'url': self.embed_link % i[1]} for i in r if i[0] == '13']
-            links += [{'source': 'videowood', 'url': self.embed_link % i[1]} for i in r if i[0] == '12']
+            #links += [{'source': 'openload', 'url': self.embed_link % i[1]} for i in r if i[0] == '14']
+            #links += [{'source': 'videomega', 'url': self.embed_link % i[1]} for i in r if i[0] == '13']
+            #links += [{'source': 'videowood', 'url': self.embed_link % i[1]} for i in r if i[0] == '12']
             for i in r:
                 try:
                     if 2 <= int(i[0]) <= 11:

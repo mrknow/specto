@@ -43,7 +43,7 @@ ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) A
 #SMU_USER_AGENT = 'URLResolver for Kodi/%s' % (addon_version)
 
 
-def request(url, close=True, redirect=True, error=False, proxy=None, post=None, headers=None, mobile=False, limit=None, referer=None, cookie=None, output='', timeout='30'):
+def request(url, close=True, redirect=True, error=False, proxy=None, post=None, headers=None, mobile=False, limit=None, referer=None, cookie=None, output='', timeout='30', XHR=False):
     try:
         #control.log('@@@@@@@@@@@@@@ - URL:%s POST:%s' % (url, post))
 
@@ -91,6 +91,10 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
             headers['Referer'] = referer
         if not 'Accept-Language' in headers:
             headers['Accept-Language'] = 'en-US'
+        if 'X-Requested-With' in headers:
+            pass
+        elif XHR == True:
+            headers['X-Requested-With'] = 'XMLHttpRequest'
         if 'Cookie' in headers:
             pass
         elif not cookie == None:
@@ -333,7 +337,7 @@ def cleanHTMLCodes(txt):
     return txt
 
 def agent():
-    return randomagent()
+    return cache.get(randomagent, 24)
 
 def randomagent():
     BR_VERS = [

@@ -37,6 +37,8 @@ except AttributeError:
 #the communication slower -- as the variables are being gathered lazily in the latest version of eclipse,
 #this value was raised from 200 to 1000.
 MAXIMUM_VARIABLE_REPRESENTATION_SIZE = 1000
+# Prefix for saving functions return values in locals
+RETURN_VALUES_DICT = '__pydevd_ret_val_dict'
 
 import os
 
@@ -134,8 +136,6 @@ if USE_LIB_COPY:
     protect_libraries_from_patching()
 
 
-from _pydev_imps._pydev_saved_modules import threading
-
 from _pydev_imps._pydev_saved_modules import thread
 _nextThreadIdLock = thread.allocate_lock()
 
@@ -185,9 +185,13 @@ if IS_PY3K:
         return list(d.items())
 
 else:
+    dict_keys = None
     try:
         dict_keys = dict.keys
     except:
+        pass
+
+    if IS_JYTHON or not dict_keys:
         def dict_keys(d):
             return d.keys()
 

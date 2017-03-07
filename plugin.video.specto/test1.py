@@ -9,7 +9,7 @@ sys.path.append('/home/mrknow/Dokumenty/praca/kodi/filmkodi/script.mrknow.urlres
 
 from resources.lib.libraries import control
 
-"""
+
 url = 'http://openload.co/embed/7wlGOdWQnT4'
 url = 'https://openload.co/embed/CFDSAsN4Zeo/Animal.Kingdom.US.S01E06.720p.HDTV.X264-DIMENSION.mp4'
 url ='http://openload.co/embed/ExatdBfcJ38'
@@ -20,22 +20,22 @@ url = 'https://openload.co/embed/rZ04_L_uRuU'
 #url = 'http://www.cda.pl/video/1852188d/Ultimatum-Bournea---The-Bourne-Ultimatum-HD?wersja=720p'
 
 
-url='http://shared.sx/8addffca7f'
-url = 'http://openload.co/embed/JlSTfXTluk8'
-import urlresolver9
-z = False
-hmf = urlresolver9.HostedMediaFile(url, include_disabled=True, include_universal=False)
-print hmf
-if hmf:
-    print 'yay! we can resolve this one'
-    z = hmf.resolve()
-else:
-    print 'dupa'
-print("URL", z)
+#url='http://shared.sx/8addffca7f'
+#url = 'http://openload.co/embed/JlSTfXTluk8'
+#import urlresolver9
+#z = False
+#hmf = urlresolver9.HostedMediaFile(url, include_disabled=True, include_universal=False)
+#print hmf
+#if hmf:
+#    print 'yay! we can resolve this one'
+#    z = hmf.resolve()
+#else:
+#    print 'dupa'
+#print("URL", z)
 
-exit()
+#exit()
 
-"""
+
 def getmovie(myclass):
     a = myclass.get_movie('tt3799694', 'The Nice Guys', '2016')
     #a = my.get_movie('tt3110958','Mechanic: Resurrection','2016')
@@ -75,12 +75,12 @@ from resources.lib.sources.pubfilm_mv_tv import source as pubfilm
 from resources.lib.sources.yesmovies_mv_tv import source as yesmovies
 from resources.lib.sources.fmovies_mv_tv import source as fmovies
 from resources.lib.sources.movie25_mv_tv import source as pmovie
-from resources.lib.sources.watchfree_mv_tv import source as watchfree
+from resources.lib.sources.movieshd_mv_tv import source as movieshd
 from resources.lib.sources.onemovies_mv_tv import source as onemovies
 from resources.lib.sources.xmovies_mv_tv import source as xmovies
 #from resources.lib.sources.genvideos_mv import source as genvid
 from resources.lib.sources.moviexk_mv_tv import source as mxk
-from resources.lib.sources.moviefree_mv_tv import source as moviefree
+from resources.lib.sources.watch5s_mv_tv import source as watch5s
 
 
 
@@ -98,8 +98,8 @@ my5 = muchmovies()
 my6 = pubfilm()
 my7 = fmovies()
 
-my1000 = xmovies()
-my2000 = None
+my1000 = muchmovies()
+my2000 = movieshd()
 
 import time
 #http://fmovies.to/ajax/episode/info?ts=1481295600&_=2338&id=902kxx&update=0
@@ -116,13 +116,13 @@ print int(time.time())
 #    x = x +1
 #    print "--------------- %s" % x
 #    getmovie(i)
-
+"""
 try:
     #a = my1000.get_movie('tt3799694', 'The Nice Guys', '2016')
     #a = my1000.get_movie('','Snowden','2016')
     #a = my1000.get_movie('tt2948356','Zootopia','2016')
-    a  = my1000.get_movie('tt4649416','Almost Christmas','2016')
-    #a = my1000.get_movie('','split','2016')
+    #a  = my1000.get_movie('tt4649416','Almost Christmas','2016')
+    a = my1000.get_movie('','split','2016')
 
     print "------------"
     print a
@@ -140,6 +140,7 @@ except Exception as e:
     print 'ERRORRRR %s' % e
     pass
 exit()
+"""
 
 title2=''
 imdb = 'tt5574490'

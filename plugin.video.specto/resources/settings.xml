@@ -43,6 +43,7 @@
 		<setting id="pubfilm" type="bool" label="Pubfilm" default="true" />
 		<setting id="putlocker" type="bool" label="Putlocker" default="true" />
 		<setting id="tunemovie" type="bool" label="Tunemovie" default="true" />
+		<setting id="watch5s" type="bool" label="Watch5s" default="true" />
 		<setting id="watchfree" type="bool" label="Watchfree" default="true" />
 		<setting id="vidics" type="bool" label="Vidics" default="true" />
 		<setting id="xmovies" type="bool" label="Xmovies" default="true" />
@@ -68,6 +69,7 @@
 		<setting id="tunemovie_tv" type="bool" label="Tunemovie" default="true" />
 		<setting id="tvrelease_tv" type="bool" label="TVrelease" default="true" />
 		<setting id="vidics_tv" type="bool" label="Vidics" default="true" />
+		<setting id="watch5s_tv" type="bool" label="Watch5s" default="true" />
 		<setting id="watchfree_tv" type="bool" label="Watchfree" default="true" />
 		<setting id="watchseries_tv" type="bool" label="Watchfree" default="true" />
 		<setting id="wsonline_tv" type="bool" label="WSOnline" default="true" />
