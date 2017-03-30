@@ -81,6 +81,7 @@ from resources.lib.sources.onemovies_mv_tv import source as onemovies
 from resources.lib.sources.onlinemovies_mv_tv import source as onlinemovies
 from resources.lib.sources.watch5s_mv_tv import source as watch5s
 from resources.lib.sources.onseries_tv import source as onseries
+from resources.lib.sources.wrzcraft_mv_tv import source as wrz
 
 
 
@@ -99,8 +100,8 @@ my5 = muchmovies()
 my6 = pubfilm()
 my7 = fmovies()
 
-my1000 = muchmovies()
-my2000 = muchmovies()
+my1000 = wrz()
+my2000 = wrz()
 
 import time
 #http://fmovies.to/ajax/episode/info?ts=1481295600&_=2338&id=902kxx&update=0
