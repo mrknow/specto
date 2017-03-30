@@ -29,13 +29,12 @@
 		<setting id="playback_info" type="bool" label="30845" default="false" />
 	</category>
 	<category label="30860">
-		<setting id="dayt" type="bool" label="Dayt" default="true" />
 		<setting id="fmovies" type="bool" label="Fmovies" default="true" />
 		<setting id="iwatchonline" type="bool" label="Iwatchonline" default="true" />
 		<setting id="movie25" type="bool" label="Movie25" default="true" />
 		<setting id="moviefree" type="bool" label="MovieFree" default="true" />
 		<setting id="movieshd" type="bool" label="MoviesHD" default="true" />
-		<setting id="moviesxk" type="bool" label="MoviesXK" default="true" />
+		<setting id="onlinemovies" type="bool" label="MoviesXK" default="true" />
 		<setting id="muchmovies" type="bool" label="Muchmovies" default="true" />
 		<setting id="onemovies" type="bool" label="Onemovies" default="true" />
 		<setting id="pelispedia" type="bool" label="Pelispedia" default="true" />
@@ -46,12 +45,10 @@
 		<setting id="watch5s" type="bool" label="Watch5s" default="true" />
 		<setting id="watchfree" type="bool" label="Watchfree" default="true" />
 		<setting id="vidics" type="bool" label="Vidics" default="true" />
-		<setting id="xmovies" type="bool" label="Xmovies" default="true" />
 		<setting id="yesmovies" type="bool" label="Yesmovies" default="true" />
 	</category>
 	<category label="30861">
 		<setting id="animeultima_tv" type="bool" label="Animeultima" default="false" />
-		<setting id="dayt_tv" type="bool" label="Dayt" default="true" />
 		<setting id="easynews_tv" type="bool" label="Easynews" default="false" />
 		<setting id="fmovies_tv" type="bool" label="Fmovies" default="true" />
 		<setting id="iwatchonline_tv" type="bool" label="Iwatchonline" default="true" />
@@ -60,6 +57,7 @@
 		<setting id="ororo_tv" type="bool" label="Ororo" default="true" />
 		<setting id="onlinedizi_tv" type="bool" label="Onlinedizi" default="true" />
 		<setting id="onemovies_tv" type="bool" label="Onemovies" default="true" />
+		<setting id="onlinemovies_tv" type="bool" label="Onlinemovies" default="true" />
 		<setting id="onseries_tv" type="bool" label="OnSeries" default="true" />
 		<setting id="primewire_tv" type="bool" label="Primewire" default="true" />
 		<setting id="pelispedia_tv" type="bool" label="Pelispedia" default="true" />

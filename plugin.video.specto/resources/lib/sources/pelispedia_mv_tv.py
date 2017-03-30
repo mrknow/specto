@@ -32,32 +32,40 @@ cj = cookielib.LWPCookieJar()
 class source:
     def __init__(self):
         self.base_link = 'http://www.pelispedia.tv'
-        self.base_link = 'http://www.pelispedia.tv'
         self.movie_link = '/pelicula/%s/'
         self.tvsearch_link = '/serie/%s/'
 
 
 
     def get_movie(self, imdb, title, year):
-
         try:
-            t = cleantitle.get(title)
+            url = self.moviesearch_link % cleantitle.geturl(title)
 
-            query = self.movie_link % cleantitle.query10(title)
-            query = urlparse.urljoin(self.base_link, query)
-            control.log('PELISPEDIA URL %s' % query)
-            result = client.request(query).decode('gb18030').encode('utf-8')
-            result = client.parseDOM(result, 'div', attrs={'id': 'player'})[0]
-            r = [(re.findall('(.*?)<a', client.parseDOM(result, 'center')[0])[0].strip(),
-                      re.findall('>\((.*?)\)</a>', client.parseDOM(result, 'center')[0])[0])]
-            r = [i for i in r if t == cleantitle.get(i[0]) and year == (i[1])][0]
-            return query
+            r = urlparse.urljoin(self.base_link, url)
+            r = client.request(r, limit='1')
+            r = client.parseDOM(r, 'title')
+
+            if not r:
+                url = 'http://www.imdb.com/title/%s' % imdb
+                url = client.request(url, headers={'Accept-Language':'es-ES'})
+                url = client.parseDOM(url, 'title')[0]
+                url = re.sub('(?:\(|\s)\d{4}.+', '', url).strip()
+                url = cleantitle.normalize(url.encode("utf-8"))
+                url = self.moviesearch_link % cleantitle.geturl(url)
+
+                r = urlparse.urljoin(self.base_link, url)
+                r = client.request(r, limit='1')
+                r = client.parseDOM(r, 'title')
+
+            if not year in r[0]: raise Exception()
+
+            return url
         except:
             return
 
     def get_show(self, imdb, tvdb, tvshowtitle, year):
         try:
-            url = self.tvsearch_link % cleantitle.query10(tvshowtitle)
+            url = self.tvsearch_link % cleantitle.geturl(tvshowtitle)
 
             r = urlparse.urljoin(self.base_link, url)
             r = client.request(r, limit='1')
@@ -149,7 +157,7 @@ class source:
                     url = client.request(url, post=post, headers=headers)
                     url = json.loads(url)['link']
 
-                    links.append({'source': 'gvideo', 'quality': 'HD', 'url': url, 'direct': True})
+                    links.append({'source': 'gvideo', 'quality': 'HD', 'url': url})
                 except:
                     pass
 
@@ -166,7 +174,7 @@ class source:
                     url = client.request(url, post=post, headers=headers)
                     url = json.loads(url)[0]['url']
 
-                    links.append({'source': 'cdn', 'quality': 'HD', 'url': url, 'direct': True})
+                    links.append({'source': 'cdn', 'quality': 'HD', 'url': url})
                 except:
                     pass
 

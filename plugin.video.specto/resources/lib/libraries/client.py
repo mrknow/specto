@@ -21,7 +21,7 @@
 
 import re,sys,urllib2,HTMLParser, urllib, urlparse
 import xbmc, random, time, cookielib
-import base64
+import base64, gzip, StringIO
 
 from resources.lib.libraries import cache
 from resources.lib.libraries import control
@@ -121,8 +121,13 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
         except urllib2.HTTPError as response:
 
             if response.code == 503:
-                mytxt = response.read(5242880)
-                if 'cf-browser-verification' in mytxt:
+                cf_result = response.read(5242880)
+                try: encoding = response.info().getheader('Content-Encoding')
+                except: encoding = None
+                if encoding == 'gzip':
+                    cf_result = gzip.GzipFile(fileobj=StringIO.StringIO(cf_result)).read()
+
+                if 'cf-browser-verification' in cf_result:
 
                     netloc = '%s://%s' % (urlparse.urlparse(url).scheme, urlparse.urlparse(url).netloc)
 
@@ -177,15 +182,24 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
         else:
             result = response.read(5242880)
 
+        try: encoding = response.info().getheader('Content-Encoding')
+        except: encoding = None
+        if encoding == 'gzip':
+            result = gzip.GzipFile(fileobj=StringIO.StringIO(result)).read()
 
-        if 'sucuri_cloudproxy_js' in result or 's={},u,c,U,r,i' in result:
+
+        if 'sucuri_cloudproxy_js' in result:
             su = sucuri().get(result)
 
             headers['Cookie'] = su
 
             request = urllib2.Request(url, data=post, headers=headers)
 
-            response = urllib2.urlopen(request, timeout=int(timeout))
+            try:
+                response = urllib2.urlopen(request, timeout=int(timeout))
+            except Exception as e:
+                control.log('Sucuri url: %s Error: %s' % (url,e))
+                ValueError('Sucuri url: %s Error: %s' % (url,e))
 
             if limit == '0':
                 result = response.read(224 * 1024)
@@ -193,6 +207,11 @@ def request(url, close=True, redirect=True, error=False, proxy=None, post=None, 
                 result = response.read(int(limit) * 1024)
             else:
                 result = response.read(5242880)
+
+            try: encoding = response.info().getheader('Content-Encoding')
+            except: encoding = None
+            if encoding == 'gzip':
+                result = gzip.GzipFile(fileobj=StringIO.StringIO(result)).read()
 
 
         if output == 'extended':
@@ -218,102 +237,95 @@ def source(url, close=True, error=False, proxy=None, post=None, headers=None, mo
 def parseDOM(html, name=u"", attrs={}, ret=False):
     # Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
 
+    if attrs is None: attrs = {}
     if isinstance(html, str):
         try:
-            html = [html.decode("utf-8")] # Replace with chardet thingy
+            html = [html.decode("utf-8")]  # Replace with chardet thingy
         except:
-            html = [html]
+            try:
+                html = [html.decode("utf-8", "replace")]
+            except:
+                html = [html]
     elif isinstance(html, unicode):
         html = [html]
     elif not isinstance(html, list):
-        return u""
+        return ''
 
     if not name.strip():
-        return u""
+        return ''
+
+    if not isinstance(attrs, dict):
+        return ''
 
     ret_lst = []
     for item in html:
-        temp_item = re.compile('(<[^>]*?\n[^>]*?>)').findall(item)
-        for match in temp_item:
-            item = item.replace(match, match.replace("\n", " "))
+        for match in re.findall('(<[^>]*\n[^>]*>)', item):
+            item = item.replace(match, match.replace('\n', ' ').replace('\r', ' '))
 
-        lst = []
-        for key in attrs:
-            lst2 = re.compile('(<' + name + '[^>]*?(?:' + key + '=[\'"]' + attrs[key] + '[\'"].*?>))', re.M | re.S).findall(item)
-            if len(lst2) == 0 and attrs[key].find(" ") == -1:  # Try matching without quotation marks
-                lst2 = re.compile('(<' + name + '[^>]*?(?:' + key + '=' + attrs[key] + '.*?>))', re.M | re.S).findall(item)
+        if not attrs:
+            pattern = '(<%s(?: [^>]*>|/?>))' % (name)
+            this_list = re.findall(pattern, item, re.M | re.S | re.I)
+        else:
+            last_list = None
+            for key in attrs:
+                pattern = '''(<%s [^>]*%s=['"]%s['"][^>]*>)''' % (name, key, attrs[key])
+                this_list = re.findall(pattern, item, re.M | re. S | re.I)
+                if not this_list and ' ' not in attrs[key]:
+                    pattern = '''(<%s [^>]*%s=%s[^>]*>)''' % (name, key, attrs[key])
+                    this_list = re.findall(pattern, item, re.M | re. S | re.I)
 
-            if len(lst) == 0:
-                lst = lst2
-                lst2 = []
-            else:
-                test = range(len(lst))
-                test.reverse()
-                for i in test:  # Delete anything missing from the next list.
-                    if not lst[i] in lst2:
-                        del(lst[i])
+                if last_list is None:
+                    last_list = this_list
+                else:
+                    last_list = [item for item in this_list if item in last_list]
+            this_list = last_list
 
-        if len(lst) == 0 and attrs == {}:
-            lst = re.compile('(<' + name + '>)', re.M | re.S).findall(item)
-            if len(lst) == 0:
-                lst = re.compile('(<' + name + ' .*?>)', re.M | re.S).findall(item)
+        lst = this_list
 
         if isinstance(ret, str):
             lst2 = []
+
             for match in lst:
-                attr_lst = re.compile('<' + name + '.*?' + ret + '=([\'"].[^>]*?[\'"])>', re.M | re.S).findall(match)
-                if len(attr_lst) == 0:
-                    attr_lst = re.compile('<' + name + '.*?' + ret + '=(.[^>]*?)>', re.M | re.S).findall(match)
-                for tmp in attr_lst:
-                    cont_char = tmp[0]
-                    if cont_char in "'\"":
-                        # Limit down to next variable.
-                        if tmp.find('=' + cont_char, tmp.find(cont_char, 1)) > -1:
-                            tmp = tmp[:tmp.find('=' + cont_char, tmp.find(cont_char, 1))]
+                pattern = '''<%s[^>]* %s\s*=\s*(?:(['"])(.*?)\\1|([^'"].*?)(?:>|\s))''' % (name, ret)
+                results = re.findall(pattern, match, re.I | re.M | re.S)
+                lst2 += [result[1] if result[1] else result[2] for result in results]
 
-                        # Limit to the last quotation mark
-                        if tmp.rfind(cont_char, 1) > -1:
-                            tmp = tmp[1:tmp.rfind(cont_char)]
-                    else:
-                        if tmp.find(" ") > 0:
-                            tmp = tmp[:tmp.find(" ")]
-                        elif tmp.find("/") > 0:
-                            tmp = tmp[:tmp.find("/")]
-                        elif tmp.find(">") > 0:
-                            tmp = tmp[:tmp.find(">")]
-
-                    lst2.append(tmp.strip())
             lst = lst2
         else:
             lst2 = []
             for match in lst:
-                endstr = u"</" + name
+                end_str = "</%s" % (name)
+                start_str = '<%s' % (name)
 
                 start = item.find(match)
-                end = item.find(endstr, start)
-                pos = item.find("<" + name, start + 1 )
+                end = item.find(end_str, start)
+                pos = item.find(start_str, start + 1)
 
-                while pos < end and pos != -1:
-                    tend = item.find(endstr, end + len(endstr))
+                while pos < end and pos != -1:  # Ignore too early </endstr> return
+                    tend = item.find(end_str, end + len(end_str))
                     if tend != -1:
                         end = tend
-                    pos = item.find("<" + name, pos + 1)
+                    pos = item.find(start_str, pos + 1)
 
                 if start == -1 and end == -1:
-                    temp = u""
+                    result = ''
                 elif start > -1 and end > -1:
-                    temp = item[start + len(match):end]
+                    result = item[start + len(match):end]
                 elif end > -1:
-                    temp = item[:end]
+                    result = item[:end]
                 elif start > -1:
-                    temp = item[start + len(match):]
+                    result = item[start + len(match):]
+                else:
+                    result = ''
 
                 if ret:
-                    endstr = item[end:item.find(">", item.find(endstr)) + 1]
-                    temp = match + temp + endstr
+                    endstr = item[end:item.find(">", item.find(end_str)) + 1]
+                    result = match + result + endstr
 
-                item = item[item.find(temp, item.find(match)) + len(temp):]
-                lst2.append(temp)
+                result = result.strip()
+
+                item = item[item.find(result, item.find(match)):]
+                lst2.append(result)
             lst = lst2
         ret_lst += lst
 
@@ -325,6 +337,7 @@ def replaceHTMLCodes(txt):
     txt = HTMLParser.HTMLParser().unescape(txt)
     txt = txt.replace("&quot;", "\"")
     txt = txt.replace("&amp;", "&")
+    txt = txt.strip()
     return txt
 
 def cleanHTMLCodes(txt):
@@ -392,10 +405,10 @@ class cfcookie:
     def get(self, netloc, ua, timeout):
         threads = []
 
-        for i in range(0, 3): threads.append(workers.Thread(self.get_cookie, netloc, ua, timeout))
+        for i in range(0, 15): threads.append(workers.Thread(self.get_cookie, netloc, ua, timeout))
         [i.start() for i in threads]
 
-        for i in range(0, 15):
+        for i in range(0, 30):
             if not self.cookie == None: return self.cookie
             time.sleep(1)
 
@@ -410,6 +423,10 @@ class cfcookie:
                 response = urllib2.urlopen(request, timeout=int(timeout))
             except urllib2.HTTPError as response:
                 result = response.read(5242880)
+                try: encoding = response.info().getheader('Content-Encoding')
+                except: encoding = None
+                if encoding == 'gzip':
+                    result = gzip.GzipFile(fileobj=StringIO.StringIO(result)).read()
 
             jschl = re.findall('name="jschl_vc" value="(.+?)"/>', result)[0]
 

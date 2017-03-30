@@ -40,7 +40,7 @@ def get(title):
 
 def query(title):
     if title == None: return
-    title = title.replace('\'', '').rsplit(':', 1)[0]
+    title = title.replace('\'', ' ').rsplit(':', 1)[0].rsplit(' -', 1)[0].replace('-', ' ')
     return title
 
 def query2(title):

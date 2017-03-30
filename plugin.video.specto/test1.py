@@ -77,10 +77,11 @@ from resources.lib.sources.fmovies_mv_tv import source as fmovies
 from resources.lib.sources.movie25_mv_tv import source as pmovie
 from resources.lib.sources.movieshd_mv_tv import source as movieshd
 from resources.lib.sources.onemovies_mv_tv import source as onemovies
-from resources.lib.sources.xmovies_mv_tv import source as xmovies
 #from resources.lib.sources.genvideos_mv import source as genvid
-from resources.lib.sources.moviexk_mv_tv import source as mxk
+from resources.lib.sources.onlinemovies_mv_tv import source as onlinemovies
 from resources.lib.sources.watch5s_mv_tv import source as watch5s
+from resources.lib.sources.onseries_tv import source as onseries
+
 
 
 
@@ -99,7 +100,7 @@ my6 = pubfilm()
 my7 = fmovies()
 
 my1000 = muchmovies()
-my2000 = movieshd()
+my2000 = muchmovies()
 
 import time
 #http://fmovies.to/ajax/episode/info?ts=1481295600&_=2338&id=902kxx&update=0
@@ -116,13 +117,13 @@ print int(time.time())
 #    x = x +1
 #    print "--------------- %s" % x
 #    getmovie(i)
-"""
+
 try:
     #a = my1000.get_movie('tt3799694', 'The Nice Guys', '2016')
     #a = my1000.get_movie('','Snowden','2016')
     #a = my1000.get_movie('tt2948356','Zootopia','2016')
     #a  = my1000.get_movie('tt4649416','Almost Christmas','2016')
-    a = my1000.get_movie('','split','2016')
+    #a = my1000.get_movie('','split','2016')
 
     print "------------"
     print a
@@ -139,17 +140,16 @@ try:
 except Exception as e:
     print 'ERRORRRR %s' % e
     pass
-exit()
-"""
 
 title2=''
-imdb = 'tt5574490'
+imdb = 'tt5491994'
 tvdb = '304262'
-title = 'Ballers'
-year = '2015'
-data = '2016-06-28'
-epis= '10'
-sezon = '2'
+title = 'Planet Earth II'
+year = '2016'
+data = '2016-11-27'
+epis= '4'
+sezon = '1'
+title2 = 'Deserts'
 
 #imdb = 'tt2364582'
 #tvdb = '263365'
@@ -159,13 +159,14 @@ sezon = '2'
 #epis= '1'
 #sezon = '1'
 
-#imdb = 'tt2078690'
-#tvdb = '263365'
-#title = "Marvel's Agents of S.H.I.E.L.D."
-#year = '2016'
-#data = '2016-09-20'
-#epis= '1'
-#sezon = '4'
+imdb = 'tt3322310'
+tvdb = '62127'
+title = "Marvel's Iron Fist"
+year = '2016'
+data = '2016-09-20'
+epis= '6'
+sezon = '1'
+title2 = 'Immortal Emerges from Cave'
 
 
 imdb = 'tt5574490'
@@ -175,15 +176,26 @@ year = '2016'
 data = '2016-06-28'
 epis= '9'
 sezon = '1'
+title2 = 'The Well-Tempered Clavier'
 
-imdb = 'tt2191671'
-tvdb = '262856'
-title = 'Elementary'
-year = '2012'
-data = '2015-11-19'
-epis= '3'
-sezon = '4'
-title2="Tag, You're Me"
+#imdb = 'tt2191671'
+#tvdb = '262856'
+#title = 'Elementary'
+#year = '2012'
+#data = '2015-11-19'
+#epis= '3'
+#sezon = '4'
+#title2="Tag, You're Me"
+
+imdb = 'tt5574490'
+tvdb = '304262'
+title = 'The Expanse'
+year = '2015'
+data = '2016-06-28'
+epis= '4'
+sezon = '2'
+title2 = 'The Well-Tempered Clavier'
+
 
 getserial(my2000)
 exit()

@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
 
+
+
+ala = u'oneseries'
+bala = 'oneseries_tv'
+
+print bala.startswith(ala)
+print str(ala) in str(bala)
+exit()
+
 import random
 import string
 import sys

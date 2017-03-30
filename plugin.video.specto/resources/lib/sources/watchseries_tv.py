@@ -161,7 +161,7 @@ class source:
             for i in range(0, 10 * 2):
                 is_alive = [x.is_alive() for x in threads]
                 if all(x == False for x in is_alive): break
-                time.sleep(1)
+                time.sleep(0.5)
             return self.sources
         except Exception as e:
             control.log('ERROR watchseries %s' % e)

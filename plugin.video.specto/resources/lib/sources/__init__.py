@@ -186,6 +186,7 @@ class sources:
 
     def playItem(self, content, name, year, imdb, tvdb, source):
         try:
+            self.url = None
             control.resolve(int(sys.argv[1]), True, control.item(path=''))
             control.execute('Dialog.Close(okdialog)')
 
@@ -235,7 +236,7 @@ class sources:
 
                     w = workers.Thread(self.sourcesResolve, items[i]['url'], items[i]['provider'])
                     w.start()
-
+                    #self.sourcesResolve(items[i]['url'], items[i]['provider'])
                     m = ''
 
                     for x in range(3600):
@@ -251,7 +252,8 @@ class sources:
                         k = control.condVisibility('Window.IsActive(yesnoDialog)')
                         if k: m += '1'; m = m[-1]
                         if (w.is_alive() == False or x > 30) and not k: break
-                        time.sleep(0.5)
+                        #Było
+                        time.sleep(1)
 
                     for x in range(30):
                         try:
@@ -262,7 +264,7 @@ class sources:
 
                         if m == '': break
                         if w.is_alive() == False: break
-                        time.sleep(0.5)
+                        time.sleep(1)
 
 
                     if w.is_alive() == True: block = items[i]['source']
@@ -640,14 +642,14 @@ class sources:
 
 
         #MRKNOW remove duplicate url's
-        #dupes = []
-        #filter = []
-        #for entry in self.sources:
-        #    if not entry['url'] in dupes:
-        #        filter.append(entry)
-        #        dupes.append(entry['url'])
+        dupes = []
+        filter = []
+        for entry in self.sources:
+            if not entry['url'] in dupes:
+                filter.append(entry)
+                dupes.append(entry['url'])
 
-        #self.sources = filter
+        self.sources = filter
 
         filter = []
         for host in hd_rank: filter += [i for i in self.sources if i['quality'] == '1080p' and i['source'].lower() == host]
@@ -753,11 +755,20 @@ class sources:
 
     def sourcesResolve(self, url, provider):
         try:
+            control.log('Provider:%s URL:%s' % (provider,url))
             provider = provider.lower()
+            control.log('XXX Provider:%s url:%s' %(provider,url))
 
             if not provider.endswith(('_mv', '_tv', '_mv_tv')):
                 sourceDict = []
-                for package, name, is_pkg in pkgutil.walk_packages(__path__): sourceDict.append((name, is_pkg))
+                for package, name, is_pkg in pkgutil.walk_packages(__path__):
+                    sourceDict.append((name, is_pkg))
+
+                for i in sourceDict:
+                    print("A",i[0], "B", i[0].startswith(provider + '_'), provider)
+                    #print str(provider) in str(i[0])
+                    #print type(provider), type(i[0])
+
                 provider = [i[0] for i in sourceDict if i[1] == False and i[0].startswith(provider + '_')][0]
 
             source = __import__(provider, globals(), locals(), [], -1).source()
@@ -771,11 +782,10 @@ class sources:
             elif url.startswith('http'):
                 result = client.request(url.split('|')[0], headers=headers, output='chunk', timeout='20')
                 if result == None: raise Exception()
-            #control.log("!!!!!!!!!!!!!!!!!!!  %s prov: %s" % (url,provider))
             self.url = url
             return url
         except:
-            return
+            return False
 
 
     def sourcesDialog(self):
