@@ -29,6 +29,7 @@
 		<setting id="playback_info" type="bool" label="30845" default="false" />
 	</category>
 	<category label="30860">
+		<setting id="alluc" type="bool" label="Alluc" default="false" />
 		<setting id="dayt" type="bool" label="Dayt" default="true" />
 		<setting id="fmovies" type="bool" label="Fmovies" default="true" />
 		<setting id="iwatchonline" type="bool" label="Iwatchonline" default="true" />
@@ -45,11 +46,13 @@
 		<setting id="tunemovie" type="bool" label="Tunemovie" default="true" />
 		<setting id="watch5s" type="bool" label="Watch5s" default="true" />
 		<setting id="watchfree" type="bool" label="Watchfree" default="true" />
+		<setting id="wrzcraft" type="bool" label="Wrzcraft" default="true" />
 		<setting id="vidics" type="bool" label="Vidics" default="true" />
 		<setting id="xmovies" type="bool" label="Xmovies" default="true" />
 		<setting id="yesmovies" type="bool" label="Yesmovies" default="true" />
 	</category>
 	<category label="30861">
+		<setting id="alluc_tv" type="bool" label="Alluc" default="false" />
 		<setting id="animeultima_tv" type="bool" label="Animeultima" default="false" />
 		<setting id="dayt_tv" type="bool" label="Dayt" default="true" />
 		<setting id="easynews_tv" type="bool" label="Easynews" default="false" />
@@ -74,6 +77,7 @@
 		<setting id="watchseries_tv" type="bool" label="Watchfree" default="true" />
 		<setting id="wsonline_tv" type="bool" label="WSOnline" default="true" />
 		<setting id="watchseries_tv" type="bool" label="Watchseries" default="true" />
+		<setting id="wrzcraft_tv" type="bool" label="Wrzcraft" default="true" />
 		<setting id="yesmovies_tv" type="bool" label="Yesmovies" default="true" />
 
 	</category>
