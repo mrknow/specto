@@ -32,11 +32,11 @@ from resources.lib import resolvers
 
 class source:
     def __init__(self):
-        self.base_link = 'http://cartoonhd.online'
+        self.base_link = 'https://cartoonhd.be'
         #http://api.cartoonh0A6ru35yevokjaqbb8
         self.social_lock = '0A6ru35yevokjaqbb8'
         #http://api.cartoonhd.online/api/v1/0A6ru35yevokjaqbb8
-        self.search_link = 'http://api.cartoonhd.online/api/v1/' + self.social_lock
+        self.search_link = 'http://api.cartoonhd.be/api/v1/' + self.social_lock
 
 
     def get_movie(self, imdb, title, year):
@@ -86,9 +86,9 @@ class source:
 
                 if 'tvshowtitle' in data:
                     url = '%s/tv-show/%s/season/%01d/episode/%01d' % (
-                    self.base_link, cleantitle.geturl(title), int(data['season']), int(data['episode']))
+                    self.base_link, cleantitle.geturl(title).replace('+','-'), int(data['season']), int(data['episode']))
                 else:
-                    url = '%s/movie/%s' % (self.base_link, cleantitle.geturl(title))
+                    url = '%s/movie/%s' % (self.base_link, cleantitle.geturl(title).replace('+','-'))
 
                 result = client.request(url, limit='5')
 

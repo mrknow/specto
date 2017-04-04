@@ -94,7 +94,7 @@ class source:
                     url = '/movie/%s/watch' % cleantitle.geturl(title)
                     year = data['year']
                     episode = None
-
+                url = url.replace('+','-')
                 url = urlparse.urljoin(base_link, url)
                 referer = url
 

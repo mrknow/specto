@@ -62,3 +62,11 @@ target/
 
 #My
 Thumbs.db
+cache.db
+test.py
+test1.py
+test10.py
+test20.py
+test2.py
+mylib/
+

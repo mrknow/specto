@@ -31,7 +31,7 @@ from resources.lib import resolvers
 
 class source:
     def __init__(self):
-        self.base_link = 'http://onlinedizi.co'
+        self.base_link = 'http://onlinedizi.com'
 
 
     def get_show(self, imdb, tvdb, tvshowtitle, year):
@@ -60,7 +60,7 @@ class source:
             result = [(i[0][-1], i[1][0]) for i in result if len(i[0]) > 0 and len(i[1]) > 0]
             result = [(re.compile('http.+?//.+?/diziler(/.+?/)').findall(i[0]), re.sub('&#\d*;','', i[1])) for i in result]
             result = [(i[0][0], cleantitle.get(i[1])) for i in result if len(i[0]) > 0]
-
+            print result
             return result
         except:
             return

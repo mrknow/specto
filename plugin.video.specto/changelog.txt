@@ -1,5 +1,5 @@
+2017.04.03.1 - fix putlocker, fmovies
 2017.01.28.1 - added gvideo hosts from Exodus.
-
 2017.01.20.2 - small fix movieshd, putlocker, in trakt episodes fix posters and fanart.
     Chcecking corect date and time setup on tv box
 2016.11.20.3 small fix putlocker

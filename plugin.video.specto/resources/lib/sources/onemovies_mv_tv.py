@@ -30,7 +30,7 @@ class source:
         self.base_link = 'http://1movies.tv'
         self.search_link = '/movies/search?s=%s'
         self.episode_link = '/ajax/movie/load_episodes_v2?id=%s&episode_id=%s&link_id=%s&_=%s'
-        self.load_player = '/ajax/movie/load_player_v2?id=%s&quality=%s&_=%s'
+        self.load_player = '/ajax/movie/load_player_v3'
 
     def now_milliseconds(self):
         return int(time.time() * 1000)
@@ -135,7 +135,7 @@ class source:
 
             ref = urlparse.urljoin(self.base_link, url)
             #control.log("one-sources-0 %s" % ref)
-            headers= {'Referer':ref, "User-Agent":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0"}
+            headers= {'Referer':ref, "User-Agent":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"}
             r100 = client.request(ref,headers=headers, output='extended')
             cookie = r100[4] ; headers = r100[3] ; result = r100[0]
 

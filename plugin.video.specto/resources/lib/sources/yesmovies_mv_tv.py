@@ -31,10 +31,30 @@ from resources.lib.libraries import client
 from resources.lib.libraries import cache
 from resources.lib import resolvers
 from resources.lib.libraries import control
+from resources.lib.libraries import jsunfuck
 import requests
 
 
-
+CODE = '''def retA():
+    class Infix:
+        def __init__(self, function):
+            self.function = function
+        def __ror__(self, other):
+            return Infix(lambda x, self=self, other=other: self.function(other, x))
+        def __or__(self, other):
+            return self.function(other)
+        def __rlshift__(self, other):
+            return Infix(lambda x, self=self, other=other: self.function(other, x))
+        def __rshift__(self, other):
+            return self.function(other)
+        def __call__(self, value1, value2):
+            return self.function(value1, value2)
+    def my_add(x, y):
+        try: return x + y
+        except Exception: return str(x) + str(y)
+    x = Infix(my_add)
+    return %s
+param = retA()'''
 
 class source:
     def __init__(self):
@@ -42,7 +62,10 @@ class source:
         self.info_link = '/ajax/movie_info/%s.html'
         self.episode_link = '/ajax/v4_movie_episodes/%s'
         self.playlist_link = '/ajax/v2_get_sources/%s.html?hash=%s'
-        #https://yesmovies.to/ajax/v4_movie_episodes/13115
+        self.server_link = '/ajax/v4_movie_episodes/%s'
+        self.embed_link = '/ajax/movie_embed/%s'
+        self.token_link = '/ajax/movie_token?eid=%s&mid=%s'
+        self.sourcelink = '/ajax/movie_sources/%s?x=%s&y=%s'
 
 
     def get_movie(self, imdb, title, year):
@@ -104,8 +127,12 @@ class source:
             for i in r:
                 try:
                     y, q = cache.get(self.ymovies_info, 9000, i[1])
-                    if not y == year: raise Exception()
-                    return urlparse.urlparse(i[0]).path + '?episode=%01d' % int(episode)
+                    mychk = False
+                    years = [str(year),str(int(year) + 1),str(int(year) - 1)]
+                    for x in years:
+                        if str(y) == x: mychk = True
+                    if mychk == False: raise Exception()
+                    return urlparse.urlparse(i[0]).path, (episode)
                 except:
                     pass
         except Exception as e:
@@ -148,126 +175,98 @@ class source:
             return
 
     def get_sources(self, url, hosthdDict, hostDict, locDict):
-        #                sources.append({'source': 'gvideo', 'quality': i['quality'].encode('utf-8'), 'provider': 'Yesmovies', 'url': i['url'].encode('utf-8')})
+        #try:
         try:
             sources = []
 
-            if url == None: return sources
+            if url is None: return sources
 
-            try: url, episode = re.findall('(.+?)\?episode=(\d*)$', url)[0]
-            except: episode = None
+            if url[0].startswith('http'):
+                self.base_link = url[0]
 
-            url = urlparse.urljoin(self.base_link, url)
+            try:
+                if url[1] > 0:
+                    episode = url[1]
+                else:
+                    episode = None
+            except:
+                episode = None
 
-            vid_id = re.findall('-(\d+)', url)[-1]
-            print("VID",vid_id)
+            mid = re.findall('-(\d+)', url[0])[-1]
 
-            '''
-            quality = cache.get(self.ymovies_info, 9000, vid_id)[1].lower()
-            if quality == 'cam' or quality == 'ts': quality = 'CAM'
-            elif quality == 'hd': quality = 'HD'
-            else: quality = 'SD'
-            '''
+            try:
+                headers = {'Referer': url}
+                u = urlparse.urljoin(self.base_link, self.server_link % mid)
+                r = client.request(u, headers=headers, XHR=True)
+                r = json.loads(r)['html']
+                r = client.parseDOM(r, 'div', attrs = {'class': 'pas-list'})
+                ids = client.parseDOM(r, 'li', ret='data-id')
+                servers = client.parseDOM(r, 'li', ret='data-server')
+                labels = client.parseDOM(r, 'a', ret='title')
+                r = zip(ids, servers, labels)
+                for eid in r:
+                    try:
+                        try:
+                            ep = re.findall('episode.*?(\d+):.*?',eid[2].lower())[0]
+                        except:
+                            ep = 0
+                        if (episode is None) or (int(ep) == int(episode)):
+                            url = urlparse.urljoin(self.base_link, self.token_link % (eid[0], mid))
+                            script = client.request(url)
+                            if '$_$' in script:
+                                params = self.uncensored1(script)
+                            elif script.startswith('[]') and script.endswith('()'):
+                                params = self.uncensored2(script)
+                            else:
+                                raise Exception()
+                            u = urlparse.urljoin(self.base_link, self.sourcelink % (eid[0], params['x'], params['y']))
+                            r = client.request(u)
+                            url = json.loads(r)['playlist'][0]['sources']
+                            url = [i['file'] for i in url if 'file' in i]
+                            url = [client.googletag(i) for i in url]
+                            url = [i[0] for i in url if i]
+                            for s in url:
+                                sources.append({'source': 'gvideo', 'quality': client.googletag(s['url'])[0]['quality'],
+                                                'provider': 'Yesmovies', 'url': s['url']})
 
-            for i in range(3):
-                r = client.request(url)
-                if not r == None: break
-
-            ref = client.parseDOM(r, 'a', ret='href', attrs = {'class': 'mod-btn mod-btn-watch'})[0]
-            ref = urlparse.urljoin(self.base_link, ref)
-            #print("VID-ref", ref)
-
-            for i in range(3):
-                r = client.request(ref, referer=url)
-                if not r == None: break
-            print("VID-r", r)
-
-            c = client.parseDOM(r, 'img', ret='src', attrs = {'class': 'hidden'})
-
-            if c: cookie = client.request(c[0], referer=ref, output='cookie')
-            else: cookie = ''
-            print("VID-c", cookie)
-
-
-            #server = re.findall('server\s*:\s*"(.+?)"', r)[0]
-            #print("VID-s", server)
-
-            #type = re.findall('type\s*:\s*"(.+?)"', r)[0]
-            #print("VID-t", type)
-
-            #episode_id = re.findall('episode_id\s*:\s*"(.+?)"', r)[0]
-
-            r = self.episode_link % (vid_id)
-            u = urlparse.urljoin(self.base_link, r)
-
-            for i in range(13):
-                r = client.request(u, referer=ref)
-                if not r == None: break
-            print("VID-r", r)
-            print json.loads(r)['html']
-
-
-            r = client.parseDOM(json.loads(r)['html'], 'div', attrs={'class':'pas-list'})[0]
-            r = re.compile('(<li.+?/li>)', re.DOTALL).findall(r)
-            print("VID-r1", r)
-
-            r = [(client.parseDOM(i, 'li', ret='data-id'),client.parseDOM(i, 'li', ret='data-server'), client.parseDOM(i, 'a', ret='title')) for i in r]
-            print("VID-r2", r)
-
-            if not episode == None:
-                r = [(i[0][0], i[1][0], i[2][0]) for i in r if i[0] and i[1]]
-                r = [(i[0],i[1], ''.join(re.findall('(\d+)', i[2])[:1])) for i in r]
-                r = [(i[0],i[1]) for i in r if '%01d' % int(i[2]) == episode]
-            else:
-                r = [(i[0][0],i[1][0])  for i in r if i[0]]
-            print("VID-r3", r)
-
-            #r = [re.findall('(\d+)', i) for i in r]
-            #r = [i[:2] for i in r if len(i) > 1]
-            r = [i[0] for i in r if 1 <= int(i[1]) <= 11][:3]
-            print("VID-r4", r)
-
-            for u in r:
-                try:
-                    key = 'xwh38if39ucx' ; key2 = '8qhfm9oyq1ux' ; key3 = 'ctiw4zlrn09tau7kqvc153uo'
-
-                    k = u + key3
-                    v = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-
-                    c = key + u + key2 + '=%s' % v
-                    c = '%s; %s' % (cookie, c)
-
-                    url = urllib.quote(uncensored(k, v))
-                    url = '/ajax/v2_get_sources/%s?hash=%s' % (u, url)
-                    url = urlparse.urljoin(self.base_link, url)
-
-                    for i in range(3):
-                        u = client.request(url, referer=ref, cookie=c, timeout='10')
-                        if not u == None: break
-
-                    u = json.loads(u)['playlist'][0]['sources']
-                    u = [i['file'] for i in u if 'file' in i]
-
-                    for i in u:
-                        try: sources.append({'source': 'gvideo', 'quality': client.googletag(i)[0]['quality'], 'provider': 'Yesmovies','url': i})
-                        except: pass
-                except:
-                    pass
+                    except:
+                        pass
+            except:
+                pass
 
             return sources
         except Exception as e:
-            print("Error %s" % e)
             return sources
 
     def resolve(self, url):
         return client.googlepass(url)
 
 
-def uncensored(a,b):
-    x = '' ; i = 0
-    for i, y in enumerate(a):
-        z = b[i % len(b) - 1]
-        y = int(ord(str(y)[0])) + int(ord(str(z)[0]))
-        x += chr(y)
-    x = base64.b64encode(x)
-    return x
+    def uncensored1(self, script):
+        try:
+            script = '(' + script.split("(_$$)) ('_');")[0].split("/* `$$` */")[-1].strip()
+            script = script.replace('(__$)[$$$]', '\'"\'')
+            script = script.replace('(__$)[_$]', '"\\\\"')
+            script = script.replace('(o^_^o)', '3')
+            script = script.replace('(c^_^o)', '0')
+            script = script.replace('(_$$)', '1')
+            script = script.replace('($$_)', '4')
+
+            vGlobals = {"__builtins__": None, '__name__': __name__, 'str': str, 'Exception': Exception}
+            vLocals = {'param': None}
+            exec (CODE % script.replace('+', '|x|'), vGlobals, vLocals)
+            data = vLocals['param'].decode('string_escape')
+            x = re.search('''_x=['"]([^"']+)''', data).group(1)
+            y = re.search('''_y=['"]([^"']+)''', data).group(1)
+            return {'x': x, 'y': y}
+        except:
+            pass
+
+    def uncensored2(self, script):
+        try:
+            js = jsunfuck.JSUnfuck(script).decode()
+            x = re.search('''_x=['"]([^"']+)''', js).group(1)
+            y = re.search('''_y=['"]([^"']+)''', js).group(1)
+            return {'x': x, 'y': y}
+        except:
+            pass

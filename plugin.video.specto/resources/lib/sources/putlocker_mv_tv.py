@@ -34,14 +34,12 @@ from resources.lib import resolvers
 
 class source:
     def __init__(self):
-        self.base_link = 'http://flixanity.watch'
+        self.base_link = 'https://flixanity.watch'
         self.sitemap = '/sitemap.xml'
 
         self.social_lock = '0A6ru35yevokjaqbb8'
-        #http://api.flixanity.watch/api/v1/0A6ru35yevokjaqbb8
-        #http://api.flixanity.watch/api/v1/0A6ru35yevokjaqbb8
-        self.search_link = 'http://api.flixanity.watch/api/v1/'+ self.social_lock
-        #http://flixanity.watch/ajax/jne.php
+        self.search_link = 'https://api.flixanity.watch/api/v1/'+ self.social_lock
+        #https://api.flixanity.watch/api/v1/0A6ru35yevokjaqbb8
 
 
     def get_movie(self, imdb, title, year):
@@ -104,7 +102,6 @@ class source:
             post = urllib.urlencode(post)
 
             r = client.request(url, post=post, headers=headers)
-            print(">>>",r)
             r = json.loads(r)
 
             t = cleantitle.get(tvshowtitle)
@@ -212,9 +209,13 @@ class source:
             post = urllib.urlencode(post)
 
             r = client.request(u, post=post, headers=headers, output='')
-            print('PUTLOCKER RESP %s' % r)
-            r = str(json.loads(r))
-            r = client.parseDOM(r, 'iframe', ret='.+?') + client.parseDOM(r, 'IFRAME', ret='.+?')
+            #print('PUTLOCKER RESP %s' % r)
+            r = r.replace('\\', '')
+
+            #r = str(json.loads(r))
+            r = re.findall('"type":"([^"]+)","net":"([^"]+)","embed":"(.*?)","weight":"([^"]+)"', r)
+
+            r = [client.parseDOM(i[2], 'iframe', ret='src')[0] for i in r]
 
             links = []
 
@@ -223,8 +224,8 @@ class source:
                 except: pass
 
             links += [{'source': 'openload.co', 'quality': 'SD', 'url': i} for i in r if 'openload.co' in i]
-            links += [{'source': 'vidto.me', 'quality': 'SD', 'url': i} for i in r if 'vidto.me' in i]
-            links += [{'source': 'thevideo.me', 'quality': 'SD', 'url': i} for i in r if 'thevideo.me' in i]
+            #links += [{'source': 'vidto.me', 'quality': 'SD', 'url': i} for i in r if 'vidto.me' in i]
+            links += [{'source': 'thevideo.me', 'quality': 'SD', 'url': i} for i in r if 'streamango' in i]
 
             for i in links:
                 sources.append({'source': i['source'], 'quality': i['quality'], 'provider': 'Putlocker', 'url': i['url']})
@@ -236,7 +237,7 @@ class source:
 
     def resolve(self, url):
         try:
-            if 'openload.co' in url or 'vidto.me' in url or 'thevideo.me' in url :
+            if 'openload.co' in url or 'streamango' in url or 'thevideo.me' in url :
                 url = resolvers.request(url)
             return url
         except:

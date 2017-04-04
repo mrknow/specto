@@ -125,12 +125,6 @@ class source:
             r = [(i[0],i[1][0], i[1][1], i[2]) for i in r]
 
 
-            #r = [(client.parseDOM(i, 'a', ret='href'), client.parseDOM(i, 'a', ret='title')) for i in r]
-            #r = [(i[0][0], i[1][0]) for i in r if i[0] and i[1]]
-
-            for i in r:
-                print "i",i[1]
-                print cleantitle.get(i[1])
 
             r = [i for i in r if t == cleantitle.get(i[1])]
             r = [(i[0],i[3]) for i in r if season == '%01d' % int(i[2])][:2]
@@ -216,7 +210,7 @@ class source:
 
 
     def resolve(self, url):
-        control.log('RESSS %S' % url)
+        control.log('RESSS %s' % url)
         try:
             if 'openload.co' in url:
                 url = resolvers.request(url)
@@ -226,7 +220,7 @@ class source:
                 r = re.findall("file: '([^']+)',label: '(\d+)", r)
                 r1 = sorted(r, key=lambda k: k[1])
                 r2  = client.replaceHTMLCodes(r1[-1][0])
-                r2 = client.googlepass(url)
+                #r2 = client.googlepass(url)
                 return r2
             if 'seriesonline' in url:
                 r = self.request(url)[0]
