@@ -3,7 +3,7 @@
 # Mrknow repository KODI addons  
 
 
-## Website / http://filmkodi.com ##
+## Website http://filmkodi.com/en/specto-1080p-kodi-add/ ##
 
 ![Specto](http://filmkodi.com/wp-content/uploads/2015/08/icon-2-e1466245667753.png)
 
